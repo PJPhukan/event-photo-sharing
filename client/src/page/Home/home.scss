@@ -1,0 +1,153 @@
+@import "../../css-config/mixins.scss";
+@import "../../css-config/variables.scss";
+.home-section {
+  max-width: 100%;
+  position: relative;
+  height: 100%;
+
+  box-sizing: border-box;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: url(../../assets/bg1.jpg) no-repeat center center/cover;
+    object-fit: cover;
+    // background-attachment: fixed;
+    opacity: 0.2;
+    z-index: -1;
+  }
+
+  .home {
+    max-width: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    .home-text-content {
+      width: 100%;
+      text-align: center;
+
+      .heading {
+        padding-top: 1rem;
+        font-size: calc($font-size-extra-large - 20px);
+        font-weight: 600;
+        line-height: 4rem;
+        span {
+          font-size: calc($font-size-extra-large + 5px);
+          color: $text-color-pink;
+          @include md {
+            font-size: calc($font-size-extra-large + 10px);
+          }
+        }
+        @include md {
+          padding-top: 1rem;
+          font-size: $font-size-extra-large;
+          line-height: normal;
+        }
+      }
+
+      .sub-heading-text {
+        font-size: calc($font-size-medium - 3px);
+        padding: 4px 0;
+        color: $text-color-secondary;
+        font-weight: 500;
+        text-align: center;
+        width: 80%;
+        margin: 0 auto;
+        @include lg {
+          text-align: start;
+          font-size: calc($font-size-medium - 5px);
+          width: 60%;
+          margin: 0 0;
+        }
+      }
+
+      .facility-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        margin: 1rem 0;
+        color: $text-color-primary;
+        gap: 1rem;
+
+        button {
+          background-color: $background-blue;
+          color: $text-color-primary;
+          border: none;
+          padding: 18px 14px;
+          font-size: $font-size-base;
+          border-radius: 8px;
+          font-weight: 500;
+
+          @include md {
+            padding: 18px 24px;
+          }
+        }
+
+        @include md {
+          margin: 1.5rem 0;
+          justify-content: start;
+        }
+      }
+
+      .home-create-event {
+        margin: 3rem 0;
+        a {
+          color: $text-color-primary;
+          background-color: $background-pink;
+          padding: 15px 50px;
+          font-size: $font-size-large;
+          font-weight: 600;
+          border-radius: 5px;
+        }
+      }
+
+      @include lg {
+        text-align: start;
+        width: 60%;
+      }
+    }
+
+    .image-content {
+      display: none;
+      height: 100%;
+      justify-content: center;
+      align-items: center;
+      padding-top: 1rem;
+      width: 50%;
+      margin-top: 6rem;
+     
+      img {
+        object-fit: cover;
+        height: 100%;
+      }
+
+      @include lg {
+        display: flex;
+      }
+    }
+    @include md {
+      max-width: calc(100% - 20px);
+      padding: 10px 40px;
+      align-items: start;
+      justify-content: space-between;
+    }
+    @include lg {
+      max-width: calc(100% - 40px);
+    }
+    @include xl {
+      max-width: calc(100% - 70px);
+    }
+    @include xxl {
+      max-width: calc(100% - 110px);
+    }
+  }
+  @include lg {
+    min-height: calc(100vh - 70px);
+  }
+}
