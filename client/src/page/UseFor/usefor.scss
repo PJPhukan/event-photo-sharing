@@ -1,0 +1,73 @@
+@import "../../css-config/mixins.scss";
+@import "../../css-config/variables.scss";
+
+.use-for {
+  max-width: 100%;
+  position: relative;
+  height: 100%;
+  box-sizing: border-box;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: url(../../assets/bg2.jpg) no-repeat center center/cover;
+    object-fit: cover;
+    opacity: 0.2;
+    z-index: -1;
+  }
+
+  .main-content {
+    max-width: 100%;
+    margin: 0 auto;
+    .heading {
+      text-align: center;
+      padding: 1rem;
+      font-weight: 600;
+      font-size: $font-size-large;
+
+      @include md {
+        font-size: $font-size-extra-large;
+      }
+    }
+
+    .card-section{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: .7rem;
+        margin-top: 1rem;
+        @include md{
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+    }
+
+    .use-for-footer{
+        text-align: center;
+        font-size: $font-size-large;
+        margin:1.5rem ;
+    }
+
+
+    @include md {
+      max-width: calc(100% - 20px);
+      padding: 10px 40px;
+    }
+    @include lg {
+      max-width: calc(100% - 40px);
+    }
+    @include xl {
+      max-width: calc(100% - 70px);
+    }
+    @include xxl {
+      max-width: calc(100% - 110px);
+    }
+  }
+  @include lg {
+    min-height: calc(100vh - 70px);
+  }
+}
