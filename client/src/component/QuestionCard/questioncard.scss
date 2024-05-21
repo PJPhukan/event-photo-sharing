@@ -1,0 +1,45 @@
+@import "../../css-config/mixins.scss";
+@import "../../css-config/variables.scss";
+
+.question-card {
+  display: flex;
+  justify-content: start;
+  flex-direction: column;
+  border: 1px solid white;
+  background-color: rgba($color: #6C6C6C, $alpha: 0.25);
+  padding: 17px 25px;
+  border-radius: 5px;
+  @include md{
+    padding: 20px 30px;
+  }
+  .question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    span {
+      font-size: $font-size-base;
+      font-weight: 500;
+    }
+    i{
+        font-size: $font-size-large;
+        cursor: pointer;
+        transition: .3s;
+        &.show{
+            transform: rotate(180deg);
+        }
+    }
+  }
+
+  .answer{
+    font-size: $font-size-small;
+    margin-top: .5rem;
+    display: none;
+    transition: .3s;
+    &.active{
+        transition: .3s;
+        display: block;
+    }
+  }
+}
