@@ -1,0 +1,71 @@
+@import "../../css-config/mixins.scss";
+@import "../../css-config/variables.scss";
+
+.work {
+  background: rgba(0, 0, 0, 0.353);
+ 
+
+  border-radius: 7px;
+  transform: translateY(0px);
+  transition: 0.3s;
+  padding: 1rem;
+  gap: 0.8rem;
+  width: 95%;
+  height: 100%;
+
+
+  @include md {
+    width: 32%;
+    height: 28rem;
+  }
+  &:hover {
+    box-shadow: rgba(255, 255, 255, 0.54) 0px 4px 7px;
+    transform: translateY(-8px);
+  }
+
+  img {
+    width: 100%;
+    object-fit: cover;
+    height: 50%;
+    @include md {
+      height: 20rem;
+    }
+  }
+
+  .work__info {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 3px 32px;
+
+    .card-heading {
+      font-size: $font-size-base;
+      font-weight: 600;
+    }
+
+    .description {
+      font-size: $font-size-small;
+      color: $text-color-secondary;
+    }
+  }
+
+  .number {
+    font-size: $font-size-base;
+    font-weight: 600;
+    color: $text-color-primary;
+    width: 25px;
+    height: 25px;
+    background: rgb(255, 255, 255);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    border-radius: 50%;
+    span {
+      position: relative;
+      color: black;
+    }
+  }
+}

@@ -1,0 +1,65 @@
+@import "../../css-config/mixins.scss";
+@import "../../css-config/variables.scss";
+.how-works {
+  max-width: 100%;
+  position: relative;
+  height: 100%;
+
+  box-sizing: border-box;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: url(../../assets/bg3.jpg) no-repeat center center/cover;
+    object-fit: cover;
+    opacity: 0.2;
+    z-index: -1;
+  }
+
+  .main-content {
+    max-width: 100%;
+    margin: 0 auto;
+ 
+
+    .heading {
+        text-align: center;
+        padding: 1rem;
+        font-weight: 600;
+        font-size: $font-size-large;
+  
+        @include md {
+          font-size: $font-size-extra-large;
+        }
+      }
+
+      .card-section{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        // flex-direction: column;
+        flex-wrap: wrap;
+      }
+    @include md {
+      max-width: calc(100% - 20px);
+      padding: 10px 40px;
+      align-items: start;
+      justify-content: space-between;
+    }
+    @include lg {
+      max-width: calc(100% - 40px);
+    }
+    @include xl {
+      max-width: calc(100% - 70px);
+    }
+    @include xxl {
+      max-width: calc(100% - 110px);
+    }
+  }
+  @include lg {
+    min-height: calc(100vh - 70px);
+  }
+}
