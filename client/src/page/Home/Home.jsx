@@ -3,6 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import HomeImg from "../../assets/home-image.png";
 import UseFor from "../UseFor/UseFor";
+import HowWork from "../HowWork/HowWork";
 const Home = () => {
   return (
     <>
@@ -35,6 +36,7 @@ const Home = () => {
         </div>
       </section>
       <UseFor/>
+      <HowWork/>
     </>
   );
 };
