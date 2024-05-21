@@ -1,1 +1,97 @@
-@import "../../css-config/mixins.scss"
+@import "../../css-config/mixins.scss";
+@import "../../css-config/variables.scss";
+.faq-section {
+  max-width: 100%;
+  position: relative;
+  height: 100%;
+
+  box-sizing: border-box;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: url(../../assets/bg1.jpg) no-repeat center center/cover;
+    object-fit: cover;
+    opacity: 0.2;
+    z-index: -1;
+  }
+
+  .main-content {
+    max-width: 100%;
+    margin: 0 auto;
+
+    .heading {
+      text-align: center;
+      padding-top: 1rem;
+      font-weight: 600;
+      font-size: $font-size-large;
+
+      @include md {
+        font-size: $font-size-extra-large;
+      }
+    }
+
+    .sub-heading {
+      color: $text-color-secondary;
+      text-align: center;
+      font-size: $font-size-small;
+      margin-bottom: 2rem;
+      @include md {
+        font-size: $font-size-base;
+      }
+    }
+
+    .button-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+      @include md {
+        gap: 1rem;
+      }
+    }
+
+    .faq-question {
+      width: 95%;
+      margin: 1rem auto;
+      margin-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      
+      @include md {
+        gap: 1rem;
+        width: 70%;
+      }
+      &.active{
+        display: block !important;
+      }
+      &.inactive{
+        display: none;
+      }
+    }
+    @include md {
+      max-width: calc(100% - 20px);
+      padding: 10px 40px;
+      align-items: start;
+      justify-content: space-between;
+    }
+    @include lg {
+      max-width: calc(100% - 40px);
+    }
+    @include xl {
+      max-width: calc(100% - 70px);
+    }
+    @include xxl {
+      max-width: calc(100% - 110px);
+    }
+  }
+  @include lg {
+    min-height: calc(100vh - 70px);
+  }
+}
