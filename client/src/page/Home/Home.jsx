@@ -5,6 +5,7 @@ import HomeImg from "../../assets/home-image.png";
 import UseFor from "../UseFor/UseFor";
 import HowWork from "../HowWork/HowWork";
 import Faq from "../Faq/Faq";
+import Testimonial from "../Testimonial/Testimonial";
 const Home = () => {
   return (
     <>
@@ -39,6 +40,7 @@ const Home = () => {
       <UseFor/>
       <HowWork/>
       <Faq/>
+      <Testimonial/>
     </>
   );
 };

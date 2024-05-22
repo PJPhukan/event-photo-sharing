@@ -9,7 +9,7 @@ const UseFor = ({ item }) => {
         <div className="card-text">
           <div className="card-heading">{item.title}</div>
           <div className="card-description">{item.description}</div>
-          <Link to={item.slug}>Read More<i class='bx bx-right-arrow-alt'></i></Link>
+          <Link to={item.slug}>Read More<i className='bx bx-right-arrow-alt'></i></Link>
         </div>
       </div>
     </>
