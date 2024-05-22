@@ -8,6 +8,7 @@ import UseFor from "./page/UseFor/UseFor.jsx";
 import Login from "./page/Login/Login.jsx";
 import Signup from "./page/Signup/Signup.jsx";
 import Faq from "./page/Faq/Faq.jsx"
+import Footer from "./page/Footer/Footer.jsx";
 function App() {
   return (
     <>
@@ -24,6 +25,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           {/* create-event  */}
         </Routes>
+        <Footer/>
       </BrowserRouter>
       {/* </UserState> */}
     </>
