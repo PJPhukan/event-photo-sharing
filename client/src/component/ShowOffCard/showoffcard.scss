@@ -1,0 +1,45 @@
+@import "../../css-config/mixins.scss";
+@import "../../css-config/variables.scss";
+.box {
+  .show-off-card {
+    min-width: 11rem;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 5px;
+    padding: 5px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    position: relative;
+  
+    @include xl {
+      min-width: 20rem;
+    }
+
+    // img {
+    //   width: 5rem;
+    //   height: 5rem;
+    //   object-fit: cover;
+
+    // }
+
+    .amount {
+      font-size: $font-size-large;
+      font-weight: 600;
+      @include xl {
+        font-size: $font-size-extra-large;
+      }
+    }
+
+    .content {
+      font-size: $font-size-base;
+      text-align: center;
+      @include xl {
+        font-size: $font-size-large;
+      }
+      color: $text-color-secondary;
+    }
+  }
+}

@@ -7,14 +7,14 @@ const data = [
     number:1
   },
   {
-    id: 1,
+    id: 2,
     title: "Click a Selfie to find photos",
     description: "Guest opens the link & clicks a selfie to find their photos.",
     image: "/howworkImage/2.png",
     number:2
   },
   {
-    id: 1,
+    id: 3,
     title: "Get your photos",
     description: "Guests can view, buy, download & share photos",
     image: "/howworkImage/3.png",
