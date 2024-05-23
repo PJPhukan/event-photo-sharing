@@ -1,0 +1,100 @@
+@import "../../css-config/mixins.scss";
+@import "../../css-config/variables.scss";
+.privacy-policy {
+  max-width: 100%;
+  position: relative;
+  height: 100%;
+
+  box-sizing: border-box;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: url(../../assets/bg3.jpg) no-repeat center center/cover;
+    object-fit: cover;
+    opacity: 0.2;
+    z-index: -1;
+  }
+
+  .main-content {
+    max-width: 100%;
+    margin: 0 auto;
+
+    .heading {
+      text-align: center;
+      padding-top: 1rem;
+      font-weight: 500;
+      font-size: $font-size-large;
+
+      @include md {
+        font-size: $font-size-extra-large;
+      }
+    }
+
+  
+
+    .text-content {
+      padding: 1rem 5px;
+      @include md {
+        padding: 1rem 30px;
+      }
+      .sub-text {
+          font-size: $font-size-base;
+          margin: .8rem 0;
+          font-weight: 500;
+          @include md {
+            margin: 1rem 0;
+            font-size: $font-size-medium;
+        }
+      }
+      .text {
+        padding-bottom: 0.5rem;
+        font-size: calc($font-size-small + 0px);
+        color: $text-color-secondary;
+        @include md {
+          padding-bottom: 1rem;
+          font-size: calc($font-size-small + 2px);
+        }
+        span {
+            color: $text-color-primary;
+          font-weight: 500;
+        }
+      }
+      li {
+        // list-style: decimal !important;
+        padding-left: 1rem;
+      }
+      .sub-heading {
+        margin-top: 1rem;
+        padding-bottom: 0.5rem;
+        font-size: $font-size-base;
+        font-weight: 500;
+        @include md {
+          margin-top: 1.3rem;
+        }
+      }
+    }
+
+    @include md {
+      max-width: calc(100% - 20px);
+      padding: 10px 40px;
+      align-items: start;
+      justify-content: space-between;
+    }
+    @include lg {
+      max-width: calc(100% - 70px);
+    }
+    @include xl {
+      max-width: calc(100% - 120px);
+    }
+    @include xxl {
+      max-width: calc(100% - 150px);
+    }
+  }
+  @include lg {
+    min-height: calc(100vh - 70px);
+  }
+}
