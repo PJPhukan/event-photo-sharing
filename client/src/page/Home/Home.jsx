@@ -46,8 +46,7 @@ const Home = () => {
             </div>
           </div>
           <div className="image-content" >
-            <img src={HomeImg} alt="" data-aos="fade-up"
-     data-aos-anchor-placement="top-bottom"/>
+            <img src={HomeImg} alt="" />
           </div>
         </div>
       </section>
