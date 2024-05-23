@@ -28,10 +28,17 @@
     display: flex;
     flex-flow: wrap;
     gap: 20px;
+    align-items: start;
+    justify-content: start;
 
     .col {
       max-width: 300px;
-
+      @include md {
+        max-width: 50%;
+      }
+      @include xl {
+        max-width: 300px;
+      }
       .title {
         font-size: $font-size-large;
         font-weight: 400;
@@ -41,12 +48,11 @@
       .text {
         color: $text-color-secondary;
         font-size: 14px;
-        a{
-            color: $text-color-secondary;
-            &:hover{
-                color: $text-color-primary;
-            }
-
+        a {
+          color: $text-color-secondary;
+          &:hover {
+            color: $text-color-primary;
+          }
         }
       }
 
@@ -81,12 +87,11 @@
       .text {
         font-size: $font-size-base;
         color: $text-color-primary;
-        margin-bottom: .2rem;
-        @include md{
+        margin-bottom: 0.2rem;
+        @include md {
           margin-bottom: 1rem;
         }
       }
-      
     }
     @include md {
       max-width: calc(100% - 20px);

@@ -12,7 +12,9 @@ import Footer from "./page/Footer/Footer.jsx";
 import TermsConditions from "./page/TermsConditions/TermsConditions.jsx";
 import PrivacyPolicy from "./page/PrivacyPolicy/PrivacyPolicy.jsx";
 import Testimonial from "./page/Testimonial/Testimonial.jsx";
+
 function App() {
+  // AOS.init();
   return (
     <>
       {/* <UserState> */}
