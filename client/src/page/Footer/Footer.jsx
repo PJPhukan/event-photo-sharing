@@ -8,12 +8,31 @@ const Footer = () => {
       <footer className="footer">
         <div className="footer-content">
           <div className="col">
-            <div className="title">About</div>
-            <div className="text">
-            Mêmois is your go-to platform for capturing and sharing life's special moments effortlessly. With user-friendly features like easy album creation, collaborative sharing, and customizable privacy settings, Mêmois ensures your memories are safely stored and shared with loved ones. Plus, our advanced face recognition technology adds an extra layer of convenience by helping you organize and identify individuals in your photos and videos. Join Mêmois today to preserve and cherish every moment with ease and joy.
+            <div
+              className="title"
+              data-aos="fade-up"
+              data-aos-anchor-placement="top-bottom"
+            >
+              About
+            </div>
+            <div className="text" data-aos="fade-up"
+     data-aos-anchor-placement="top-bottom">
+              Mêmois is your go-to platform for capturing and sharing life's
+              special moments effortlessly. With user-friendly features like
+              easy album creation, collaborative sharing, and customizable
+              privacy settings, Mêmois ensures your memories are safely stored
+              and shared with loved ones. Plus, our advanced face recognition
+              technology adds an extra layer of convenience by helping you
+              organize and identify individuals in your photos and videos. Join
+              Mêmois today to preserve and cherish every moment with ease and
+              joy.
             </div>
           </div>
-          <div className="col">
+          <div
+            className="col"
+            data-aos="fade-up"
+            data-aos-anchor-placement="top-bottom"
+          >
             <div className="title">Contact</div>
             <div className="c-content">
               <FaLocationArrow />
@@ -28,16 +47,36 @@ const Footer = () => {
               <div className="text">Email:memois2024@gmail.com</div>
             </div>
           </div>
-          <div className="col">
+          <div
+            className="col"
+            data-aos="fade-up"
+            data-aos-anchor-placement="top-bottom"
+          >
             <div className="title">Use Cases</div>
-            <span className="text"><Link to="/wedding">Weddings</Link></span>
-            <span className="text"><Link to="/private-event">Private Events</Link></span>
-            <span className="text"><Link to="/college">College Events</Link></span>
-            <span className="text"><Link to="/sports">Sporting Events</Link></span>
-            <span className="text"><Link to="/club">Social Clubs</Link></span>
-            <span className="text"><Link to="/corporate">Corporate Events</Link></span>
+            <span className="text">
+              <Link to="/wedding">Weddings</Link>
+            </span>
+            <span className="text">
+              <Link to="/private-event">Private Events</Link>
+            </span>
+            <span className="text">
+              <Link to="/college">College Events</Link>
+            </span>
+            <span className="text">
+              <Link to="/sports">Sporting Events</Link>
+            </span>
+            <span className="text">
+              <Link to="/club">Social Clubs</Link>
+            </span>
+            <span className="text">
+              <Link to="/corporate">Corporate Events</Link>
+            </span>
           </div>
-          <div className="col">
+          <div
+            className="col"
+            data-aos="fade-up"
+            data-aos-anchor-placement="top-bottom"
+          >
             <div className="title">Quick Links</div>
             <span className="text">
               <Link to="/">Home</Link>
@@ -58,7 +97,11 @@ const Footer = () => {
               <Link to="/faq">FAQ</Link>
             </span>
           </div>
-          <div className="bottom-bar">
+          <div
+            className="bottom-bar"
+            data-aos="fade-up"
+            data-aos-anchor-placement="top-bottom"
+          >
             <div className="text">
               © Memois Pvt. limited. All Rights Reserved
             </div>

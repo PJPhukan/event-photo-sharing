@@ -5,7 +5,8 @@ import "./testimonialcard.scss";
 const TestimonialCard = ({ card }) => {
   return (
     <>
-      <div className="card-item">
+      <div className="card-item" data-aos="fade-up"
+     data-aos-anchor-placement="top-bottom">
         <div className="testimonial-card">
           <div className="rating">
             <i className="bx bxs-star"></i>

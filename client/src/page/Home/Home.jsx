@@ -12,35 +12,49 @@ const Home = () => {
       <section className="home-section">
         <div className="home">
           <div className="home-text-content">
-            <div className="heading">
+            <div
+              className="heading"
+              data-aos="fade-up"
+              data-aos-anchor-placement="top-bottom"
+            >
               <span>C</span>apture and <span>S</span>hare Your <span>P</span>
               recious <span>M</span>oments with <span>M</span>oment{" "}
               <span>M</span>
               emoirs
             </div>
-            <div className="sub-heading-text">
+            <div
+              className="sub-heading-text"
+              data-aos="fade-up"
+              data-aos-anchor-placement="top-bottom"
+            >
               Visitors can take a selfie, and their pictures will be instantly
               accessible.
             </div>
-            <div className="facility-button">
+            <div
+              className="facility-button"
+              data-aos="fade-up"
+              data-aos-anchor-placement="top-bottom"
+            >
               <button>Privacy first </button>
               <button>Face Recognition</button>
               <button>Completely Free</button>
             </div>
 
-            <div className="home-create-event">
+            <div className="home-create-event" data-aos="fade-up"
+     data-aos-anchor-placement="top-bottom">
               <Link to="/create-event">Create Event</Link>
             </div>
           </div>
-          <div className="image-content">
-            <img src={HomeImg} alt="" />
+          <div className="image-content" >
+            <img src={HomeImg} alt="" data-aos="fade-up"
+     data-aos-anchor-placement="top-bottom"/>
           </div>
         </div>
       </section>
-      <UseFor/>
-      <HowWork/>
-      <Faq/>
-      <Testimonial/>
+      <UseFor />
+      <HowWork />
+      <Faq />
+      <Testimonial />
     </>
   );
 };

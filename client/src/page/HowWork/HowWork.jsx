@@ -7,7 +7,8 @@ const HowWork = () => {
     <>
       <section className="how-works">
         <div className="main-content">
-          <div className="heading">How it works</div>
+          <div className="heading" data-aos="fade-up"
+     data-aos-anchor-placement="top-bottom">How it works</div>
           <div className="card-section">
             {data.map((item) => {
               return <Work key={item.id} item={item} />;
