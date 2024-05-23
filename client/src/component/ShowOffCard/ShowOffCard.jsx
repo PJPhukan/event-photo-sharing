@@ -3,7 +3,8 @@ import "./showoffcard.scss";
 import CountUp from "react-countup";
 const ShowOffCard = ({ item }) => {
   return (
-    <div className="box">
+    <div className="box" data-aos="fade-up"
+    data-aos-anchor-placement="top-bottom">
       <div className="show-off-card">
         {/* <img src={item.image} alt="" /> */}
         <div className="amount">

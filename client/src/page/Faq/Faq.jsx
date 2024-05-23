@@ -28,12 +28,15 @@ const Faq = () => {
     <>
       <section className="faq-section">
         <div className="main-content">
-          <div className="heading">Frequently Asked Questions</div>
-          <div className="sub-heading">
+          <div className="heading" data-aos="fade-up"
+     data-aos-anchor-placement="top-bottom">Frequently Asked Questions</div>
+          <div className="sub-heading" data-aos="fade-up"
+     data-aos-anchor-placement="top-bottom">
             We are here to help with any questions you have about security,
             recognition, photos and others
           </div>
-          <div className="button-box">
+          <div className="button-box" data-aos="fade-up"
+     data-aos-anchor-placement="top-bottom">
             <div onClick={FaceRecognitionhandle}>
               <FaqButton text="Face Recognition" active={face} />
             </div>

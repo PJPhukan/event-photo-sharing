@@ -34,8 +34,10 @@ const Testimonial = () => {
     <>
       <section className="testimonial-section">
         <div className="main-content">
-          <div className="heading">Customer Testimonials</div>
-          <div className="sub-heading">
+          <div className="heading" data-aos="fade-up"
+     data-aos-anchor-placement="top-bottom">Customer Testimonials</div>
+          <div className="sub-heading" data-aos="fade-up"
+     data-aos-anchor-placement="top-bottom">
             Great website, highly recommended for all your needs.
           </div>
           <div className="testimonial-content">

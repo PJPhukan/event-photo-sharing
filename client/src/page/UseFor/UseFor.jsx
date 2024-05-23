@@ -6,13 +6,15 @@ const UseFor = () => {
   return (
     <section className="use-for">
       <div className="main-content">
-        <div className="heading">Works for all types of Events</div>
+        <div className="heading" data-aos="fade-up"
+     data-aos-anchor-placement="top-bottom">Works for all types of Events</div>
         <div className="card-section">
           {useforData.map((item) => {
             return <UseForComponent key={item.id} item={item} />;
           })}
         </div>
-        <div className="use-for-footer">
+        <div className="use-for-footer" data-aos="fade-up"
+     data-aos-anchor-placement="top-bottom">
           and many other use cases like birthday, camps, cruise ships and etc...
         </div>
       </div>
