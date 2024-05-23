@@ -18,9 +18,9 @@ const Testimonial = () => {
       if (window.innerWidth <= 640) {
         setnumberItem(1.4);
       } else if (window.innerWidth <= 1024) {
-        setnumberItem(2.4);
+        setnumberItem(2);
       } else {
-        setnumberItem(3.5);
+        setnumberItem(3);
       }
     };
     handleResize();

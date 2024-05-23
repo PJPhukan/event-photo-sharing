@@ -10,8 +10,7 @@ const Footer = () => {
           <div className="col">
             <div className="title">About</div>
             <div className="text">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Est
-              quidem, amet nisi ratione accusamus quam ad! veniam animi!
+            Mêmois is your go-to platform for capturing and sharing life's special moments effortlessly. With user-friendly features like easy album creation, collaborative sharing, and customizable privacy settings, Mêmois ensures your memories are safely stored and shared with loved ones. Plus, our advanced face recognition technology adds an extra layer of convenience by helping you organize and identify individuals in your photos and videos. Join Mêmois today to preserve and cherish every moment with ease and joy.
             </div>
           </div>
           <div className="col">
@@ -31,12 +30,12 @@ const Footer = () => {
           </div>
           <div className="col">
             <div className="title">Use Cases</div>
-            <span className="text">Weddings</span>
-            <span className="text">Private Events</span>
-            <span className="text">College Events</span>
-            <span className="text">Sporting Events</span>
-            <span className="text">Social Clubs</span>
-            <span className="text">Corporate Events</span>
+            <span className="text"><Link to="/wedding">Weddings</Link></span>
+            <span className="text"><Link to="/private-event">Private Events</Link></span>
+            <span className="text"><Link to="/college">College Events</Link></span>
+            <span className="text"><Link to="/sports">Sporting Events</Link></span>
+            <span className="text"><Link to="/club">Social Clubs</Link></span>
+            <span className="text"><Link to="/corporate">Corporate Events</Link></span>
           </div>
           <div className="col">
             <div className="title">Quick Links</div>
