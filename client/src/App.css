@@ -27,6 +27,3 @@ a {
 .color-pink{
   color: var(--text-color-pink);
 }
-li{
-  list-style: none;
-}
