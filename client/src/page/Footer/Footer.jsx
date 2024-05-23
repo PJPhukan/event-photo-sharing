@@ -18,9 +18,7 @@ const Footer = () => {
             <div className="title">Contact</div>
             <div className="c-content">
               <FaLocationArrow />
-              <div className="text">
-               New Delhi, India ,7002020
-              </div>
+              <div className="text">New Delhi, India ,7002020</div>
             </div>
             <div className="c-content">
               <FaMobileAlt />
@@ -43,22 +41,22 @@ const Footer = () => {
           <div className="col">
             <div className="title">Quick Links</div>
             <span className="text">
-              <Link to="">Home</Link>
+              <Link to="/">Home</Link>
             </span>
             <span className="text">
-              <Link to="">About</Link>
+              <Link to="/about">About</Link>
             </span>
             <span className="text">
-              <Link to="">Privacy Policy</Link>
+              <Link to="/use-for">Use for</Link>
             </span>
             <span className="text">
-              <Link to="">Returns</Link>
+              <Link to="/privacy-policy">Privacy Policy</Link>
             </span>
             <span className="text">
-              <Link to="">Terns & Conditions</Link>
+              <Link to="/terms-conditions">Terns & Conditions</Link>
             </span>
             <span className="text">
-              <Link to="">Contact Us</Link>
+              <Link to="/faq">FAQ</Link>
             </span>
           </div>
           <div className="bottom-bar">

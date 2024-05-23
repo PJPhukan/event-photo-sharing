@@ -5,10 +5,18 @@
   min-height: 16rem;
   border-radius: 10px;
   padding: 15px;
-  @include md{
-    min-height: 22rem;
 
-}
+  &::before{
+    content: '';
+    position: relative;
+    height: 50%;
+    width: 50%;
+    left: 50%;
+    top: -50%;
+  }
+  @include md {
+    min-height: 22rem;
+  }
   .testimonial-card {
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
@@ -17,52 +25,48 @@
     align-items: center;
     flex-direction: column;
 
-    .rating{
-        color: gold;
-        margin-top: .5rem;
-        @include md{
-            margin-top: 1rem;
-
-        }
+    .rating {
+      color: gold;
+      margin-top: 0.5rem;
+      @include md {
+        margin-top: 1rem;
+      }
     }
-    .text-content{
-        padding: .5rem;
-        text-align: center;
-        font-size: $font-size-small;
-        font-weight: 500;
-        margin-bottom: .6rem;
-        @include md{
-            padding: 1rem;
-            font-size: $font-size-base;
-
-        }
-    }
-    img{
-        width: 4rem;
-        border-radius: 50%;
-        @include md{
-            width: 6rem;
-
-        }
-    }
-    .user-name{
+    .text-content {
+      padding: 0.5rem;
+      text-align: center;
+      font-size: $font-size-small;
+      font-weight: 500;
+      margin-bottom: 0.6rem;
+      @include md {
+        padding: 1rem;
         font-size: $font-size-base;
-        font-weight: 600;
-        margin-top: .5rem;
-        @include md{
-            margin-top: .7rem;
-            font-size: $font-size-medium;
-
-        }
+      }
     }
-    .details{
-        color: $text-color-secondary;
-        display: flex;
-        gap: .7rem;
-        font-size: $font-size-small;
-        @include md{
-            font-size: $font-size-base;
-        }
+    img {
+      width: 4rem;
+      border-radius: 50%;
+      @include md {
+        width: 6rem;
+      }
+    }
+    .user-name {
+      font-size: $font-size-base;
+      font-weight: 600;
+      margin-top: 0.5rem;
+      @include md {
+        margin-top: 0.7rem;
+        font-size: $font-size-medium;
+      }
+    }
+    .details {
+      color: $text-color-secondary;
+      display: flex;
+      gap: 0.7rem;
+      font-size: $font-size-small;
+      @include md {
+        font-size: $font-size-base;
+      }
     }
   }
 }

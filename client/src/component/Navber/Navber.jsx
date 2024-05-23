@@ -33,6 +33,7 @@ const Navber = () => {
             <Link to="/">Home</Link>
             <Link to="/about">About</Link>
             <Link to="/use-for">Use for</Link>
+            <Link to="/testimonial">Testimonial</Link>
             <Link to="/faq">
               FAQ'<span>s</span>
             </Link>

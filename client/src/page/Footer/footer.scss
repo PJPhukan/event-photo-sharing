@@ -16,8 +16,9 @@
     background: url(../../assets/bg1.jpg) no-repeat center center/cover;
     object-fit: cover;
     // background-attachment: fixed;
-    opacity: 0.2;
+    // opacity: 0.2;
     z-index: -1;
+    background: black;
   }
 
   .footer-content {
@@ -80,7 +81,10 @@
       .text {
         font-size: $font-size-base;
         color: $text-color-primary;
-        margin-bottom: 1rem;
+        margin-bottom: .2rem;
+        @include md{
+          margin-bottom: 1rem;
+        }
       }
       
     }
