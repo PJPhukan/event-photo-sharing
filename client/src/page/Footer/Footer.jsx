@@ -5,18 +5,21 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <>
-      <footer className="footer">
+      <footer className="footer" 
+            data-aos="fade-up"
+            data-aos-anchor-placement="top-bottom">
         <div className="footer-content">
           <div className="col">
             <div
               className="title"
-              data-aos="fade-up"
-              data-aos-anchor-placement="top-bottom"
+              
             >
               About
             </div>
-            <div className="text" data-aos="fade-up"
-     data-aos-anchor-placement="top-bottom">
+            <div
+              className="text"
+              
+            >
               Mêmois is your go-to platform for capturing and sharing life's
               special moments effortlessly. With user-friendly features like
               easy album creation, collaborative sharing, and customizable
@@ -30,8 +33,6 @@ const Footer = () => {
           </div>
           <div
             className="col"
-            data-aos="fade-up"
-            data-aos-anchor-placement="top-bottom"
           >
             <div className="title">Contact</div>
             <div className="c-content">
@@ -49,8 +50,6 @@ const Footer = () => {
           </div>
           <div
             className="col"
-            data-aos="fade-up"
-            data-aos-anchor-placement="top-bottom"
           >
             <div className="title">Use Cases</div>
             <span className="text">
@@ -74,8 +73,6 @@ const Footer = () => {
           </div>
           <div
             className="col"
-            data-aos="fade-up"
-            data-aos-anchor-placement="top-bottom"
           >
             <div className="title">Quick Links</div>
             <span className="text">
@@ -99,8 +96,6 @@ const Footer = () => {
           </div>
           <div
             className="bottom-bar"
-            data-aos="fade-up"
-            data-aos-anchor-placement="top-bottom"
           >
             <div className="text">
               © Memois Pvt. limited. All Rights Reserved
