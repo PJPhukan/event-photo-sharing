@@ -1,6 +1,6 @@
 /* IMPORT ALL EXTERNAL CSS  */
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
-
+@import url('https://fonts.googleapis.com/css2?family=Mukta&family=Noto+Sans+Sogdian&family=Playpen+Sans&family=Tilt+Neon&display=swap');
 * {
   padding: 0;
   margin: 0;
@@ -25,6 +25,21 @@ a {
   color: var(--text-color-primary);
 }
 
+li{
+  list-style: none;
+}
 .color-pink{
   color: var(--text-color-pink);
+}
+
+/* dashboard section  */
+.dashboard-user{
+  display: flex;
+  justify-content: start;
+  align-items: start;
+
+}
+
+.sidebar-right{
+  width: 100%;
 }
