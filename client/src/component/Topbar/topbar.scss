@@ -1,0 +1,86 @@
+@import "../../css-config/mixins.scss";
+@import "../../css-config/variables.scss";
+
+.top-bar {
+  background: $dashboard-bg-primary;
+  height: 60px;
+  width: 100%;
+  position: sticky;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0.3rem;
+  top: 0;
+
+  @include md {
+    padding: 0 1.5rem;
+    height: 80px;
+  }
+
+  .left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+
+    @include md {
+      gap: 1rem;
+    }
+    i {
+      font-size: calc($font-size-large + 10px);
+      cursor: pointer;
+    }
+    .search {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.3rem;
+      background: $dashboard-bg-secondary;
+      padding: 5px 2px;
+      border-radius: 5px;
+      i {
+        gap: 1rem;
+        font-size: calc($font-size-large);
+      }
+      input {
+        padding: 3px;
+        border-radius: 5px;
+        outline: none;
+        border: none;
+        background: $dashboard-bg-secondary;
+        color: $text-color-primary;
+        @include md {
+          width: 20rem;
+        }
+      }
+    }
+  }
+
+  .right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: $font-size-medium;
+    font-size: $font-size-large;
+    gap: 0.4rem;
+    padding-right: 5px;
+    @include md {
+      font-size: $font-size-large;
+      gap: 1rem;
+    }
+
+    .icon {
+      display: none;
+      @include md {
+        display: inline-block;
+      }
+    }
+    img {
+      width: 30px;
+      border-radius: 50%;
+      @include md {
+        width: 40px;
+      }
+    }
+  }
+}
