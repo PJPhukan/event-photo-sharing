@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-const imageSchema = new mongoose.model(
+const imageSchema = new mongoose.Schema(
   {
     imageUrl: {
       type: String,
