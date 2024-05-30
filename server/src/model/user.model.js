@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import {names} from "../data/names.js"
+import { names } from "../data/names.js";
 const userSchema = new Schema(
   {
     username: {
@@ -30,15 +30,21 @@ const userSchema = new Schema(
       required: true,
       unique: true,
       trim: true,
-      max
+      max:10,
     },
     avatar: {
       type: String,
-      default:function(){
-        const isFamale= names.some(n=>n.name.toLowercase().includes(this.fullname.toLowercase()) && n.gender==="female")
-        const gender= isFamale?"female":"male"
-        return `https://d2u8k2ocievbld.cloudfront.net/memojis/${gender}/${Math.floor(Math.random() * 30) + 1}.png`;
-      }
+      default: function () {
+        const isFamale = names.some(
+          (n) =>
+            n.name.toLowercase().includes(this.fullname.toLowercase()) &&
+            n.gender === "female"
+        );
+        const gender = isFamale ? "female" : "male";
+        return `https://d2u8k2ocievbld.cloudfront.net/memojis/${gender}/${
+          Math.floor(Math.random() * 30) + 1
+        }.png`;
+      },
     },
     coverImage: {
       type: String,
