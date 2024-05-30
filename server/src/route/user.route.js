@@ -1,0 +1,43 @@
+import { Router } from "express";
+import { upload } from "../middleware/multer.middleware.js";
+import {
+  RegisterUser,
+  GerUserDetails,
+  Login,
+  Logout,
+  ChangePassword,
+  ChangeMobileNumber,
+  ChangeAvater,
+  ChangeCoverImage,
+  ForgotPassword,
+  VerifyUser,
+  ResetPassword,
+} from "../controller/user.conrollers.js";
+import { VerifyJwtToken } from "../libs/auth.helpers.js";
+const router = Router();
+
+router.route("/register").post(RegisterUser); //No logged in required
+
+router.route("/getdetails").get(VerifyJwtToken, GerUserDetails); //user logged in required
+
+router.route("/login").post(Login); //no logged in required
+
+router.route("/logout").post(VerifyJwtToken, Logout); //user logged in required
+
+router.route("/changepassword").patch(VerifyJwtToken, ChangePassword); //user logged in required
+
+router.route("/changemobilenumber").patch(VerifyJwtToken, ChangeMobileNumber); //user logged in required
+
+router
+  .route("/changeavater")
+  .patch(VerifyJwtToken, upload.single("avatar"), ChangeAvater); //user logged in required
+
+router
+  .route("/changecoverimage")
+  .patch(VerifyJwtToken, upload.single("coverImg"), ChangeCoverImage); //user logged in required
+
+router.route("/forgotpassword").post(ForgotPassword); //no logged in required
+
+router.route("/verifyuser").post(VerifyUser); //no logged in required
+
+export default router;
