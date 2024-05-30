@@ -5,7 +5,7 @@ const MongoConnect = async () => {
       `${process.env.MONGO_DB_URI}/${process.env.DB_NAME}`
     );
     console.log(
-      `⭐ MONGO CONNECTION SUCCESSFULL⭐ !! ${response.connection.host}`
+      `⭐ MONGO CONNECTION SUCCESSFULL ⭐ !! ${response.connection.host}`
     );
   } catch (error) {
     console.error("MONGO CONNECTION ERROR ", error);
