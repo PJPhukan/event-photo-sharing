@@ -12,13 +12,7 @@ const collectionSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Image",
     },
-    /*
-    Using aggregation pipeline 
-    totalImage:{
-        type:Number,
-        default:true
-    }
-    */
+  
   },
   {
     timestamps: true,
