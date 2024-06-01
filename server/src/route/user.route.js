@@ -10,7 +10,7 @@ import {
   ChangeAvater,
   ChangeCoverImage,
   ForgotPassword,
-  VerifyUser,
+  VerifyOTP,
   ResetPassword,
 } from "../controller/user.conrollers.js";
 import { VerifyJwtToken } from "../libs/auth.helpers.js";
@@ -38,6 +38,8 @@ router
 
 router.route("/forgotpassword").post(ForgotPassword); //no logged in required
 
-router.route("/verifyuser").post(VerifyUser); //no logged in required
+router.route("/verifyotp").post(VerifyOTP); //no logged in required
+
+router.route("/resetpassword").patch(ResetPassword); //no logged in required
 
 export default router;

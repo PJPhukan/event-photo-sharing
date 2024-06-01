@@ -30,14 +30,13 @@ const userSchema = new Schema(
       required: true,
       unique: true,
       trim: true,
-      max:10,
     },
     avatar: {
       type: String,
       default: function () {
         const isFamale = names.some(
           (n) =>
-            n.name.toLowercase().includes(this.fullname.toLowercase()) &&
+            n.name.toLowerCase().includes(this.fullname.toLowerCase()) &&
             n.gender === "female"
         );
         const gender = isFamale ? "female" : "male";
@@ -48,13 +47,7 @@ const userSchema = new Schema(
     },
     coverImage: {
       type: String,
-    },
-    collections: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Collection",
-      },
-    ],
+    }
   },
   {
     timestamps: true,
