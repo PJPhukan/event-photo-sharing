@@ -28,7 +28,6 @@ const userSchema = new Schema(
     phoneNumber: {
       type: Number,
       required: true,
-      unique: true,
       trim: true,
     },
     avatar: {
@@ -47,7 +46,7 @@ const userSchema = new Schema(
     },
     coverImage: {
       type: String,
-    }
+    },
   },
   {
     timestamps: true,

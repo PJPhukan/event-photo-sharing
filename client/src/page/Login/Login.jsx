@@ -1,7 +1,10 @@
 import "./login.scss";
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import context from "../../../Context/context";
 const Login = () => {
+  const usecontext = useContext(context);
+  const {} = usecontext;
   return (
     <section className="login">
       <div className="main-content">
@@ -27,9 +30,9 @@ const Login = () => {
                 placeholder="password"
               />
             </div>
-              <Link to="/forgot-password" className="forgotPassword">
-                Forgot Password?
-              </Link>
+            <Link to="/forgot-password" className="forgotPassword">
+              Forgot Password?
+            </Link>
             <button className="login-button">Log In</button>
             <div className="or">
               <span className="line">or</span>
@@ -44,10 +47,10 @@ const Login = () => {
                 <span>Facebook</span>
               </div>
             </div>
-            
+
             <Link to="/signup" className="registration">
-                Don't have an account? <span>Register here</span>&rarr;
-              </Link>
+              Don't have an account? <span>Register here</span>&rarr;
+            </Link>
           </div>
         </div>
       </div>
