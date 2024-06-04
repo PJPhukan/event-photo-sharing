@@ -28,20 +28,11 @@ let VerificationOtp = null;
 const RegisterUser = AsyncHandler(async (req, res) => {
   const { username, fullname, email, password, phoneNumber } = req.body;
 
-  // if (
-  //   [username, fullname, email, password, phoneNumber].some(
-  //     (item) => item?.trim() === ""
-  //   )
-  // ) {
-  //   throw new ApiError(400, "All field are required");
-  // }
-
   if (!username && !fullname && !email && !password && !phoneNumber) {
     throw new ApiError(400, "All field are required");
   }
-  let user = await User.findOne({ $or: [{ email }, { username }] }).select(
-    "-password"
-  );
+
+  let user = await User.findOne({ $or: [{ email }, { username }] });
 
   if (user) {
     throw new ApiError(409, "User Already exist");
@@ -55,11 +46,14 @@ const RegisterUser = AsyncHandler(async (req, res) => {
     email,
     password: securePassword,
     phoneNumber,
+    coverImage: null,
   });
+
+  user = await User.findById(user._id).select("-password");
+
   if (!user) {
     throw new ApiError(500, "Internal server error !!");
   }
-  user = user?.select("-password");
   const options = {
     httpOnly: true,
     secure: true,
@@ -296,7 +290,7 @@ const ResetPassword = AsyncHandler(async (req, res) => {
     httpOnly: true,
     secure: true,
   };
-  
+
   const payload = {
     _id: user._id,
     username: user.username,

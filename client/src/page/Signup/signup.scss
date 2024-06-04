@@ -85,12 +85,24 @@
         .heading {
           text-align: center;
           margin: 0.8rem auto;
-          font-weight: 500;
-          font-size: $font-size-base;
+          font-weight: 600;
+          font-size: $font-size-medium;
 
           @include md {
             margin: 1rem auto;
-            font-size: $font-size-medium;
+            font-size: $font-size-large;
+          }
+        }
+
+        .error-box{
+          text-align: center;
+          color: red;
+          font-weight: 500;
+          font-size: $font-size-small;
+          margin: 1rem 0;
+          height: 15px;
+          @include md{
+            font-size: $font-size-base;
           }
         }
         .input-box {
@@ -103,7 +115,7 @@
           position: relative;
 
           @include md {
-            margin-bottom: .6rem;
+            margin-bottom: 0.6rem;
           }
           label {
             padding-bottom: 0.5rem;
@@ -119,10 +131,9 @@
             outline: none;
             color: $text-color-primary;
             font-size: $font-size-base;
+            
           }
         }
-
-        
 
         .login-button {
           width: 80%;
