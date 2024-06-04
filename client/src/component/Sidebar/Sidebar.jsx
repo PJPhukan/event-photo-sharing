@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./sidebar.scss";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import context from "../../../Context/context";
 const Sidebar = () => {
   const usecontext = useContext(context);
   const { showSidebar } = usecontext;
   const [Showmobile, setShowmobile] = useState(true);
-  
+  let location = useLocation();
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 768) {
@@ -21,6 +21,9 @@ const Sidebar = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+  useEffect(() => {
+  }, [location])
+
   return (
     <>
       <div
@@ -30,59 +33,62 @@ const Sidebar = () => {
       >
         <div className="logo">Memois</div>
         <div className="nav-item">
-          <li>
-            <Link to="/dashboard" className="active">
+          <Link
+            to="/dashboard"
+            className={`${location.pathname === "/dashboard" ? "active" : " "}`}
+          >
+            <li>
               <i className="bx bxs-dashboard"></i>
               <span>Dashboard</span>
-            </Link>
-          </li>
+            </li>
+          </Link>
 
-          <li>
-            <Link to="/dashboard/profile">
+          <Link to="/dashboard/profile" className={`${location.pathname === "/dashboard/profile" ? "active" : " "}`}>
+            <li>
               <i className="bx bxs-user"></i>
               <span>Profile</span>
-            </Link>
-          </li>
+            </li>
+          </Link>
 
-          <li>
-            <Link to="/dashboard/create-event">
+          <Link to="/dashboard/create-event" className={`${location.pathname === "/dashboard/create-event" ? "active" : " "}`}>
+            <li>
               <i className="bx bxs-calendar-event"></i>
               <span>Events</span>
-            </Link>
-          </li>
+            </li>
+          </Link>
 
-          <li>
-            <Link to="/dashboard/collections">
+          <Link to="/dashboard/collections" className={`${location.pathname === "/dashboard/collections" ? "active" : " "}`}>
+            <li>
               <i className="bx bx-collection"></i>
               <span>Collections</span>
-            </Link>
-          </li>
+            </li>
+          </Link>
 
-          <li>
-            <Link to="/dashboard/favorite">
+          <Link to="/dashboard/favorite" className={`${location.pathname === "/dashboard/favorite" ? "active" : " "}`}>
+            <li>
               <i className="bx bxs-star"></i>
               <span>Favorites</span>
-            </Link>
-          </li>
+            </li>
+          </Link>
 
-          <li>
-            <Link to="/dashboard/notifications">
+          <Link to="/dashboard/notifications" className={`${location.pathname === "/dashboard/notifications" ? "active" : " "}`}>
+            <li>
               <i className="bx bxs-bell"></i>
               <span>Notifications</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/dashboard/settings">
+            </li>
+          </Link>
+          <Link to="/dashboard/settings" className={`${location.pathname === "/dashboard/settings" ? "active" : " "}`}>
+            <li>
               <i className="bx bxs-cog"></i>
               <span>Settings</span>
-            </Link>
-          </li>
-          <li className="logout">
-            <Link to="/">
+            </li>
+          </Link>
+          <Link to="/logout" className={`${location.pathname === "/logout" ? "active" : " "}`}>
+            <li className="logout">
               <i className="bx bx-log-out"></i>
               <span>Logout</span>
-            </Link>
-          </li>
+            </li>
+          </Link>
         </div>
       </div>
     </>

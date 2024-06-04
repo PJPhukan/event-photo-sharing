@@ -16,9 +16,7 @@ const Signup = () => {
   });
   const HandleSignIn = async () => {
     if (user.password !== user.confirmPassword) {
-      console.log("Confirm password is not correct");
       setError("Confirm password is not correct");
-      console.log(user);
     } else {
       await register(user);
       setadminlogin(true);
