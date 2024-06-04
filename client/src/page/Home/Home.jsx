@@ -40,12 +40,15 @@ const Home = () => {
               <button>Completely Free</button>
             </div>
 
-            <div className="home-create-event" data-aos="fade-up"
-     data-aos-anchor-placement="top-bottom">
+            <div
+              className="home-create-event"
+              data-aos="fade-up"
+              data-aos-anchor-placement="top-bottom"
+            >
               <Link to="/create-event">Create Event</Link>
             </div>
           </div>
-          <div className="image-content" >
+          <div className="image-content">
             <img src={HomeImg} alt="" />
           </div>
         </div>

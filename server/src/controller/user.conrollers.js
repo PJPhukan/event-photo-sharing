@@ -97,7 +97,7 @@ const Login = AsyncHandler(async (req, res) => {
   if (!username && !password) {
     throw new ApiError(400, "username and password are required !");
   }
-  let user = await User.findOne(username);
+  let user = await User.findOne({username});
 
   if (!user) {
     throw new ApiError(404, "Please authenticate with valid credentials");
@@ -109,7 +109,7 @@ const Login = AsyncHandler(async (req, res) => {
   }
 
   user.password = undefined;
-  console.log("115 : ", user);
+  // console.log("115 : ", user);
 
   const options = {
     httpOnly: true,

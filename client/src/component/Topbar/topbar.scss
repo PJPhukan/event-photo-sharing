@@ -11,6 +11,7 @@
   align-items: center;
   padding: 0 0.3rem;
   top: 0;
+  z-index: 99;
 
   @include md {
     padding: 0 1.5rem;

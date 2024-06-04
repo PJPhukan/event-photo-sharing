@@ -1,11 +1,13 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import "./topbar.scss";
 import ProfileImage from "../../assets/profile.jpg";
 import { Link } from "react-router-dom";
 import context from "../../../Context/context";
 const Topbar = () => {
   const usecontext = useContext(context);
-  const { showSidebar, setshowSidebar } = usecontext;
+  const { showSidebar, setshowSidebar, user } = usecontext;
+  useEffect(() => {
+  }, [user]);
 
   return (
     <div className="top-bar">
@@ -29,7 +31,7 @@ const Topbar = () => {
         </Link>
 
         <Link to="/dashboard/profile">
-          <img src={ProfileImage} alt="" />
+          <img src={user ? user.avatar : ProfileImage} alt="" />
         </Link>
       </div>
     </div>
