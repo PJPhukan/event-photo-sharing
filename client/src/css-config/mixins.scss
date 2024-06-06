@@ -1,3 +1,8 @@
+@mixin smm {
+    @media only screen and (min-width: 400px) {
+        @content;
+    }
+}
 @mixin sm {
     @media only screen and (min-width: 640px) {
         @content;

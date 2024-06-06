@@ -1,0 +1,25 @@
+@import "../../css-config/mixins.scss";
+@import "../../css-config/variables.scss";
+.create-event-main{
+    max-width: 100%;
+    position: relative;
+    height: 100%;
+    box-sizing: border-box;
+    background: $dashboard-bg-secondary;
+    padding: 0.5rem;
+    font-family: "Tilt Neon", sans-serif;
+    @include lg {
+        padding: 1rem 1.5rem;
+        min-height: calc(100vh);
+      }
+      .event-main-content{
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        
+
+        
+      }
+}
