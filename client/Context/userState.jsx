@@ -11,36 +11,6 @@ const UseState = (props) => {
 
   //all api's
 
-  // const [jokes, setjokes] = useState([]);
-  // //get all joke from the backend
-  // const getJoke = async () => {
-  //   axios
-  //     .get("/api/joke")
-  //     .then((res) => {
-  //       setjokes(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //     });
-  // };
-
-  //REGISTER USER
-  /**
-       const register = async (payload) => {
-          await axios
-          .post(`${serverURI}/auth/user/register`, payload)
-          .then((res) => {
-              console.log("Client: Inside User register 📌📌📌📌");
-              console.log(res);
-              setUser(res.user);
-            })
-            .catch((err) => {
-              console.log("Client: Inside User register ❗❗❗❗", 35);
-              console.log(err.response.data.message);
-              setError(err.response.data.message);
-          });
-      };
-    */
   const register = async (payload) => {
     try {
       const res = await axios.post(`${serverURI}/auth/user/register`, payload);
@@ -56,17 +26,17 @@ const UseState = (props) => {
 
   //LOGGED IN USER
   const login = async (payload) => {
-    await axios
-      .post(`${serverURI}/auth/user/login`, payload)
-      .then((res) => {
-        console.log("Client: Inside User login 📌📌📌📌 , 45");
-        console.log(res);
-        setUser(res.user);
-      })
-      .catch((err) => {
-        console.log("Client: Inside User login ❗❗❗❗");
-        console.log(err);
-      });
+    try {
+      const res = await axios.post(`${serverURI}/auth/user/login`, payload);
+      // console.log("Response:", res);
+      // console.log(res.data.data.user);
+      if (res.data.success) {
+        setUser(res.data.data.user);
+      }
+    } catch (err) {
+      // console.log(err.response.data.message);
+      setError(err.response.data.message);
+    }
   };
 
   //GET USER DETAILS
@@ -85,16 +55,13 @@ const UseState = (props) => {
 
   //LOGOUT
   const logout = async () => {
-    await axios
-      .post(`${serverURI}/auth/user/logout`)
-      .then((res) => {
-        console.log("Client: Inside Logout 📌📌📌📌 , 74");
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log("Client: Inside Logout ❗❗❗❗");
-        console.log(err);
-      });
+    try {
+      const res = await axios.post(`${serverURI}/auth/user/logout`);
+      console.log(res.data.data.message);
+    } catch (err) {
+      console.log(err.response.data.message);
+      setError(err.response.data.message);
+    }
   };
 
   //PASSWORD CHANGE
@@ -122,9 +89,10 @@ const UseState = (props) => {
         logout,
         changepassword,
         adminlogin,
-        setadminlogin,
         error,
+        setadminlogin,
         setError,
+        user,
       }}
     >
       {props.children}
