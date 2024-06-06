@@ -2,7 +2,7 @@ import React from "react";
 import "./work.scss";
 const Work = ({ item }) => {
   return (
-    <div className="work" data-aos="fade-up"
+    <div className="work-main" data-aos="fade-up"
     data-aos-anchor-placement="top-bottom">
       <img src={item.image} alt="" />
 
