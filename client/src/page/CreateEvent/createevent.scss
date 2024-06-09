@@ -1,25 +1,64 @@
 @import "../../css-config/mixins.scss";
 @import "../../css-config/variables.scss";
-.create-event-main{
-    max-width: 100%;
-    position: relative;
-    height: 100%;
-    box-sizing: border-box;
-    background: $dashboard-bg-secondary;
-    padding: 0.5rem;
-    font-family: "Tilt Neon", sans-serif;
-    @include lg {
-        padding: 1rem 1.5rem;
-        min-height: calc(100vh);
+.create-event-main {
+  max-width: 100%;
+  position: relative;
+  height: 100%;
+  box-sizing: border-box;
+  background: $dashboard-bg-secondary;
+  padding: 0.5rem;
+  font-family: "Tilt Neon", sans-serif;
+  z-index: 1;
+  @include lg {
+    padding: 1rem 1.5rem;
+    min-height: calc(100vh);
+  }
+  .top-event {
+    display: flex;
+    justify-content: space-between;
+    // margin: 0 1rem;
+    // border: 2px solid red;
+    align-items: start;
+    .section-heading {
+      margin-bottom: 0.5rem;
+      @include md {
+        margin-bottom: 1rem;
       }
-      .event-main-content{
-        display: flex;
-        justify-content: start;
-        align-items: center;
-        gap: 1rem;
-        flex-wrap: wrap;
-        
+      .main-heading {
+        font-size: $font-size-medium;
+        @include md {
+          font-size: $font-size-large;
+        }
+      }
 
-        
+      .sub-heading {
+        font-size: $font-size-small;
+        color: $text-color-secondary;
+        font-weight: 200;
+        @include md {
+          font-size: $font-size-base;
+        }
       }
+    }
+
+    .create-event-btn {
+      text-decoration: none;
+      font-size: $font-size-base;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 0.5rem 2rem;
+      background: linear-gradient(0deg, #003fff, #0b31ac);
+      border-radius: 5px;
+      @include md {
+        padding: 0.8rem 3rem;
+      }
+    }
+  }
+  .event-main-content {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
 }
