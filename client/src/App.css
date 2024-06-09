@@ -42,4 +42,5 @@ li{
 
 .sidebar-right{
   width: 100%;
+  z-index: 1;
 }
