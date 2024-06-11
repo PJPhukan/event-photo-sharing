@@ -11,7 +11,7 @@ app.use(express.urlencoded());
 app.use(cookieParser());
 
 //All routes
-app.use("/auth/user", userRouter);
+app.use("/api/auth/user", userRouter);
 
 app.use((err, req, res, next) => {
   if (err instanceof ApiError) {

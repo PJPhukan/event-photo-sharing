@@ -1,7 +1,6 @@
 import { useState } from "react";
 import context from "./context";
 import axios from "axios";
-const serverURI = "http://localhost:3000";
 const UseState = (props) => {
   //all state management
   const [showSidebar, setshowSidebar] = useState(true); //side bar states
@@ -13,7 +12,7 @@ const UseState = (props) => {
 
   const register = async (payload) => {
     try {
-      const res = await axios.post(`${serverURI}/auth/user/register`, payload);
+      const res = await axios.post("/api/auth/user/register", payload);
       console.log("Response:", res);
       setUser(res.data.data.user);
       // console.log("User", user);
@@ -27,7 +26,7 @@ const UseState = (props) => {
   //LOGGED IN USER
   const login = async (payload) => {
     try {
-      const res = await axios.post(`${serverURI}/auth/user/login`, payload);
+      const res = await axios.post("/api/auth/user/login", payload);
       // console.log("Response:", res);
       // console.log(res.data.data.user);
       if (res.data.success) {
@@ -42,7 +41,7 @@ const UseState = (props) => {
   //GET USER DETAILS
   const getuser = async () => {
     await axios
-      .get(`${serverURI}/auth/user/getdetails`)
+      .get("/api/auth/user/getdetails")
       .then((res) => {
         console.log("Client: Inside get user details 📌📌📌📌 , 60");
         console.log(res);
@@ -56,7 +55,7 @@ const UseState = (props) => {
   //LOGOUT
   const logout = async () => {
     try {
-      const res = await axios.post(`${serverURI}/auth/user/logout`);
+      const res = await axios.post("/api/auth/user/logout");
       console.log(res.data.data.message);
     } catch (err) {
       console.log(err.response.data.message);
@@ -67,7 +66,7 @@ const UseState = (props) => {
   //PASSWORD CHANGE
   const changepassword = async (data) => {
     await axios
-      .post(`${serverURI}/auth/user/changepassword`, data)
+      .post("/api/auth/user/changepassword", data)
       .then((res) => {
         console.log("Client: Inside change password 📌📌📌📌 , 47");
         console.log(res);

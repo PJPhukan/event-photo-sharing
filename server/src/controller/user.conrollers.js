@@ -56,7 +56,9 @@ const RegisterUser = AsyncHandler(async (req, res) => {
   }
   const options = {
     httpOnly: true,
-    secure: true,
+    // secure:true, // Secure in production
+    sameSite: "Strict", // Helps protect against CSRF attacks
+    maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
   };
   const payload = {
     _id: user._id,
@@ -97,7 +99,7 @@ const Login = AsyncHandler(async (req, res) => {
   if (!username && !password) {
     throw new ApiError(400, "username and password are required !");
   }
-  let user = await User.findOne({username});
+  let user = await User.findOne({ username });
 
   if (!user) {
     throw new ApiError(404, "Please authenticate with valid credentials");
@@ -113,7 +115,9 @@ const Login = AsyncHandler(async (req, res) => {
 
   const options = {
     httpOnly: true,
-    secure: true,
+    // secure: true, // Secure in production
+    sameSite: "Strict", // Helps protect against CSRF attacks
+    maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
   };
   const payload = {
     _id: user._id,
@@ -136,7 +140,9 @@ const Logout = AsyncHandler(async (req, res) => {
   }
   const options = {
     httpOnly: true,
-    secure: true,
+    // secure: true, // Secure in production
+    sameSite: "Strict", // Helps protect against CSRF attacks
+    maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
   };
   return res
     .status(200)
