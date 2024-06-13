@@ -1,0 +1,246 @@
+@import "../../css-config/mixins.scss";
+@import "../../css-config/variables.scss";
+
+.profile {
+  max-width: 100%;
+  position: relative;
+  height: 100%;
+  box-sizing: border-box;
+  background: $dashboard-bg-secondary;
+  padding: 0.5rem;
+  font-family: "Tilt Neon", sans-serif;
+  z-index: -1;
+  @include lg {
+    padding: 1rem 1.5rem;
+    min-height: calc(100vh);
+  }
+  .profile-content {
+    width: 100%;
+
+    .cover-image {
+      width: 100%;
+      height: 10rem;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      @include md {
+        width: 100%;
+        height: 20rem;
+        border-radius: 15px;
+      }
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -8;
+      }
+      label {
+        position: absolute;
+        right: 2rem;
+        bottom: 1rem;
+        font-size: $font-size-medium;
+        cursor: pointer;
+        z-index: 10;
+        background: $text-color-primary;
+        color: $dashboard-bg-secondary;
+        padding: 1px 4px;
+        border-radius: 5px;
+        align-items: center;
+        display: flex;
+        gap: 0.3rem;
+        @include md {
+          font-size: $font-size-medium;
+          right: 3rem;
+          bottom: 2rem;
+        }
+        span {
+          display: none;
+          @include md {
+            display: inline-block;
+          }
+        }
+      }
+      input {
+        display: none;
+      }
+    }
+
+    .user-details {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      width: 100%;
+      margin: 0 auto;
+      height: 100%;
+      z-index: 10;
+      flex-direction: column;
+      @include md {
+        width: 90%;
+        justify-content: start;
+        align-items: start;
+        flex-direction: row;
+      }
+      .avatar {
+        border-radius: 50%;
+        width: 5rem;
+        height: 5rem;
+        position: relative;
+        margin-top: -15%;
+        border: 3px solid white;
+
+        @include md {
+          margin-top: -8%;
+          border: 5px solid white;
+
+          width: 10rem;
+          height: 10rem;
+        }
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          z-index: -8;
+          border-radius: 50%;
+        }
+        label {
+          position: absolute;
+          right: 0;
+          bottom: 0;
+          font-size: $font-size-large;
+          cursor: pointer;
+          z-index: 10;
+          color: $text-color-primary;
+          height: 1.5rem;
+          width: 1.5rem;
+          margin: auto 0;
+          text-align: center;
+          background: none;
+          color: $text-color-primary;
+          border-radius: 50%;
+          font-size: $font-size-base;
+          @include md {
+            font-size: calc($font-size-large + 5px);
+            right: 0;
+            bottom: 0.5rem;
+            height: 2.3rem;
+            width: 2.3rem;
+            background: $text-color-primary;
+            color: $dashboard-bg-secondary;
+          }
+        }
+        input {
+          display: none;
+        }
+      }
+
+      .details {
+        margin: 0.5rem 1rem;
+        text-align: center;
+        @include md {
+          text-align: start;
+        }
+        .fullname {
+          font-size: $font-size-base;
+
+          @include md {
+            font-size: $font-size-medium;
+          }
+        }
+
+        .bio {
+          font-size: $font-size-small;
+          @include md {
+            font-size: $font-size-base;
+          }
+        }
+      }
+    }
+
+    .user-details-update {
+      margin: 1rem 0;
+      width: 100%;
+      padding: 0 .5rem;
+      @include md{
+        padding: 0;
+      }
+      .user-details-heading {
+        font-size: $font-size-base;
+        @include md {
+          font-size: $font-size-medium;
+        }
+      }
+      .user-sub-heading {
+        font-size: $font-size-small;
+        color: $text-color-secondary;
+        font-weight: 200;
+        @include md {
+          font-size: $font-size-small;
+        }
+      }
+
+      form {
+        margin: 0.5rem 0;
+        padding: 0.5rem 0;
+        width: 100%;
+        @include md {
+          margin: 1rem 0;
+        }
+
+        .row-box {
+          display: flex;
+          justify-content: start;
+          align-items: center;
+          width: 100%;
+          margin-bottom: 1rem;
+          gap: 1rem;
+          flex-direction: column;
+          @include md {
+            margin-bottom: 1rem;
+            gap: 2rem;
+            flex-direction: row;
+          }
+          .user-details-box {
+            width: 100%;
+            .user-title {
+              font-size: $font-size-base;
+              padding-bottom: 0.3rem;
+              display: flex;
+              justify-content: start;
+              align-items: center;
+              gap: 0.2rem;
+            }
+            input,
+            textarea {
+              width: 100%;
+              background: $dashboard-bg-primary;
+              color: $text-color-secondary;
+              outline: none;
+              font-size: $font-size-base;
+              padding: 0.5rem 1rem;
+              border: none;
+              border-radius: 7px;
+            }
+          }
+        }
+        .btn {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          input[type="submit"] {
+            background: linear-gradient(0deg, #003fff, #0b31ac);
+            font-weight: 500;
+            color: $text-color-primary;
+            font-size: $font-size-base;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}
