@@ -15,8 +15,6 @@ const UseState = (props) => {
       const res = await axios.post("/api/auth/user/register", payload);
       console.log("Response:", res);
       setUser(res.data.data.user);
-      // console.log("User", user);
-      // console.log(res.data.data.user);
     } catch (err) {
       // console.log(err.response.data.message);
       setError(err.response.data.message);
@@ -27,8 +25,6 @@ const UseState = (props) => {
   const login = async (payload) => {
     try {
       const res = await axios.post("/api/auth/user/login", payload);
-      // console.log("Response:", res);
-      // console.log(res.data.data.user);
       if (res.data.success) {
         setUser(res.data.data.user);
       }
@@ -55,8 +51,8 @@ const UseState = (props) => {
   //LOGOUT
   const logout = async () => {
     try {
-      const res = await axios.post("/api/auth/user/logout");
-      console.log(res.data.data.message);
+      await axios.post("/api/auth/user/logout");
+      console.log("Logout succesfully");
     } catch (err) {
       console.log(err.response.data.message);
       setError(err.response.data.message);
