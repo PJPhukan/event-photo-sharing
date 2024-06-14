@@ -17,11 +17,17 @@ import CreateEvent from "./page/CreateEvent/CreateEvent";
 import Sidebar from "./component/Sidebar/Sidebar";
 import Topbar from "./component/Topbar/Topbar";
 import context from "../Context/context";
-
+import Profile from "./page/Profile/Profile";
+import Settings from "./page/Settings/Settings";
 const Router = () => {
   const userContext = useContext(context);
-  const { adminlogin } = userContext;
-  useEffect(() => {}, [adminlogin]);
+  const { adminlogin, CheckCookie } = userContext;
+
+  useEffect(() => {
+    CheckCookie();
+  },[],[adminlogin]);
+
+  // useEffect(() => {}, [adminlogin]);
 
   return (
     <>
@@ -59,8 +65,8 @@ const Router = () => {
                   element={<CreateEvent />}
                 />
                 <Route path="/dashboard/favorite" element={<CreateEvent />} />
-                <Route path="/dashboard/profile" element={<CreateEvent />} />
-                <Route path="/dashboard/settings" element={<CreateEvent />} />
+                <Route path="/dashboard/profile" element={<Profile />} />
+                <Route path="/dashboard/settings" element={<Settings />} />
                 {/* TODO */}
                 {/* /dashboard/uploads */}
                 {/* /dashboard/notifications */}
