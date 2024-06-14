@@ -111,7 +111,6 @@ const Login = AsyncHandler(async (req, res) => {
   }
 
   user.password = undefined;
-  // console.log("115 : ", user);
 
   const options = {
     httpOnly: true,
@@ -148,6 +147,41 @@ const Logout = AsyncHandler(async (req, res) => {
     .status(200)
     .clearCookie("authToken", options)
     .json(new ApiResponse(200, {}, "User logged out successfully"));
+});
+
+const UpdateUserDetails = AsyncHandler(async (req, res) => {
+  const { username, email, fullname, bio, mobile } = req.body;
+
+  const UpdateUser = {};
+
+  if (username) UpdateUser.username = username;
+  if (email) UpdateUser.email = email;
+  if (fullname) UpdateUser.fullname = fullname;
+  if (bio) UpdateUser.bio = bio;
+  if (mobile) UpdateUser.mobile = mobile;
+
+  let user = await User.findById(req.user._id);
+
+  if (!user) {
+    throw new ApiError(404, "User not found !");
+  }
+
+  user = await Notes.findByIdAndUpdate(
+    req.user._id,
+    { $set: UpdateUser },
+    { new: true }
+  ).select("-password");
+
+  if (!user) {
+    throw new ApiError(
+      500,
+      "Internal server error occured while updating user details !"
+    );
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, "Successfully user details updated !"));
 });
 
 const ChangePassword = AsyncHandler(async (req, res) => {
@@ -325,4 +359,5 @@ export {
   ForgotPassword,
   VerifyOTP,
   ResetPassword,
+  UpdateUserDetails
 };
