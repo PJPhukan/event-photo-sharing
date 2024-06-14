@@ -42,10 +42,10 @@ const Home = () => {
 
             <div
               className="home-create-event"
-              data-aos="fade-up"
-              data-aos-anchor-placement="top-bottom"
             >
-              <Link to="/create-event">Create Event</Link>
+              <Link to="/create-event" 
+              data-aos="fade-up"
+              data-aos-anchor-placement="top-bottom">Create Event</Link>
             </div>
           </div>
           <div className="image-content">
