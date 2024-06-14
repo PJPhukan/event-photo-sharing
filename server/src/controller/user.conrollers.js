@@ -275,6 +275,12 @@ const ChangeCoverImage = AsyncHandler(async (req, res) => {
   return res.status(200).json(200, user, "Cover image update successfully");
 });
 
+const CheckCookie = AsyncHandler(async (req, res) => {
+  const token = req.cookies?.authToken;
+  return res
+    .status(200)
+    .json(new ApiResponse(200,{ token}, "Token fetched successfully !"));
+});
 //TODO-> Using link
 let Useremail = null;
 const ForgotPassword = AsyncHandler(async (req, res) => {
@@ -359,5 +365,6 @@ export {
   ForgotPassword,
   VerifyOTP,
   ResetPassword,
-  UpdateUserDetails
+  UpdateUserDetails,
+  CheckCookie,
 };
