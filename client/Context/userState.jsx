@@ -10,6 +10,7 @@ const UseState = (props) => {
 
   //all api's
 
+  //REGISTER USER
   const register = async (payload) => {
     try {
       const res = await axios.post("/api/auth/user/register", payload);
@@ -39,12 +40,10 @@ const UseState = (props) => {
     await axios
       .get("/api/auth/user/getdetails")
       .then((res) => {
-        console.log("Client: Inside get user details 📌📌📌📌 , 60");
-        console.log(res);
+        setUser(res.data.data.user);
       })
       .catch((err) => {
-        console.log("Client: Inside get user details ❗❗❗❗");
-        console.log(err);
+        setUser(null);
       });
   };
 
@@ -73,6 +72,34 @@ const UseState = (props) => {
       });
   };
 
+  //UPDATE USER
+
+  //CHECK COOKIE
+  const CheckCookie = async () => {
+    try {
+      const response = await axios.get("/api/auth/user/check-cookie");
+      // console.log(response.data);
+      if (response.data.data.token) {
+        setadminlogin(true);
+      } else {
+        setadminlogin(false);
+      }
+    } catch (error) {}
+  };
+  //CHANGE PASSWORD
+
+  //CHANGE MOBILE NUMBER
+
+  //CHANGE AVATAR
+
+  //CHANGE COVER IMAGE
+
+  //FORGOT PASSWORD
+
+  //VERIFY OTP
+
+  //RESET PASSWORD
+
   return (
     <context.Provider
       value={{
@@ -88,6 +115,7 @@ const UseState = (props) => {
         setadminlogin,
         setError,
         user,
+        CheckCookie,
       }}
     >
       {props.children}
