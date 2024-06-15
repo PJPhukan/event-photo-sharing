@@ -30,7 +30,7 @@ const Topbar = () => {
           <i className="bx bxs-bell"></i>
         </Link>
 
-        <Link to="/dashboard/profile">
+        <Link to="/dashboard/profile" className="ProfileImage">
           <img src={user ? user.avatar : ProfileImage} alt="" />
         </Link>
       </div>

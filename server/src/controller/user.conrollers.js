@@ -244,7 +244,6 @@ const ChangeAvater = AsyncHandler(async (req, res) => {
       avatar: cloudinaryUrl,
     },
   })?.select("-password");
-
   if (!user) {
     throw new ApiError(500, "Error occured while updating avater ");
   }
@@ -279,7 +278,7 @@ const CheckCookie = AsyncHandler(async (req, res) => {
   const token = req.cookies?.authToken;
   return res
     .status(200)
-    .json(new ApiResponse(200,{ token}, "Token fetched successfully !"));
+    .json(new ApiResponse(200, { token }, "Token fetched successfully !"));
 });
 //TODO-> Using link
 let Useremail = null;

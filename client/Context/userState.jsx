@@ -91,9 +91,29 @@ const UseState = (props) => {
   //CHANGE MOBILE NUMBER
 
   //CHANGE AVATAR
+  const ChangeAvatar = async (payload) => {
+    try {
+      const response = await axios.patch(
+        "/api/auth/user/changeavater",
+        payload
+      );
+    } catch (error) {
+      setError(err.response.data.message);
+    }
+  };
 
   //CHANGE COVER IMAGE
-
+  const ChangeCoverImage = async (payload) => {
+    try {
+      const response = await axios.patch(
+        "/api/auth/user/changecoverimage",
+        payload
+      );
+    } catch (error) {
+      console.log(error);
+      setError(err.response.data.message);
+    }
+  };
   //FORGOT PASSWORD
 
   //VERIFY OTP
@@ -116,6 +136,8 @@ const UseState = (props) => {
         setError,
         user,
         CheckCookie,
+        ChangeAvatar,
+        ChangeCoverImage,
       }}
     >
       {props.children}
