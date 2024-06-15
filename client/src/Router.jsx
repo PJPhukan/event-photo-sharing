@@ -57,7 +57,7 @@ const Router = () => {
             <div className="sidebar-right">
               <Topbar />
               <Routes>
-                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/" element={<Dashboard />} />
 
                 {/* TODO  */}
                 <Route

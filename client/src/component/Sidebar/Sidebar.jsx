@@ -39,8 +39,8 @@ const Sidebar = () => {
         <div className="logo">Memois</div>
         <div className="nav-item">
           <Link
-            to="/dashboard"
-            className={`${location.pathname === "/dashboard" ? "active" : " "}`}
+            to="/"
+            className={`${location.pathname === "/" ? "active" : " "}`}
           >
             <li>
               <i className="bx bxs-dashboard"></i>
