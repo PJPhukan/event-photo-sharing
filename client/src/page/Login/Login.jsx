@@ -16,7 +16,7 @@ const Login = () => {
     await login(loginuser);
     if (!error) {
       setadminlogin(true);
-      navigate("/dashboard");
+      navigate("/");
     }
   };
 

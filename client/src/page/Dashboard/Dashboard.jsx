@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import "./dashboard.scss";
 import { Link } from "react-router-dom";
 import DashImg from "../../assets/dashborad-img.jpg";
+import context from "../../../Context/context";
 
 const Dashboard = () => {
+  const userContext = useContext(context);
+  const { getuser } = userContext;
+  useEffect(() => {
+    getuser()
+  }, [])
+  
   return (
     <>
       <section className="dashboard">
@@ -69,7 +76,7 @@ const Dashboard = () => {
               </div>
               <div className="bottom">
                 <h2 className="amount">1200</h2>
-                <i className='bx bxs-like'></i>
+                <i className="bx bxs-like"></i>
               </div>
             </div>
           </div>

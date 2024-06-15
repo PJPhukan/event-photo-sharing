@@ -20,7 +20,7 @@ const Signup = () => {
     } else {
       await register(user);
       setadminlogin(true);
-      navigate("/dashboard");
+      navigate("/");
     }
   };
   const onChange = (e) => {
