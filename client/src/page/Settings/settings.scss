@@ -1,0 +1,236 @@
+@import "../../css-config/mixins.scss";
+@import "../../css-config/variables.scss";
+
+.settings {
+  max-width: 100%;
+  position: relative;
+  height: 100%;
+  box-sizing: border-box;
+  background: $dashboard-bg-secondary;
+  padding: 0.5rem;
+  font-family: "Tilt Neon", sans-serif;
+  z-index: -1;
+  @include lg {
+    padding: 1rem 1.5rem;
+    min-height: calc(100vh);
+  }
+  .settings-content {
+    width: 100%;
+    .account-settings-top {
+      background: linear-gradient(
+        180deg,
+        $dashboard-bg-primary,
+        $dashboard-bg-primary,
+        $dashboard-bg-third
+      );
+      border-radius: 5px;
+      margin-bottom: 1rem;
+      padding: 0.5rem 0.5rem;
+      @include md {
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+      }
+
+      .change-box {
+        width: 100%;
+        margin-bottom: 2rem;
+        // border: 1px solid white;
+        // box-shadow: 0 0 5px white;
+
+        // padding: 1rem .5rem;
+        border-radius: 5px;
+        @include md {
+          margin-bottom: 1.5rem;
+        }
+        .box-heading{
+          font-size: calc($font-size-base + 3px);
+          margin: .5rem 0;
+          color: $text-color-secondary;
+        }
+        form {
+          display: flex;
+          // border: 1px solid red;
+          justify-content: start;
+          width: 100%;
+          gap: 1rem;
+          flex-direction: column;
+          @include sm {
+            flex-direction: row;
+            align-items: last baseline;
+          }
+          .row-box {
+            display: flex;
+            flex-direction: column;
+            min-width: 30%;
+            flex-wrap: wrap;
+            flex: 1;
+            .top {
+              font-size: $font-size-base;
+              padding-bottom: 0.3rem;
+              display: flex;
+              justify-content: start;
+              align-items: center;
+              gap: 0.2rem;
+            }
+            input {
+              width: 100%;
+              background: $text-color-secondary;
+              color: $dashboard-bg-secondary;
+              outline: none;
+              font-size: $font-size-base;
+              padding: 0.5rem 1rem;
+              border: none;
+              border-radius: 7px;
+            }
+          }
+          .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            input[type="submit"] {
+              background: linear-gradient(0deg, #003fff, #0b31ac);
+              font-weight: 500;
+              color: $text-color-primary;
+              font-size: $font-size-base;
+              padding: 0.5rem 1rem;
+              border-radius: 8px;
+              width: 100%;
+              border: none;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+
+    .profile-settings-bottom {
+      background: linear-gradient(
+        180deg,
+        $dashboard-bg-primary,
+        $dashboard-bg-primary,
+        $dashboard-bg-third
+      );
+      padding: 0.5rem 0.5rem;
+      @include md {
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        gap: 0.5rem;
+        width: 100%;
+        @include md {
+          gap: 0.8rem;
+        }
+        .details-row-box {
+          display: flex;
+          gap: 0.7rem;
+          width: 100%;
+          flex-direction: column-reverse;
+          @include sm {
+            flex-direction: row;
+          }
+          @include md {
+            gap: 1rem;
+          }
+
+          .details-box {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            min-width: 40%;
+            flex: 1;
+            &.avatarImg {
+              display: flex;
+              flex-direction: row;
+              gap: 1rem;
+              justify-content: start;
+              align-items: center;
+              img {
+                width: 3rem;
+                height: 3rem;
+                border-radius: 50%;
+                @include md {
+                  width: 4rem;
+                  height: 4rem;
+                }
+              }
+              .avatar-btn {
+                padding: 0.5rem 2rem;
+                border-radius: 0.5rem;
+                border: none;
+                font-family: "Tilt Neon", sans-serif;
+                font-size: $font-size-base;
+                cursor: pointer;
+                color: $text-color-primary;
+                &:nth-child(2) {
+                  background: $background-black;
+                  border: 1px solid $text-color-primary;
+                }
+                &:nth-child(3) {
+                  background: linear-gradient(0deg, #003fff, #0b31ac);
+                }
+              }
+            }
+            .user-title {
+              font-size: $font-size-base;
+              padding-bottom: 0.3rem;
+              display: flex;
+              justify-content: start;
+              align-items: center;
+              gap: 0.2rem;
+            }
+            input,
+            textarea {
+              width: 100%;
+              background: $text-color-primary;
+              background: $text-color-secondary;
+              color: $dashboard-bg-secondary;
+              outline: none;
+              font-size: $font-size-base;
+              padding: 0.5rem 1rem;
+              border: none;
+              border-radius: 7px;
+            }
+          }
+        }
+        input[type="submit"] {
+          background: linear-gradient(0deg, #003fff, #0b31ac);
+          font-weight: 500;
+          color: $text-color-primary;
+          font-size: $font-size-base;
+          padding: 0.5rem 2rem;
+          border-radius: 8px;
+          border: none;
+          cursor: pointer;
+          margin-top: 0.7rem;
+        }
+      }
+    }
+
+    .settings-heading {
+      font-size: $font-size-medium;
+      font-weight: 300;
+      @include md {
+        font-size: calc($font-size-medium + 5px);
+      }
+    }
+    .heading-sub-text {
+      font-size: $font-size-small;
+      color: $text-color-secondary;
+      font-weight: 200;
+      margin-bottom: 1rem;
+      @include md {
+        margin-bottom: 1.5rem;
+      }
+    }
+
+    .account-create {
+      font-size: $font-size-small;
+      text-align: center;
+      margin: 1rem 0;
+    }
+  }
+}
