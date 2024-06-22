@@ -1,0 +1,64 @@
+@import "../../css-config/mixins.scss";
+@import "../../css-config/variables.scss";
+.notification {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 100%;
+  height: calc(100vh - 80px);
+  color: $dashboard-bg-primary;
+  border-radius: 5px;
+  background: $text-color-primary;
+  scroll-behavior: smooth;
+  overflow-x: auto;
+  padding: 0.5rem;
+  @include md {
+    width: 23rem;
+    height: 30rem;
+    right: 1rem;
+    padding: 1rem 0.8rem;
+  }
+
+  .top-heading {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+
+    @include md {
+      margin-bottom: 0.7rem;
+    }
+    .notification-heading {
+      font-size: $font-size-base;
+
+      @include md {
+        font-size: calc($font-size-base + 3px);
+      }
+    }
+
+    button {
+      border: none;
+      padding: 0.5rem;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-weight: 600;
+      font-family: "Tilt Neon", sans-serif;
+      @include md {
+        padding: 0.5rem 1rem;
+      }
+      i {
+        font-size: $font-size-base;
+      }
+    }
+  }
+
+  .message-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}

@@ -4,8 +4,14 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import context from "../../../Context/context";
 const Sidebar = () => {
   const navigate = useNavigate();
-  const usecontext = useContext(context);
-  const { showSidebar, logout, setadminlogin } = usecontext;
+  const usercontext = useContext(context);
+  const {
+    showSidebar,
+    logout,
+    setadminlogin,
+    showNotification,
+    setshowNotification,
+  } = usercontext;
   const [Showmobile, setShowmobile] = useState(true);
   let location = useLocation();
   useEffect(() => {
@@ -28,6 +34,10 @@ const Sidebar = () => {
     await logout();
     setadminlogin(false);
     navigate("/");
+  };
+
+  const ToggleNotification = () => {
+    setshowNotification(!showNotification);
   };
   return (
     <>
@@ -96,17 +106,12 @@ const Sidebar = () => {
             </li>
           </Link>
 
-          <Link
-            to="/dashboard/notifications"
-            className={`${
-              location.pathname === "/dashboard/notifications" ? "active" : " "
-            }`}
-          >
+          <button onClick={ToggleNotification}>
             <li>
               <i className="bx bxs-bell"></i>
               <span>Notifications</span>
             </li>
-          </Link>
+          </button>
           <Link
             to="/dashboard/settings"
             className={`${

@@ -3,12 +3,20 @@ import "./topbar.scss";
 import ProfileImage from "../../assets/profile.jpg";
 import { Link } from "react-router-dom";
 import context from "../../../Context/context";
+import Notification from "../Notification/Notification";
 const Topbar = () => {
-  const usecontext = useContext(context);
-  const { showSidebar, setshowSidebar, user } = usecontext;
-  useEffect(() => {
-  }, [user]);
-
+  const UserContext = useContext(context);
+  const {
+    showSidebar,
+    setshowSidebar,
+    user,
+    showNotification,
+    setshowNotification,
+  } = UserContext;
+  useEffect(() => {}, [user]);
+  const ToggleNotification = () => {
+    setshowNotification(!showNotification);
+  };
   return (
     <div className="top-bar">
       <div className="left">
@@ -22,18 +30,17 @@ const Topbar = () => {
         </div>
       </div>
       <div className="right">
-        <Link to="/dashboard/uploads">
+        <Link to="/dashboard/uploads" className="icon">
           {/* <i className="bx bxs-image-add"></i> */}
           <i className="bx bx-plus"></i>
         </Link>
-        <Link to="/dashboard/notifications" className="icon">
-          <i className="bx bxs-bell"></i>
-        </Link>
+        <i className="bx bxs-bell" onClick={ToggleNotification}></i>
 
         <Link to="/dashboard/profile" className="ProfileImage">
           <img src={user ? user.avatar : ProfileImage} alt="" />
         </Link>
       </div>
+      <Notification />
     </div>
   );
 };

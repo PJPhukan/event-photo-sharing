@@ -5,7 +5,7 @@ import context from "../../../Context/context";
 const Login = () => {
   const navigate = useNavigate();
   const usecontext = useContext(context);
-  const { login, error, setadminlogin, user } = usecontext;
+  const { login, error, setadminlogin, user, setError } = usecontext;
 
   const [loginuser, setUser] = useState({
     username: "",
@@ -13,10 +13,12 @@ const Login = () => {
   });
 
   const HandleLogIn = async () => {
-    await login(loginuser);
-    if (!error) {
+    const response = await login(loginuser);
+    if (response.data.success) {
       setadminlogin(true);
       navigate("/");
+    } else {
+      setError(response.data.message);
     }
   };
 

@@ -7,7 +7,7 @@ const UseState = (props) => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
   const [adminlogin, setadminlogin] = useState(false);
-
+  const [showNotification, setshowNotification] = useState(false);
   //all api's
 
   //REGISTER USER
@@ -29,8 +29,10 @@ const UseState = (props) => {
       if (res.data.success) {
         setUser(res.data.data.user);
       }
+      return res;
     } catch (err) {
       // console.log(err.response.data.message);
+      console.log(err);
       setError(err.response.data.message);
     }
   };
@@ -43,6 +45,7 @@ const UseState = (props) => {
         setUser(res.data.data.user);
       })
       .catch((err) => {
+        console.log(err);
         setUser(null);
       });
   };
@@ -73,6 +76,16 @@ const UseState = (props) => {
   };
 
   //UPDATE USER
+  const UpdateUserDetails = async (payload) => {
+    try {
+      const res = await axios.patch("/api/auth/user/updateuser", payload);
+      if (res.data.success) {
+        setUser(res.data.data.user);
+      }
+    } catch (err) {
+      setError(err.response.data.message);
+    }
+  };
 
   //CHECK COOKIE
   const CheckCookie = async () => {
@@ -111,7 +124,7 @@ const UseState = (props) => {
       );
     } catch (error) {
       console.log(error);
-      setError(err.response.data.message);
+      setError(error.response.data.message);
     }
   };
   //FORGOT PASSWORD
@@ -120,6 +133,10 @@ const UseState = (props) => {
 
   //RESET PASSWORD
 
+  //Remove notification
+  const RemoveNotification = async () => {
+    console.log("Remove notification");
+  };
   return (
     <context.Provider
       value={{
@@ -138,6 +155,10 @@ const UseState = (props) => {
         CheckCookie,
         ChangeAvatar,
         ChangeCoverImage,
+        UpdateUserDetails,
+        showNotification,
+        setshowNotification,
+        RemoveNotification
       }}
     >
       {props.children}
