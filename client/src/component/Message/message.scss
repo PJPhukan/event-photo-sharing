@@ -1,0 +1,48 @@
+@import "../../css-config/mixins.scss";
+@import "../../css-config/variables.scss";
+
+.message {
+  min-height: 4rem;
+  //   border: 1px solid red;
+  font-size: $font-size-base;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0.5rem;
+  background: $dashboard-bg-white;
+  border-radius: 7px;
+  gap: 1rem;
+  .left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    .like-user-avatar {
+      position: relative;
+      i {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        font-size: calc($font-size-base - 3px);
+        padding: 5px;
+        background: $dashboard-bg-blue;
+        color: $text-color-primary;
+      }
+      img {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+      }
+    }
+
+    .message-text {
+      font-size: calc($font-size-base - 2px);
+    }
+  }
+
+  i {
+    cursor: pointer;
+    padding: 0.5rem;
+    background: $text-color-primary;
+    border-radius: 50%;
+  }
+}

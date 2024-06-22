@@ -27,7 +27,7 @@ const Settings = () => {
               </div>
               <div className="row-box">
                 <div className="top">
-                  <i class="bx bxs-lock"></i>
+                  <i className="bx bxs-lock"></i>
                   <span>Password</span>
                 </div>
                 <input type="password" />
@@ -42,14 +42,14 @@ const Settings = () => {
             <form method="post">
               <div className="row-box">
                 <div className="top">
-                  <i class="bx bxs-lock"></i>
+                  <i className="bx bxs-lock"></i>
                   <span>Current Password</span>
                 </div>
                 <input type="password" />
               </div>
               <div className="row-box">
                 <div className="top">
-                  <i class="bx bxs-lock-open"></i>
+                  <i className="bx bxs-lock-open"></i>
                   <span>New Password</span>
                 </div>
                 <input type="password" />

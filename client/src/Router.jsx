@@ -23,9 +23,13 @@ const Router = () => {
   const userContext = useContext(context);
   const { adminlogin, CheckCookie } = userContext;
 
-  useEffect(() => {
-    CheckCookie();
-  },[],[adminlogin]);
+  useEffect(
+    () => {
+      CheckCookie();
+    },
+    [],
+    [adminlogin]
+  );
 
   // useEffect(() => {}, [adminlogin]);
 

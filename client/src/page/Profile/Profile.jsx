@@ -6,31 +6,42 @@ import context from "../../../Context/context";
 
 const Profile = () => {
   const UserContext = useContext(context);
-  const { getuser, user, ChangeAvatar, ChangeCoverImage } = UserContext;
-  const [avatarImg, setAvatarImg] = useState(null); // Changed to lowercase to avoid conflict
+  const { getuser, user, ChangeAvatar, ChangeCoverImage, UpdateUserDetails } =
+    UserContext;
+  const [avatarImg, setAvatarImg] = useState(null);
   const [coverImg, setCoverImg] = useState(null);
 
+  const [initialized, setInitialized] = useState(false);
+
+  const [fullname, setFullname] = useState("");
+  const [bio, setBio] = useState("");
   useEffect(() => {
     getuser();
   }, [getuser]);
 
   const [euser, seteuser] = useState({
-    eusername: user?.username || "",
-    ename: user?.fullname || "",
-    emobile: user?.phoneNumber || "",
-    eemail: user?.email || "",
-    ebio: user?.bio || "",
+    eusername: "",
+    ename: "",
+    emobile: "",
+    eemail: "",
+    ebio: "",
   });
 
   useEffect(() => {
-    seteuser({
-      eusername: user?.username || "",
-      ename: user?.fullname || "",
-      emobile: user?.phoneNumber || "",
-      eemail: user?.email || "",
-      ebio: user?.bio || "",
-    });
-  }, [user]);
+    if (user && !initialized) {
+      seteuser({
+        eusername: user.username || "",
+        ename: user.fullname || "",
+        emobile: user.phoneNumber || "",
+        eemail: user.email || "",
+        ebio: user.bio || "",
+      });
+
+      setInitialized(true); // Mark form as initialized
+    }
+    setFullname(user?.fullname);
+    setBio(user?.bio || "");
+  }, [user, initialized]);
 
   const Onchange = (e) => {
     seteuser({ ...euser, [e.target.name]: e.target.value });
@@ -52,6 +63,11 @@ const Profile = () => {
     await ChangeCoverImage(formdata);
   };
 
+  const UpdateDetails = async (e) => {
+    e.preventDefault();
+    await UpdateUserDetails(euser);
+    console.log("User update successfully");
+  };
   return (
     <section className="profile">
       <div className="profile-content">
@@ -60,7 +76,12 @@ const Profile = () => {
             <i className="bx bxs-camera"></i>
             <span>Edit Cover Photo</span>
           </label>
-          <input type="file" id="edit-cover" name="Coverfile" onChange={ChangeUserCoverImg} />
+          <input
+            type="file"
+            id="edit-cover"
+            name="Coverfile"
+            onChange={ChangeUserCoverImg}
+          />
           <img src={user?.coverImage ? user.coverImage : coverImage} alt="" />
         </div>
 
@@ -73,8 +94,8 @@ const Profile = () => {
             <input type="file" id="edit-avatar" onChange={ChangeUserAvatar} />
           </div>
           <div className="details">
-            <div className="fullname">{euser.ename}</div>
-            <div className="bio">{euser.ebio}</div>
+            <div className="fullname">{fullname}</div>
+            <div className="bio">{bio}</div>
           </div>
         </div>
 
@@ -153,7 +174,12 @@ const Profile = () => {
               </div>
             </div>
             <div className="btn">
-              <input type="submit" value="Edit Your Profile" />
+              <input
+                type="submit"
+                value="Edit Your Profile"
+                // onSubmit={UpdateDetails}
+                onClick={UpdateDetails}
+              />
             </div>
           </form>
         </div>
