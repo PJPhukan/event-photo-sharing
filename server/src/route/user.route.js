@@ -14,7 +14,8 @@ import {
   ResetPassword,
   UpdateUserDetails,
   CheckCookie,
-  ChangeEmail
+  ChangeEmail,
+  DeleteAccount,
 } from "../controller/user.conrollers.js";
 import { VerifyJwtToken } from "../libs/auth.helpers.js";
 const router = Router();
@@ -29,7 +30,7 @@ router.route("/logout").post(VerifyJwtToken, Logout); //user logged in required
 
 router.route("/updateuser").patch(VerifyJwtToken, UpdateUserDetails); //user logged in required
 
-router.route("/check-cookie").get( CheckCookie); //no logged in required
+router.route("/check-cookie").get(CheckCookie); //no logged in required
 
 router.route("/changepassword").patch(VerifyJwtToken, ChangePassword); //user logged in required
 
@@ -50,5 +51,7 @@ router.route("/forgotpassword").post(ForgotPassword); //no logged in required
 router.route("/verifyotp").post(VerifyOTP); //no logged in required
 
 router.route("/resetpassword").patch(ResetPassword); //no logged in required
+
+router.route("/deleteaccount").delete(VerifyJwtToken, DeleteAccount); // logged in required
 
 export default router;
