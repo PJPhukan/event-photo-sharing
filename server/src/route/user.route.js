@@ -13,7 +13,8 @@ import {
   VerifyOTP,
   ResetPassword,
   UpdateUserDetails,
-  CheckCookie
+  CheckCookie,
+  ChangeEmail
 } from "../controller/user.conrollers.js";
 import { VerifyJwtToken } from "../libs/auth.helpers.js";
 const router = Router();
@@ -31,6 +32,8 @@ router.route("/updateuser").patch(VerifyJwtToken, UpdateUserDetails); //user log
 router.route("/check-cookie").get( CheckCookie); //no logged in required
 
 router.route("/changepassword").patch(VerifyJwtToken, ChangePassword); //user logged in required
+
+router.route("/changeemail").patch(VerifyJwtToken, ChangeEmail); //user logged in required
 
 router.route("/changemobilenumber").patch(VerifyJwtToken, ChangeMobileNumber); //user logged in required
 

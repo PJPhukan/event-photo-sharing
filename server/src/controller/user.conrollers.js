@@ -150,15 +150,14 @@ const Logout = AsyncHandler(async (req, res) => {
 });
 
 const UpdateUserDetails = AsyncHandler(async (req, res) => {
-  const { username, email, fullname, bio, mobile } = req.body;
+  const { eusername, ename, ebio, emobile } = req.body;
 
   const UpdateUser = {};
 
-  if (username) UpdateUser.username = username;
-  if (email) UpdateUser.email = email;
-  if (fullname) UpdateUser.fullname = fullname;
-  if (bio) UpdateUser.bio = bio;
-  if (mobile) UpdateUser.mobile = mobile;
+  if (eusername) UpdateUser.username = eusername;
+  if (ename) UpdateUser.fullname = ename;
+  if (ebio) UpdateUser.bio = ebio;
+  if (emobile) UpdateUser.phoneNumber = emobile;
 
   let user = await User.findById(req.user._id);
 
@@ -166,7 +165,7 @@ const UpdateUserDetails = AsyncHandler(async (req, res) => {
     throw new ApiError(404, "User not found !");
   }
 
-  user = await Notes.findByIdAndUpdate(
+  user = await User.findByIdAndUpdate(
     req.user._id,
     { $set: UpdateUser },
     { new: true }
@@ -211,6 +210,28 @@ const ChangePassword = AsyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(new ApiResponse(200, {}, "Password changed successfully !"));
+});
+
+const ChangeEmail = AsyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+  let user = await User.findById(req.user._id);
+  if (!user) {
+    throw new ApiError(401, "Plase authenticate with a valid user credentials");
+  }
+
+  const checkPassword = await CompareHashedPassword(password, user.password);
+  if (!checkPassword) {
+    throw new ApiError(401, "Password is incorrect !");
+  }
+  user = await User.findOneAndUpdate(req.user._id, {
+    $set: {
+      email,
+    },
+  }).select("-password");
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, "User email changed successfully !"));
 });
 
 const ChangeMobileNumber = AsyncHandler(async (req, res) => {
@@ -280,7 +301,7 @@ const CheckCookie = AsyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, { token }, "Token fetched successfully !"));
 });
-//TODO-> Using link
+//TODO:-> Using link
 let Useremail = null;
 const ForgotPassword = AsyncHandler(async (req, res) => {
   const { email } = req.body;
@@ -366,4 +387,5 @@ export {
   ResetPassword,
   UpdateUserDetails,
   CheckCookie,
+  ChangeEmail
 };
