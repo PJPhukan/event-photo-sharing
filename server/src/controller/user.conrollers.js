@@ -373,6 +373,21 @@ const ResetPassword = AsyncHandler(async (req, res) => {
     );
 });
 
+const DeleteAccount = AsyncHandler(async (req, res) => {
+  let user = await User.findById(req.user._id);
+  if (!user)
+    throw new ApiError(404, "Please Authenticate with valid credentials !");
+
+  const checkDeleted = await user.deleteOne();
+  if (checkDeleted) {
+    return res
+      .status(200)
+      .json(new ApiResponse(200, "User Successfully deleted"));
+  } else {
+    throw new ApiError(500, "Error Occured while deleting Account");
+  }
+});
+
 export {
   RegisterUser,
   GerUserDetails,
@@ -387,5 +402,6 @@ export {
   ResetPassword,
   UpdateUserDetails,
   CheckCookie,
-  ChangeEmail
+  ChangeEmail,
+  DeleteAccount
 };
