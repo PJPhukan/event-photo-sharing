@@ -111,7 +111,7 @@ const UseState = (props) => {
         payload
       );
     } catch (error) {
-      setError(err.response.data.message);
+      setError(error.response.data.message);
     }
   };
 
