@@ -1,0 +1,37 @@
+@import "../../css-config/mixins.scss";
+@import "../../css-config/variables.scss";
+.table-data-content {
+  &:nth-child(odd) {
+    background: #e0dada;
+  }
+  &:nth-child(even) {
+    background: #fff;
+  }
+  td {
+    padding: 5px;
+    font-size: $font-size-small;
+    color: #333;
+    text-wrap: wrap;
+    
+    &.show {
+      display: none;
+      @include xl {
+        display: table-cell;
+      }
+    }
+    @include md {
+      padding: 15px;
+      font-size: $font-size-base;
+    }
+    button {
+      color: green;
+      background: none;
+      cursor: pointer;
+      font-size: $font-size-small;
+      border: none;
+      @include md {
+        font-size: $font-size-base;
+      }
+    }
+  }
+}

@@ -1,16 +1,19 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect,useState } from "react";
 import "./dashboard.scss";
 import { Link } from "react-router-dom";
 import DashImg from "../../assets/dashborad-img.jpg";
 import context from "../../../Context/context";
+import TableData from "../../component/TableData/TableData";
+import NoFileFound from "../../component/NoFileFound/NoFileFound";
 
 const Dashboard = () => {
   const userContext = useContext(context);
   const { getuser } = userContext;
+  const [noFile, setnoFile] = useState(true);
   useEffect(() => {
-    getuser()
-  }, [])
-  
+    getuser();
+  }, []);
+
   return (
     <>
       <section className="dashboard">
@@ -81,10 +84,39 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-        <div className="col">
-          <div className="overview">Uploads overview</div>
-          <div className="weekly-overview">Weekly overview</div>
-        </div>
+        {!noFile ? (
+          <div className="tabuler--wrapper col">
+            <h3 className="main--title">Your Event Overview</h3>
+            <div className="table--container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Media</th>
+                    <th>Likes</th>
+                    <th className="show">Images</th>
+                    <th className="show">Videos</th>
+                    <th className="show">Date</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <TableData />
+                  <TableData />
+                  <TableData />
+                </tbody>
+              </table>
+            </div>
+
+            <Link className="footer-create" to="/">
+              Create New Event
+            </Link>
+          </div>
+        ) : (
+          <div className="col no-event-box">
+            <NoFileFound />
+          </div>
+        )}
       </section>
     </>
   );
