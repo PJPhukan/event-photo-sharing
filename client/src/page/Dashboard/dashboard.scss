@@ -3,7 +3,7 @@
 .dashboard {
   max-width: 100%;
   position: relative;
-  height: 100%;
+  min-height: 100%;
   box-sizing: border-box;
   background: $dashboard-bg-secondary;
   padding: 0.5rem;
@@ -135,7 +135,7 @@
       flex-wrap: wrap;
       gap: 0.5rem;
       margin-top: 1rem;
-      padding: 0 .3px;
+      padding: 0 0.3px;
       @include md {
         width: 40%;
         gap: 0.8rem;
@@ -202,14 +202,13 @@
           i {
             font-size: $font-size-extra-large;
             color: $dashboard-bg-light;
-            @include xl{
+            color: #0b2682b6;
+            @include xl {
               font-size: $font-size-extra-large;
-
             }
           }
         }
 
-        
         &:nth-child(odd) {
           .top {
             color: $text-color-pink;
@@ -222,5 +221,113 @@
         }
       }
     }
+
+    // .overview-chart {
+    //   display: flex;
+    //   justify-content: start;
+    //   align-items: start;
+    //   flex-direction: column;
+    //   position: relative;
+    //   height: 100%;
+    //   width: 100%;
+    //   margin-right: 1rem;
+    //   border: 1px solid red;
+
+    //   background: linear-gradient(
+    //     180deg,
+    //     $dashboard-bg-primary,
+    //     $dashboard-bg-primary,
+    //     $dashboard-bg-third
+    //   );
+    //   @include lg {
+    //     width: auto;
+    //     // height: 100%;
+    //   }
+
+    //   canvas {
+    //     width: 70%;
+    //   }
+    // }
+
+    .weekly-overview {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: start;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding: 0 0.3px;
+
+      @include md {
+        width: 30%;
+        gap: 0.8rem;
+      }
+    }
+    &.tabuler--wrapper {
+      margin-top: 1rem;
+      border-radius: 10px;
+      padding: 0.5rem;
+      flex-direction: column;
+      background: linear-gradient(
+        180deg,
+        $dashboard-bg-primary,
+        $dashboard-bg-primary,
+        $dashboard-bg-third
+      );
+      @include md {
+        margin-top: 1rem;
+        padding: 1rem;
+      }
+
+      .main--title {
+        font-size: $font-size-base;
+        font-weight: 300;
+        margin-bottom: 0.8rem;
+        @include md {
+          font-size: calc($font-size-medium);
+        }
+      }
+      .table--container {
+        width: 100%;
+        border-radius: 5px;
+        overflow: hidden;
+        table {
+          width: 100%;
+          border-collapse: collapse;
+
+          thead {
+            background: linear-gradient(0deg, #003fff, #0b31ac);
+            color: #fff;
+            th {
+              padding: 5px;
+              text-align: left;
+              font-size: $font-size-small;
+              @include md {
+                font-size: $font-size-base;
+                padding: 15px;
+              }
+              &.show {
+                display: none;
+                @include xl {
+                  display: table-cell;
+                }
+              }
+              tbody {
+                background: #f2f2f2;
+              }
+            }
+          }
+        }
+      }
+
+      .footer-create {
+        text-align: center;
+        font-size: $font-size-small;
+        margin: 0.5rem 0;
+        cursor: pointer;
+      }
+    }
+ 
   }
 }
