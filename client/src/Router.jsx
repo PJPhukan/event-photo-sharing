@@ -69,8 +69,8 @@ const Router = () => {
                   element={<CreateEvent />}
                 />
                 <Route path="/dashboard/favorite" element={<CreateEvent />} />
-                <Route path="/dashboard/profile" element={<Profile />} />
                 <Route path="/dashboard/settings" element={<Settings />} />
+                <Route path="/dashboard/profile" element={<Profile />} />
                 {/* TODO */}
                 {/* /dashboard/uploads */}
                 {/* /dashboard/notifications */}
