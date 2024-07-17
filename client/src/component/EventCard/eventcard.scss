@@ -3,13 +3,7 @@
 
 .event-card {
   border-radius: 10px;
-  // background-image: url(https://images.unsplash.com/photo-1557672199-6e8c8b2b8fff?ixlib=rb-1.2.1&auto=format&fit=crop&w=934&q=80);
-  background-size: cover;
-  position: relative;
-  transition-duration: 300ms;
-  transition-property: transform, box-shadow;
-  transition-timing-function: ease-out;
-  transform: rotate3d(0);
+
   color: $text-color-primary;
   padding: 0.6rem 0.5rem;
   background: linear-gradient(
@@ -22,115 +16,200 @@
   display: flex;
   max-width: 100%;
   flex: 1;
+  flex-direction: column;
   @include smm {
-    max-width: 48%;
+    max-width: 100%;
   }
 
   @include sm {
-    max-width: 33%;
+    min-width: 48%;
+    max-width: 49%;
   }
   @include md {
-    padding: 1rem 2rem;
+    padding: 0.5rem 0.8rem;
+    max-width: 33%;
   }
   @include xl {
     max-width: 24%;
+    min-width: 23%;
+    // border: 2px solid blue;
   }
   &:hover {
     transition-duration: 150ms;
     box-shadow: none;
   }
-  .event-card-box {
+  .top-box {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: column;
-    gap: 0.5rem;
-    width: 100%;
-    @include md {
-      gap: 2rem;
+    justify-content: start;
+    gap: 0.3rem;
+    .event-logo {
+      object-fit: cover;
+      border-radius: 50%;
+      width: 3rem;
+      height: 3rem;
+      @include md {
+        width: 4rem;
+        height: 4rem;
+      }
     }
 
-    .top {
+    .top-text {
       display: flex;
-      justify-content: space-between;
+      justify-content: start;
       align-items: start;
-      gap: 1rem;
+      flex-direction: column;
 
-      @include md {
-        gap: 2rem;
-      }
-      @include xl {
-        gap: 3rem;
-      }
-      .left {
-        display: flex;
-        justify-content: center;
-        align-items: start;
-        flex-direction: column;
-        gap: 0.3rem;
-        @include md {
-          gap: 0.5rem;
-        }
-        .title {
-          font-size: $font-size-base;
-        }
-        .top-buttom {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          gap: 0.3rem;
-
-          .amount {
-            font-size: calc($font-size-large + 5px);
-
-            @include md {
-              font-size: calc($font-size-large + 15px);
-            }
-          }
-
-          .buttom-text {
-            font-size: $font-size-small;
-          }
-        }
-      }
-      .right svg {
-        font-size: calc($font-size-extra-large);
-        color: $dashboard-bg-secondary;
+      .event-name {
+        font-size: calc($font-size-base);
+        font-weight: 300;
 
         @include md {
-          font-size: calc($font-size-extra-large + 5px);
-        }
-        @include xl {
-          font-size: calc($font-size-extra-large + 10px);
+          font-size: calc($font-size-base + 3px);
         }
       }
-    }
-    .buttom {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-      align-items: center;
-      font-size: calc($font-size-base - 3px);
-      @include md {
-        font-size: $font-size-base;
-      }
-      i {
-        cursor: pointer;
-        z-index: 1000;
+      .event-type {
+        font-size: calc($font-size-small);
+        font-weight: 300;
+        color: $text-color-secondary;
+        @include md {
+          font-size: calc($font-size-base - 3px);
+        }
       }
     }
   }
 
-  .glow {
-    display: none;
+  .event-description {
+    margin: 0.3rem 0;
+    // text-overflow: ellipsis;
+    // white-space: nowrap;
+    // overflow: hidden;
+    // display: block;
+    font-size: $font-size-small;
     @include md {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      left: 0;
-      top: 0;
-      z-index: -1;
+      margin: 0.5rem 0;
+      font-size: calc($font-size-base - 2px);
+      margin-bottom: 0.7rem;
     }
-    // background-image: radial-gradient(circle at 50% -20%, #ffffff22, #0000000f);
+  }
+
+  .details-box {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    margin-bottom: 1rem;
+
+    .contact-details-item {
+      display: flex;
+      justify-content: start;
+      align-items: start;
+      gap: 0.4rem;
+      padding-bottom: 0.2rem;
+      @include md {
+        gap: 0.5rem;
+      }
+      i {
+        font-size: calc($font-size-base - 2px);
+        color: $text-color-secondary;
+        @include md {
+          font-size: $font-size-base;
+        }
+      }
+      span {
+        font-size: calc($font-size-base - 1px);
+        color: $text-color-primary;
+        opacity: 0.8;
+        font-weight: 200;
+        @include md {
+          opacity: 0.6;
+          font-size: calc($font-size-base - 3px);
+        }
+
+        .country-code {
+          margin-right: 0.4rem;
+        }
+      }
+    }
+  }
+
+  .time-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    .created-time {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      color: $text-color-secondary;
+      .show-time {
+        display: none;
+        @include md {
+          display: inline-block;
+        }
+      }
+    }
+    .view-more {
+      border: none;
+      background: transparent;
+      color: $text-color-primary;
+      cursor: pointer;
+      i {
+        font-size: $font-size-medium;
+      }
+    }
+    .pop-up-model {
+      padding: 0.5rem;
+      position: absolute;
+      background: $text-color-primary;
+      color: $dashboard-bg-primary;
+      right: -100%;
+      bottom: 100%;
+      border-radius: 8px;
+      display: none;
+      justify-content: start;
+      flex-direction: column;
+      align-items: start;
+      gap: 0.1rem;
+      overflow: hidden;
+      padding-top: 0.7rem;
+      padding-right: 1.4rem;
+      transition:all 0.3s;
+      &.active-event-pop-up {
+        display: flex;
+        right: 0.5rem;
+      }
+      .cross-icon {
+        position: absolute;
+        top: 0;
+        right: 0;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        i {
+          font-size: $font-size-large;
+          font-weight: 500;
+        }
+      }
+
+      .pop-up-item {
+        width: 100%;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        display: flex;
+        justify-content: start;
+        align-items: start;
+        gap: 0.5rem;
+        font-size: $font-size-small;
+        padding: 0.3rem 0.5rem;
+        z-index: 100;
+        transition: 0.4s;
+        border-radius: 4px;
+        &:hover {
+          background: rgba($color: #000000, $alpha: 0.2);
+        }
+      }
+    }
   }
 }
