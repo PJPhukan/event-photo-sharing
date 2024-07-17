@@ -13,7 +13,7 @@ import PrivacyPolicy from "./page/PrivacyPolicy/PrivacyPolicy";
 import Testimonial from "./page/Testimonial/Testimonial";
 import ForgotPassowrd from "./page/ForgotPassword/ForgotPassowrd";
 import Dashboard from "./page/Dashboard/Dashboard";
-import CreateEvent from "./page/CreateEvent/CreateEvent";
+import Event from "./page/Event/Event";
 import Sidebar from "./component/Sidebar/Sidebar";
 import Topbar from "./component/Topbar/Topbar";
 import context from "../Context/context";
@@ -62,13 +62,8 @@ const Router = () => {
               <Topbar />
               <Routes>
                 <Route path="/" element={<Dashboard />} />
-
-                {/* TODO  */}
-                <Route
-                  path="/dashboard/create-event"
-                  element={<CreateEvent />}
-                />
-                <Route path="/dashboard/favorite" element={<CreateEvent />} />
+                <Route path="/dashboard/event" element={<Event />} />
+                <Route path="/dashboard/favorite" element={<Event />} />
                 <Route path="/dashboard/settings" element={<Settings />} />
                 <Route path="/dashboard/profile" element={<Profile />} />
                 {/* TODO */}

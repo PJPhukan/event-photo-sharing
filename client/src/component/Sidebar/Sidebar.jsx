@@ -71,9 +71,9 @@ const Sidebar = () => {
           </Link>
 
           <Link
-            to="/dashboard/create-event"
+            to="/dashboard/event"
             className={`${
-              location.pathname === "/dashboard/create-event" ? "active" : " "
+              location.pathname === "/dashboard/event" ? "active" : " "
             }`}
           >
             <li>
