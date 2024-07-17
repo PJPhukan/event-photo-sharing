@@ -1,6 +1,6 @@
 import React from "react";
 import EventCard from "../../component/EventCard/EventCard";
-import "./createevent.scss";
+import "./event.scss";
 import { Link } from "react-router-dom";
 const CreateEvent = () => {
   return (
