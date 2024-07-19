@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./eventcard.scss";
-import { GiLoveLetter } from "react-icons/gi";
 import { Link } from "react-router-dom";
 import ProfileImg from "../../assets/collLogo.png";
 import { MdDelete } from "react-icons/md";
+import { FaRegEye } from "react-icons/fa";
 const EventCard = () => {
   const [showEventPopUP, setshowEventPopUP] = useState(false);
 
@@ -21,18 +21,33 @@ const EventCard = () => {
   const DeleteEvent = () => {
     console.log("Delete Event button was clicked");
   };
+
+  const getSubstring = (str, len) => {
+    if (str.length > len) {
+      return str.substring(0, len) + "...";
+    }
+    return str;
+  };
   return (
     <div className="event-card">
       <div className="top-box">
-        <img src={ProfileImg} alt="" className="event-logo" />
-        <div className="top-text">
-          <h4 className="event-name">Event name</h4>
-          <h5 className="event-type">Marrage</h5>
+        <div className="event-card-box">
+          <img src={ProfileImg} alt="" className="event-logo" />
+          <div className="top-text">
+            <h4 className="event-name">{getSubstring("College annual function",14)}</h4>
+            <h5 className="event-type">Marrage</h5>
+          </div>
         </div>
+        <Link to="/dashboard/event/:eventId" className="btn-view">
+          <FaRegEye />
+          View
+        </Link>
       </div>
       <p className="event-description">
-        Discover a curated collection of stunning images perfect for enhancing
-        your creative endeavors. High-quality, versatile, and ready to inspire.
+        {getSubstring(
+          "Discover a curated collection of stunning images perfect for enhancingyour creative endeavors. High-quality, versatile, and ready to inspire.",
+          60
+        )}
       </p>
 
       <div className="details-box">
