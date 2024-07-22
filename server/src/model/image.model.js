@@ -8,7 +8,23 @@ const imageSchema = new mongoose.Schema(
     title: {
       type: String,
       default: "Image",
-    }
+    },
+    event_id: {
+      type: Schema.Types.ObjectId,
+      ref: "Event",
+    },
+    user_id: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+    image_public_id: {
+      type: String,
+      required: true,
+    },
+    visibility: {
+      type: String,
+      default: "public",
+    },
   },
   {
     timestamps: true,
