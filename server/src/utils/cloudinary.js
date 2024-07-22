@@ -16,13 +16,24 @@ const cloudinaryUpload = async (localFilePath) => {
     const cloudinaryResponse = await cloudinary.uploader.upload(localFilePath, {
       resource_type: "auto",
     });
-    // console.log("Cloudinary response", cloudinaryResponse);
+    console.log("Cloudinary response", cloudinaryResponse);
     fs.unlinkSync(localFilePath);
-    return cloudinaryResponse.url;
+    return cloudinaryResponse;
   } catch (error) {
     fs.unlinkSync(localFilePath);
     return;
   }
 };
 
-export { cloudinaryUpload };
+const cloudinaryDelete = async (publicId) => {
+  try {
+    if (publicId) {
+      const response = await cloudinary.uploader.destroy(publicId);
+      return response.json();
+    }
+  } catch (error) {
+    console.error("cloudinary destroy error: ", error);
+  }
+};
+
+export { cloudinaryUpload, cloudinaryDelete };
