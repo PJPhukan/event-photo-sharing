@@ -1,5 +1,8 @@
 import mongoose, { Schema } from "mongoose";
 import { image } from "../data/eventImage";
+const isInclude = (n) => {
+  return n.type.toLowerCase().includes(this.EventType.toLowerCase());
+};
 const EventSchema = new Schema(
   {
     user_id: {
@@ -33,10 +36,8 @@ const EventSchema = new Schema(
     CoverImage: {
       type: String,
       default: function () {
-        const url = image.some((n) => {
-          n.type.toLowerCase().includes(this.EventType.toLowerCase());
-        });
-        return url;
+        const url = image.filter(isInclude);
+        return url.url;
       },
     },
   },
