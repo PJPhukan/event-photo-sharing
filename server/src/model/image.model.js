@@ -25,6 +25,10 @@ const imageSchema = new mongoose.Schema(
       type: String,
       default: "public",
     },
+    resource_type: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,

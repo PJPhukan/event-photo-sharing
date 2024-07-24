@@ -257,12 +257,12 @@ const ChangeAvater = AsyncHandler(async (req, res) => {
     throw new ApiError(400, "Please select an valid avatar");
   }
   const cloudinaryUrl = await cloudinaryUpload(localAvatarPath);
-  if (!cloudinaryUrl) {
+  if (!cloudinaryUrl.url) {
     throw new ApiError(500, "Error occured while updating avatar image ");
   }
   const user = await User.findByIdAndUpdate(req.user._id, {
     $set: {
-      avatar: cloudinaryUrl,
+      avatar: cloudinaryUrl.url,
     },
   })?.select("-password");
   if (!user) {
@@ -277,15 +277,14 @@ const ChangeCoverImage = AsyncHandler(async (req, res) => {
     throw new ApiError(400, "Please select a valid cover image");
 
   const cloudinaryCoverUrl = await cloudinaryUpload(localCoverPath);
-
-  if (!cloudinaryCoverUrl)
+  if (!cloudinaryCoverUrl.url)
     throw new ApiError(
       500,
       "Error occured while uploading image to the cloudinary "
     );
   const user = await User.findByIdAndUpdate(req.user._id, {
     $set: {
-      coverImage: cloudinaryCoverUrl,
+      coverImage: cloudinaryCoverUrl.url,
     },
   })?.select("-password");
 
@@ -403,5 +402,5 @@ export {
   UpdateUserDetails,
   CheckCookie,
   ChangeEmail,
-  DeleteAccount
+  DeleteAccount,
 };
