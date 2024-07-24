@@ -4,7 +4,8 @@ import {
   CreateEvent,
   DeleteEvent,
   EditEvent,
-  GetAllEvent
+  GetAllEvent,
+  EventDetails,
 } from "../controller/event.controllers.js";
 import { VerifyJwtToken } from "../libs/auth.helpers.js";
 const router = Router();
@@ -17,6 +18,6 @@ router.route("/edit-event").patch(VerifyJwtToken, EditEvent); //logged in requir
 
 router.route("/get-events").get(VerifyJwtToken, GetAllEvent); //logged in required
 
-
+router.route("/get-event-details").get(VerifyJwtToken, EventDetails); //logged in required
 
 export default router;
