@@ -39,6 +39,10 @@ const Sidebar = () => {
   const ToggleNotification = () => {
     setshowNotification(!showNotification);
   };
+
+  const checkUrl = (str) => {
+    return location.pathname.includes(`/${str}/`);
+  };
   return (
     <>
       <div
@@ -61,7 +65,7 @@ const Sidebar = () => {
           <Link
             to="/dashboard/profile"
             className={`${
-              location.pathname === "/dashboard/profile" ? "active" : " "
+              location.pathname === "/dashboard/profile" || checkUrl("profile")? "active" : " "
             }`}
           >
             <li>
@@ -73,7 +77,7 @@ const Sidebar = () => {
           <Link
             to="/dashboard/event"
             className={`${
-              location.pathname === "/dashboard/event" ? "active" : " "
+              location.pathname === "/dashboard/event" || checkUrl("event")? "active" : " "
             }`}
           >
             <li>
@@ -85,7 +89,7 @@ const Sidebar = () => {
           <Link
             to="/dashboard/collections"
             className={`${
-              location.pathname === "/dashboard/collections" ? "active" : " "
+              location.pathname === "/dashboard/collections" || checkUrl("collections") ? "active" : " "
             }`}
           >
             <li>
@@ -97,7 +101,7 @@ const Sidebar = () => {
           <Link
             to="/dashboard/favorite"
             className={`${
-              location.pathname === "/dashboard/favorite" ? "active" : " "
+              location.pathname === "/dashboard/favorite" || checkUrl("favorite") ? "active" : " "
             }`}
           >
             <li>
@@ -115,7 +119,7 @@ const Sidebar = () => {
           <Link
             to="/dashboard/settings"
             className={`${
-              location.pathname === "/dashboard/settings" ? "active" : " "
+              location.pathname === "/dashboard/settings" || checkUrl("settings") ? "active" : " "
             }`}
           >
             <li>

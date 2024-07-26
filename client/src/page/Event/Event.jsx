@@ -1,16 +1,24 @@
-import React from "react";
+import React, { useContext } from "react";
 import EventCard from "../../component/EventCard/EventCard";
 import "./event.scss";
-import { Link } from "react-router-dom";
+import context from "../../../Context/context";
 const CreateEvent = () => {
+  const userContext = useContext(context);
+  const { setcreateEvent } = userContext;
   return (
-    <section className="create-event-main">
+    <section className="event-main">
       <div className="top-event">
         <div className="section-heading">
           <div className="main-heading">Events</div>
           <div className="sub-heading">Manage your all events</div>
         </div>
-        <Link to="/dashboard/create-event" className="create-event-btn"> Create Event</Link>
+        <button
+          className="create-event-btn"
+          onClick={() => setcreateEvent(true)}
+        >
+          {" "}
+          Create Event
+        </button>
       </div>
       <div className="event-main-content">
         <EventCard />
