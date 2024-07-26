@@ -34,11 +34,13 @@ const EventCard = () => {
         <div className="event-card-box">
           <img src={ProfileImg} alt="" className="event-logo" />
           <div className="top-text">
-            <h4 className="event-name">{getSubstring("College annual function",14)}</h4>
+            <h4 className="event-name">
+              {getSubstring("College annual function", 10)}
+            </h4>
             <h5 className="event-type">Marrage</h5>
           </div>
         </div>
-        <Link to="/dashboard/event/:eventId" className="btn-view">
+        <Link to="/dashboard/event/2" className="btn-view">
           <FaRegEye />
           View
         </Link>
@@ -46,7 +48,7 @@ const EventCard = () => {
       <p className="event-description">
         {getSubstring(
           "Discover a curated collection of stunning images perfect for enhancingyour creative endeavors. High-quality, versatile, and ready to inspire.",
-          60
+          50
         )}
       </p>
 
@@ -95,8 +97,8 @@ const EventCard = () => {
             <span>Edit Details</span>
           </button>
           <button className="pop-up-item" onClick={ChangeAvatarEvent}>
-            <i className="bx bxs-camera"></i>
-            <span>Change Avatar</span>
+            <i className="bx bx-qr"></i>
+            <span>QR Code</span>
           </button>
           <button className="pop-up-item" onClick={DeleteEvent}>
             <MdDelete />
