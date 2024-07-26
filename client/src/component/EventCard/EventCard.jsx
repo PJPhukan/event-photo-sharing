@@ -1,12 +1,13 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import "./eventcard.scss";
 import { Link } from "react-router-dom";
 import ProfileImg from "../../assets/collLogo.png";
 import { MdDelete } from "react-icons/md";
 import { FaRegEye } from "react-icons/fa";
+import context from "../../../Context/context";
 const EventCard = () => {
   const [showEventPopUP, setshowEventPopUP] = useState(false);
-
+  const { seteditEvent } = useContext(context);
   //TODO:Edit Details of the event
   const EditDetailsEvent = () => {
     console.log("Edit Details button was clicked");
@@ -92,7 +93,7 @@ const EventCard = () => {
           >
             <i className="bx bx-x"></i>
           </button>
-          <button className="pop-up-item" onClick={EditDetailsEvent}>
+          <button className="pop-up-item" onClick={() => seteditEvent(true)}>
             <i className="bx bx-edit-alt"></i>
             <span>Edit Details</span>
           </button>

@@ -21,9 +21,10 @@ import Profile from "./page/Profile/Profile";
 import Settings from "./page/Settings/Settings";
 import EventDetails from "./page/EventDetails/EventDetails";
 import CreateEvent from "./component/CreateEvent/CreateEvent";
+import EditEvent from "./component/EditEvent/EditEvent";
 const Router = () => {
   const userContext = useContext(context);
-  const { adminlogin, CheckCookie, createEvent } = userContext;
+  const { adminlogin, CheckCookie, createEvent,editEvent } = userContext;
 
   useEffect(
     () => {
@@ -60,6 +61,7 @@ const Router = () => {
         {adminlogin && (
           <div className="dashboard-user">
             {createEvent && <CreateEvent />}
+            {editEvent && <EditEvent />}  
             <Sidebar />
             <div className="sidebar-right">
               <Topbar />

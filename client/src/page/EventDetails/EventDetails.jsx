@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./eventdetails.scss";
 import { useParams } from "react-router-dom";
 import ProfileImg from "../../assets/collLogo.png";
 import Item from "../../component/Item/Item";
+import context from "../../../Context/context";
+
 const EventDetails = () => {
   const { id } = useParams();
-
+  const { seteditEvent } = useContext(context);
   const [showPopUP, setshowPopUP] = useState(false);
   return (
     <div className="event-details-main">
@@ -51,7 +53,10 @@ const EventDetails = () => {
                     <i className="bx bx-x"></i>
                   </button>
 
-                  <button className="more-item">
+                  <button
+                    className="more-item"
+                    onClick={() => seteditEvent(true)}
+                  >
                     <i className="bx bx-edit-alt"></i>
                     <span>Edit</span>
                   </button>
