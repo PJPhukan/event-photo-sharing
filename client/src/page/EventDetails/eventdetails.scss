@@ -1,0 +1,245 @@
+@import "../../css-config/mixins.scss";
+@import "../../css-config/variables.scss";
+.event-details-main {
+  max-width: 100%;
+  position: relative;
+  height: 100%;
+  box-sizing: border-box;
+  background: $dashboard-bg-secondary;
+  padding: 0.5rem;
+  font-family: "Tilt Neon", sans-serif;
+  z-index: 1;
+  @include lg {
+    min-height: calc(100vh);
+  }
+  .top-details-main {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    background: $dashboard-bg-primary;
+    padding: 0.7rem 0.5rem;
+    border-radius: 4px;
+    gap: 0.5rem;
+
+    .event-avatar {
+      width: 3rem;
+      height: 3rem;
+      object-fit: cover;
+      border-radius: 50%;
+      display: none;
+      @include md {
+        width: 4rem;
+        height: 4rem;
+        display: inline-block;
+      }
+    }
+    .details-left {
+      display: flex;
+      align-items: start;
+      gap: 0.5rem;
+      flex-direction: column;
+      width: 100%;
+
+      .top-text-details {
+        display: flex;
+        justify-content: start;
+        gap: 0.3rem;
+        justify-content: space-between;
+        width: 100%;
+        // border: 2px solid red;
+        @include md {
+          gap: 0.4rem;
+        }
+
+        .left-text-details {
+          .main-heading {
+            font-size: $font-size-base;
+            @include md {
+              font-size: $font-size-medium;
+            }
+          }
+
+          .sub-heading {
+            font-size: $font-size-small;
+            color: $text-color-secondary;
+            font-weight: 200;
+            margin-left: 0.5rem;
+            @include md {
+              font-size: $font-size-base;
+            }
+          }
+
+          .event-description {
+            opacity: 0.7;
+            font-size: $font-size-small;
+            display: none;
+            @include md {
+              display: inline-block;
+            }
+          }
+        }
+
+        .right-text-details {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 0.5rem;
+          flex-direction: row;
+          @include md {
+            gap: 0.3rem;
+          }
+          .right-item-button {
+            text-decoration: none;
+            font-size: $font-size-base;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 0.2rem 0.3rem;
+            background: linear-gradient(0deg, #003fff, #0b31ac);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            flex-wrap: nowrap;
+            font-size: calc($font-size-base - 5px);
+            @include md {
+              padding: 0.3rem 0.4rem;
+              font-size: $font-size-base;
+            }
+
+            input {
+              display: none;
+            }
+            label {
+              display: flex;
+              gap: 0.3rem;
+              align-items: center;
+            }
+          }
+          .right-item-pop-up-button {
+            text-decoration: none;
+            font-size: $font-size-medium;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 0.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            flex-wrap: nowrap;
+            position: relative;
+            @include md {
+              padding: 0.3rem;
+              font-size: $font-size-large;
+            }
+
+            .pop-up-menu {
+              display: none;
+              justify-content: start;
+              flex-direction: column;
+              align-items: start;
+              gap: 0.1rem;
+              overflow: hidden;
+              padding: 0.4rem 1rem;
+              padding-right: 1rem;
+              transition: all 0.1s;
+              position: absolute;
+              right: 1.3rem;
+              top: 0.3rem;
+              background: $text-color-primary;
+              color: $dashboard-bg-primary;
+              border-radius: 8px;
+              z-index: 10000;
+              @include md {
+                top: 1rem;
+              }
+              &.active-pop-up {
+                display: flex;
+              }
+              .cross-icon {
+                position: absolute;
+                top: 0;
+                right: 0;
+                border: none;
+                border-radius: 50%;
+                cursor: pointer;
+                i {
+                  font-size: $font-size-large;
+                  font-weight: 500;
+                }
+              }
+
+              .more-item {
+                width: 100%;
+                border: none;
+                background: transparent;
+                cursor: pointer;
+                display: flex;
+                justify-content: start;
+                align-items: start;
+                gap: 0.9rem;
+                font-size: $font-size-small;
+                padding: 0.3rem 0.5rem;
+                z-index: 100;
+                transition: 0.3s;
+                border-radius: 4px;
+
+                span {
+                  text-wrap: nowrap;
+                }
+                @include md {
+                  padding: 0.5rem 0.9rem;
+                }
+                &:hover {
+                  background: rgba($color: #000000, $alpha: 0.2);
+                }
+              }
+            }
+          }
+        }
+      }
+      .mobile-desc {
+        opacity: 0.7;
+        font-size: $font-size-small;
+        display: inline-block;
+        @include md {
+          display: none;
+        }
+      }
+      .address-container {
+        display: flex;
+        justify-content: start;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+
+        @include md {
+          gap: 1rem;
+        }
+        .address-box {
+          background: $dashboard-bg-secondary;
+          padding: 0.3rem 0.5rem;
+          border-radius: 5px;
+          display: flex;
+          gap: 0.3rem;
+          align-items: center;
+          @include md {
+            padding: 0.3rem 0.7rem;
+          }
+          .country-code {
+            margin-right: 5px;
+          }
+        }
+      }
+    }
+  }
+
+  .event-items {
+    display: flex;
+    flex-wrap: wrap;
+    flex: 1;
+    gap: 0.2rem;
+    background: $dashboard-bg-secondary;
+    margin-top: 0.5rem;
+    @include md {
+      gap: 0.5rem;
+    }
+  }
+}
