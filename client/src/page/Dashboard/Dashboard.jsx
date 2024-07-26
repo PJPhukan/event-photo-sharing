@@ -8,8 +8,8 @@ import NoFileFound from "../../component/NoFileFound/NoFileFound";
 
 const Dashboard = () => {
   const userContext = useContext(context);
-  const { getuser } = userContext;
-  const [noFile, setnoFile] = useState(true);
+  const { getuser,setcreateEvent } = userContext;
+  const [noFile, setnoFile] = useState(false);
   useEffect(() => {
     getuser();
   }, []);
@@ -30,7 +30,7 @@ const Dashboard = () => {
                   videos with friends and family.
                 </div>
                 <div className="create-event">
-                  <Link to="/dashboard/create-event"> Create Event</Link>
+                  <button onClick={()=>setcreateEvent(true)}> Create Event</button>
                 </div>
               </div>
               <div className="right-box">
@@ -108,9 +108,9 @@ const Dashboard = () => {
               </table>
             </div>
 
-            <Link className="footer-create" to="/">
+            <button className="footer-create" onClick={()=>setcreateEvent(true)} >
               Create New Event
-            </Link>
+            </button>
           </div>
         ) : (
           <div className="col no-event-box">

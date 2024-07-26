@@ -8,6 +8,7 @@ const UseState = (props) => {
   const [error, setError] = useState(null);
   const [adminlogin, setadminlogin] = useState(false);
   const [showNotification, setshowNotification] = useState(false);
+  const [createEvent, setcreateEvent] = useState(false);
   //all api's
 
   //REGISTER USER
@@ -158,7 +159,9 @@ const UseState = (props) => {
         UpdateUserDetails,
         showNotification,
         setshowNotification,
-        RemoveNotification
+        RemoveNotification,
+        setcreateEvent,
+        createEvent
       }}
     >
       {props.children}

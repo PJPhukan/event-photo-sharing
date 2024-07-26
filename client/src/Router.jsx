@@ -19,9 +19,11 @@ import Topbar from "./component/Topbar/Topbar";
 import context from "../Context/context";
 import Profile from "./page/Profile/Profile";
 import Settings from "./page/Settings/Settings";
+import EventDetails from "./page/EventDetails/EventDetails";
+import CreateEvent from "./component/CreateEvent/CreateEvent";
 const Router = () => {
   const userContext = useContext(context);
-  const { adminlogin, CheckCookie } = userContext;
+  const { adminlogin, CheckCookie, createEvent } = userContext;
 
   useEffect(
     () => {
@@ -57,6 +59,7 @@ const Router = () => {
         {/* Logged in users routes  */}
         {adminlogin && (
           <div className="dashboard-user">
+            {createEvent && <CreateEvent />}
             <Sidebar />
             <div className="sidebar-right">
               <Topbar />
@@ -66,6 +69,8 @@ const Router = () => {
                 <Route path="/dashboard/favorite" element={<Event />} />
                 <Route path="/dashboard/settings" element={<Settings />} />
                 <Route path="/dashboard/profile" element={<Profile />} />
+                <Route path="/dashboard/event/:id" element={<EventDetails />} />
+
                 {/* TODO */}
                 {/* /dashboard/uploads */}
                 {/* /dashboard/notifications */}
