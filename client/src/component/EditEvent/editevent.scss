@@ -1,0 +1,153 @@
+@import "../../css-config/mixins.scss";
+@import "../../css-config/variables.scss";
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Sevillana&display=swap");
+.edit-event-main {
+  min-width: 100%;
+  min-height: 100vh;
+  // border: 2px solid red;
+  position: fixed;
+  z-index: 100000;
+  background: rgba($color: #000000, $alpha: 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  top: 0;
+  left: 0;
+  font-family: "Tilt Neon", sans-serif;
+
+  .main-content {
+    width: 95%;
+    position: relative;
+    background: url("../../assets/car.jpg") no-repeat center center/cover;
+    border-radius: 7px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    @include sm{
+        width: 60%;
+
+    }
+    @include md {
+      border-radius: 10px;
+      width: 30%;
+    }
+    .close-button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 100000;
+      cursor: pointer;
+      font-size: $font-size-large;
+      display: flex;
+      justify-content: center;
+      justify-content: center !important;
+      align-items: center;
+      border: none;
+      padding: 0.1rem;
+      border-radius: 0 0 0 10px;
+      @include md {
+        border-radius: 0 0 0 7px;
+
+        font-size: calc($font-size-large + 5px);
+        padding: 0.3rem;
+      }
+    }
+
+    .content-item {
+      width: 100%;
+      padding: 0.5rem;
+      opacity: 0.8;
+      @include md {
+        // width: 50%;
+        padding: 0.8rem;
+      }
+
+      background: rgba($color: white, $alpha: 0.3);
+
+      .logo {
+        width: 4rem;
+        object-fit: cover;
+        margin-bottom: 0;
+        @include md {
+          width: 3rem;
+        }
+      }
+      .heading {
+        text-align: center;
+        color: $dashboard-bg-secondary;
+        opacity: 0.8;
+        font-size: $font-size-large;
+        margin-bottom: 1rem;
+        @include md {
+          font-size: calc($font-size-large + 5px);
+          margin-bottom: 1.5rem;
+        }
+      }
+      form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: 90%;
+        margin: auto;
+        gap: 0.8rem;
+        .input-item {
+          width: 100%;
+          display: flex;
+          border-bottom: 2px solid black;
+          border-radius: 4px;
+          box-shadow: rgba(255, 255, 255, 0.2) 0px 60px 40px -7px;
+          padding: 0 0.3rem;
+          background: #ffffff89;
+          align-items: center;
+          justify-content: center;
+          @include md {
+            border-radius: 5px;
+            padding: 0 0.5rem;
+          }
+          label {
+            color: black;
+            font-size: $font-size-medium;
+          }
+          input,
+          select {
+            border: none;
+            padding: 0.5rem;
+            width: 100%;
+            outline: none;
+            color: $dashboard-bg-secondary;
+            font-size: calc($font-size-base - 2px);
+            background: transparent;
+            cursor: pointer;
+            font-family: "Tilt Neon", sans-serif;
+            @include md {
+              font-size: $font-size-base;
+              padding: 0.7rem;
+            }
+          }
+          input::placeholder {
+            color: $dashboard-bg-secondary;
+            font-family: "Tilt Neon", sans-serif;
+          }
+        }
+        .sub-btn {
+          background: black;
+          color: white;
+          margin: 1rem;
+          padding: 0.5rem 1.5rem;
+          font-size: $font-size-base;
+          border-radius: 50px;
+          cursor: pointer;
+          @include md {
+            margin: 1.2rem;
+            padding: 0.5rem 2rem;
+            font-size: calc($font-size-base + 3px);
+          }
+        }
+      }
+
+    }
+  }
+}
