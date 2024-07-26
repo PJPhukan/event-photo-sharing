@@ -15,7 +15,7 @@
   top: 0;
   left: 0;
   font-family: "Tilt Neon", sans-serif;
-  
+
   .main-content {
     width: 95%;
     position: relative;
@@ -42,9 +42,9 @@
       align-items: center;
       border: none;
       padding: 0.1rem;
-      border-radius: 0 0 0 10px;
+      border-radius: 0 0 0 7px;
       @include md {
-        border-radius: 0 0 0 7px;
+        border-radius: 0 0 0 10px;
 
         font-size: calc($font-size-large + 5px);
         padding: 0.3rem;
@@ -146,7 +146,7 @@
         }
       }
       &.right {
-        padding: .8rem 0.4rem;
+        padding: 0.8rem 0.4rem;
         display: none;
         align-items: center;
         flex-direction: column;
@@ -158,7 +158,6 @@
         .text-hading {
           font-size: $font-size-extra-large;
           font-family: "Sevillana";
-          
         }
 
         .user-name {

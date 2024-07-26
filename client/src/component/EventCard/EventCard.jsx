@@ -7,15 +7,10 @@ import { FaRegEye } from "react-icons/fa";
 import context from "../../../Context/context";
 const EventCard = () => {
   const [showEventPopUP, setshowEventPopUP] = useState(false);
-  const { seteditEvent } = useContext(context);
+  const { seteditEvent, downloadQR, setdownloadQR } = useContext(context);
   //TODO:Edit Details of the event
   const EditDetailsEvent = () => {
     console.log("Edit Details button was clicked");
-  };
-
-  //TODO:Change avatar of the event
-  const ChangeAvatarEvent = () => {
-    console.log("Change Avatar Event button was clicked");
   };
 
   //TODO:Delete event
@@ -97,7 +92,7 @@ const EventCard = () => {
             <i className="bx bx-edit-alt"></i>
             <span>Edit Details</span>
           </button>
-          <button className="pop-up-item" onClick={ChangeAvatarEvent}>
+          <button className="pop-up-item" onClick={() => setdownloadQR(true)}>
             <i className="bx bx-qr"></i>
             <span>QR Code</span>
           </button>

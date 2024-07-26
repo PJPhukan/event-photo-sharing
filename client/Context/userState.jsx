@@ -10,6 +10,7 @@ const UseState = (props) => {
   const [showNotification, setshowNotification] = useState(false);
   const [createEvent, setcreateEvent] = useState(false);
   const [editEvent, seteditEvent] = useState(false);
+  const [downloadQR, setdownloadQR] = useState(false);
   //all api's
 
   //REGISTER USER
@@ -162,6 +163,8 @@ const UseState = (props) => {
         setshowNotification,
         RemoveNotification,
         setcreateEvent,
+        downloadQR,
+        setdownloadQR,
         createEvent,
         editEvent,
         seteditEvent,
