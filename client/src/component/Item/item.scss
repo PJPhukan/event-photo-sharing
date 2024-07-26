@@ -1,0 +1,139 @@
+@import "../../css-config/mixins.scss";
+@import "../../css-config/variables.scss";
+
+.item {
+  border-radius: 5px;
+  position: relative;
+  min-width: 48%;
+  max-width: 50%;
+  display: flex;
+  flex: 1;
+  cursor: pointer;
+  @include smm {
+    min-width: 32%;
+    max-width: 33%;
+  }
+  @include md {
+    max-width: 25%;
+    min-width: 24%;
+  }
+  @include xl {
+    max-width: 20%;
+    min-width: 19%;
+  }
+  //   @include xxl {
+  //     max-width: 16%;
+  //   }
+
+  .item-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  video {
+    height: 100%;
+    height: 100%;
+  }
+
+  #love {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    color: red;
+    font-size: $font-size-base;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1000;
+  }
+  .like-deteails-icon {
+    position: absolute;
+    bottom: 0.4rem;
+    right: 0.4rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: $font-size-small;
+    @include md {
+      bottom: 0.5rem;
+      right: 0.5rem;
+    }
+    i {
+      font-size: $font-size-base;
+      &.active {
+        color: red;
+      }
+    }
+  }
+  .img-more {
+    position: absolute;
+    top: 0.4rem;
+    right: 0.4rem;
+    cursor: pointer;
+    font-size: $font-size-base;
+
+    @include md {
+      top: 0.5rem;
+      right: 0.5rem;
+    }
+  }
+  .dropdown-menu-more {
+    display: none;
+    justify-content: start;
+    flex-direction: column;
+    align-items: start;
+    gap: 0.1rem;
+    overflow: hidden;
+    padding: 0.2rem;
+    padding-right: 1.4rem;
+    transition: all 0.1s;
+    position: absolute;
+    right: 1.3rem;
+    top: .5rem;
+    background: $text-color-primary;
+    color: $dashboard-bg-primary;
+    border-radius: 8px;
+    @include md {
+      top: 1rem;
+    }
+    &.show-dropdown-menu {
+      display: flex;
+    }
+    .cross-icon {
+      position: absolute;
+      top: 0;
+      right: 0;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      i {
+        font-size: $font-size-large;
+        font-weight: 500;
+      }
+    }
+
+    .more-item {
+      width: 100%;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      justify-content: start;
+      align-items: start;
+      gap: 0.5rem;
+      font-size: $font-size-small;
+      padding: 0.1rem 0.5rem;
+      z-index: 100;
+      transition: 0.3s;
+      border-radius: 4px;
+      @include md {
+        padding: 0.2rem 0.5rem;
+      }
+      &:hover {
+        background: rgba($color: #000000, $alpha: 0.2);
+      }
+    }
+  }
+}

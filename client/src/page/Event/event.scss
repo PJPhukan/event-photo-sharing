@@ -1,6 +1,6 @@
 @import "../../css-config/mixins.scss";
 @import "../../css-config/variables.scss";
-.create-event-main {
+.event-main {
   max-width: 100%;
   position: relative;
   height: 100%;
@@ -42,13 +42,16 @@
     }
 
     .create-event-btn {
-      text-decoration: none;
       font-size: $font-size-base;
       font-weight: 500;
       cursor: pointer;
+      border: none;
       padding: 0.5rem 2rem;
       background: linear-gradient(0deg, #003fff, #0b31ac);
       border-radius: 5px;
+      color: $text-color-primary;
+      font-weight: 500;
+      font-family: "Tilt Neon", sans-serif;
       @include md {
         padding: 0.8rem 3rem;
       }
