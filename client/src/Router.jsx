@@ -22,9 +22,11 @@ import Settings from "./page/Settings/Settings";
 import EventDetails from "./page/EventDetails/EventDetails";
 import CreateEvent from "./component/CreateEvent/CreateEvent";
 import EditEvent from "./component/EditEvent/EditEvent";
+import QRCode from "./component/QRCode/QRCode";
 const Router = () => {
   const userContext = useContext(context);
-  const { adminlogin, CheckCookie, createEvent,editEvent } = userContext;
+  const { adminlogin, CheckCookie, createEvent, editEvent, downloadQR } =
+    userContext;
 
   useEffect(
     () => {
@@ -61,10 +63,12 @@ const Router = () => {
         {adminlogin && (
           <div className="dashboard-user">
             {createEvent && <CreateEvent />}
-            {editEvent && <EditEvent />}  
+            {editEvent && <EditEvent />}
             <Sidebar />
             <div className="sidebar-right">
               <Topbar />
+              {downloadQR && <QRCode />}
+
               <Routes>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/dashboard/event" element={<Event />} />

@@ -7,7 +7,7 @@ import context from "../../../Context/context";
 
 const EventDetails = () => {
   const { id } = useParams();
-  const { seteditEvent } = useContext(context);
+  const { seteditEvent,setdownloadQR } = useContext(context);
   const [showPopUP, setshowPopUP] = useState(false);
   return (
     <div className="event-details-main">
@@ -64,7 +64,7 @@ const EventDetails = () => {
                     <i className="bx bx-share-alt"></i>
                     <span>Share</span>
                   </button>
-                  <button className="more-item">
+                  <button className="more-item" onClick={()=>setdownloadQR(true)}>
                     <i className="bx bx-qr"></i>
                     <span>QR Code</span>
                   </button>
