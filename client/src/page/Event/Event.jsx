@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import EventCard from "../../component/EventCard/EventCard";
 import "./event.scss";
-import context from "../../../Context/context";
+import {context} from "../../../Context/context";
 const CreateEvent = () => {
   const userContext = useContext(context);
   const { setcreateEvent } = userContext;

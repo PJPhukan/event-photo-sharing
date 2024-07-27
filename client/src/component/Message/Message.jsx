@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import "./message.scss";
 import profileImg from "../../assets/profile.jpg";
-import context from "../../../Context/context";
+import {context} from "../../../Context/context";
 const Message = () => {
   const Contexts = useContext(context);
   const { RemoveNotification } = Contexts;

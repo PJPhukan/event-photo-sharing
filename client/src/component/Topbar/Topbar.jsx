@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import "./topbar.scss";
 import ProfileImage from "../../assets/profile.jpg";
 import { Link } from "react-router-dom";
-import context from "../../../Context/context";
+import {context} from "../../../Context/context";
 import Notification from "../Notification/Notification";
 const Topbar = () => {
   const UserContext = useContext(context);

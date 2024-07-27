@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import "./profile.scss";
 import coverImage from "../../assets/coverImage.jpeg";
 import AvatarImg from "../../assets/profile.jpg";
-import context from "../../../Context/context";
+import {context} from "../../../Context/context";
 
 const Profile = () => {
   const UserContext = useContext(context);

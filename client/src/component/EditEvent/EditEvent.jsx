@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { MdDescription } from "react-icons/md";
 import { FiType } from "react-icons/fi";
 import Logo from "../../assets/logo1.png";
-import context from "../../../Context/context";
+import {context} from "../../../Context/context";
 const EditEvent = () => {
   const { seteditEvent } = useContext(context);
   //TODO: send data to the backend and navigate to that page

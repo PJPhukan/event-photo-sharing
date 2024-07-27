@@ -1,7 +1,7 @@
 import React, { useState, useRef, useContext } from "react";
 import QRCode from "qrcode.react";
 import "./qrcode.scss";
-import context from "../../../Context/context";
+import {context} from "../../../Context/context";
 const QRcode = () => {
   const [text, setText] = useState("Paragjyoti Phukan");
   const qrRef = useRef();

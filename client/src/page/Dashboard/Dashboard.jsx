@@ -2,7 +2,7 @@ import React, { useContext, useEffect,useState } from "react";
 import "./dashboard.scss";
 import { Link } from "react-router-dom";
 import DashImg from "../../assets/dashborad-img.jpg";
-import context from "../../../Context/context";
+import {context} from "../../../Context/context";
 import TableData from "../../component/TableData/TableData";
 import NoFileFound from "../../component/NoFileFound/NoFileFound";
 
