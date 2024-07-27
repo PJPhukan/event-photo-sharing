@@ -1,0 +1,121 @@
+@import "../../css-config/mixins.scss";
+@import "../../css-config/variables.scss";
+
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Sevillana&display=swap");
+.click-selfie-main {
+  min-width: 100%;
+  min-height: 100vh;
+//   border: 2px solid red;
+  position: fixed;
+  z-index: 100;
+  background: rgba($color: #000000, $alpha: 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  top: 60px;
+  left: 0;
+  font-family: "Tilt Neon", sans-serif;
+
+  .main-content {
+    width: 95%;
+    position: relative;
+    // background: url("../../assets/car.png") no-repeat center center/cover;
+    background: rgba($color: #000000, $alpha: 1);
+
+    border-radius: 7px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    @include sm {
+      width: 60%;
+    }
+    @include md {
+      border-radius: 10px;
+      width: 30%;
+    }
+    .close-button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 100000;
+      cursor: pointer;
+      font-size: $font-size-large;
+      display: flex;
+      justify-content: center;
+      justify-content: center !important;
+      align-items: center;
+      border: none;
+      padding: 0.1rem;
+      border-radius: 0 0 0 10px;
+      @include md {
+        border-radius: 0 0 0 7px;
+
+        font-size: calc($font-size-large + 5px);
+        padding: 0.3rem;
+      }
+    }
+
+    .cemera-box {
+      height: 18rem;
+      width: 18rem;
+      border-radius: 50%;
+      border: 4px solid white;
+      overflow: hidden;
+
+      margin: 1rem auto;
+      @include md {
+        height: 18rem;
+        width: 18rem;
+        margin: 1.5rem auto;
+      }
+      .camera-round {
+        height: 100%;
+      }
+    }
+
+    .button-box {
+      display: flex;
+      justify-content: center;
+      margin: 1.5rem 0;
+      align-items: center;
+      flex-direction: column;
+      //   border: 2px solid red;
+      width: 100%;
+      gap: 0.6rem;
+      @include md {
+        // margin-top: 1.5rem;
+      }
+      .top-button-box {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        button {
+          border: none;
+          padding: 0.5rem 2rem;
+          background: #fff;
+          color: $dashboard-bg-primary;
+          cursor: pointer;
+          font-family: "Tilt Neon", sans-serif;
+          border-radius: 50px;
+          font-size: $font-size-base;
+        }
+        
+      }
+      .get-photos {
+        border: none;
+        padding: 0.8rem 2rem;
+        background: linear-gradient(0deg, #003fff, #0b31ac);
+        color: $text-color-primary;
+        font-family: "Tilt Neon", sans-serif;
+        border-radius: 50px;
+        font-size: $font-size-base;
+        cursor: pointer;
+        width: 60%;
+      }
+    }
+  }
+}

@@ -23,6 +23,7 @@ import EventDetails from "./page/EventDetails/EventDetails";
 import CreateEvent from "./component/CreateEvent/CreateEvent";
 import EditEvent from "./component/EditEvent/EditEvent";
 import QRCode from "./component/QRCode/QRCode";
+import Selfie from "./page/Selfie/Selfie";
 const Router = () => {
   const userContext = useContext(context);
   const { adminlogin, CheckCookie, createEvent, editEvent, downloadQR } =
@@ -55,6 +56,7 @@ const Router = () => {
             <Route path="/terms-conditions" element={<TermsConditions />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/forgot-password" element={<ForgotPassowrd />} />
+            <Route path="/:userId/:eventId" element={<Selfie />} />
           </Routes>
         )}
         {!adminlogin && <Footer />}
@@ -76,7 +78,7 @@ const Router = () => {
                 <Route path="/dashboard/settings" element={<Settings />} />
                 <Route path="/dashboard/profile" element={<Profile />} />
                 <Route path="/dashboard/event/:id" element={<EventDetails />} />
-
+                <Route path="/:userId/:eventId" element={<Selfie />} />
                 {/* TODO */}
                 {/* /dashboard/uploads */}
                 {/* /dashboard/notifications */}
