@@ -15,9 +15,9 @@ app.use(cookieParser());
 
 //All routes
 app.use("/api/auth/user", userRouter);
-app.use("./api/event", eventRouter);
-app.use("./api/image",imageRouter)
-app.use("./api/like",likeRouter)
+app.use("/api/event", eventRouter);
+app.use("/api/image",imageRouter)
+app.use("/api/like",likeRouter)
 
 app.use((err, req, res, next) => {
   if (err instanceof ApiError) {
