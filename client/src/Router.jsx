@@ -16,7 +16,7 @@ import Dashboard from "./page/Dashboard/Dashboard";
 import Event from "./page/Event/Event";
 import Sidebar from "./component/Sidebar/Sidebar";
 import Topbar from "./component/Topbar/Topbar";
-import context from "../Context/context";
+import {context} from "../Context/context";
 import Profile from "./page/Profile/Profile";
 import Settings from "./page/Settings/Settings";
 import EventDetails from "./page/EventDetails/EventDetails";

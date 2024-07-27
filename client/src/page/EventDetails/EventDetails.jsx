@@ -3,7 +3,7 @@ import "./eventdetails.scss";
 import { useParams } from "react-router-dom";
 import ProfileImg from "../../assets/collLogo.png";
 import Item from "../../component/Item/Item";
-import context from "../../../Context/context";
+import {context} from "../../../Context/context";
 
 const EventDetails = () => {
   const { id } = useParams();

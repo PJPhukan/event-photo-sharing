@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import ProfileImg from "../../assets/collLogo.png";
 import { MdDelete } from "react-icons/md";
 import { FaRegEye } from "react-icons/fa";
-import context from "../../../Context/context";
+import {context} from "../../../Context/context";
 const EventCard = () => {
   const [showEventPopUP, setshowEventPopUP] = useState(false);
   const { seteditEvent, downloadQR, setdownloadQR } = useContext(context);

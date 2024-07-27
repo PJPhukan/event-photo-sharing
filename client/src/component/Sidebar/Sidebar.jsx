@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./sidebar.scss";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import context from "../../../Context/context";
+import {context} from "../../../Context/context";
 const Sidebar = () => {
   const navigate = useNavigate();
   const usercontext = useContext(context);

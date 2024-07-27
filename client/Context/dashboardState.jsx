@@ -1,15 +1,11 @@
 import { useState } from "react";
-import context from "./context";
+import { dashboad } from "./context";
 import axios from "axios";
 
 const DashboardState = (props) => {
-  const [showNotification, setshowNotification] = useState(false);
+  // const [showNotification, setshowNotification] = useState(false);
 
-  return (
-    <context.Provider value={{ showNotification, setshowNotification }}>
-      {props.children}
-    </context.Provider>
-  );
+  return <dashboad.Provider value={{}}>{props.children}</dashboad.Provider>;
 };
 
 export default DashboardState;

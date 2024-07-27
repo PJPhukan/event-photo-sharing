@@ -1,5 +1,5 @@
 import { useState } from "react";
-import context from "./context";
+import {context} from "./context";
 import axios from "axios";
 const UseState = (props) => {
   //all state management

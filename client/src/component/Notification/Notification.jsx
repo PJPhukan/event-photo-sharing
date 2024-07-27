@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import "./notification.scss";
 import Message from "../Message/Message";
-import context from "../../../Context/context";
+import {context} from "../../../Context/context";
 
 const Notification = () => {
   const UserContext = useContext(context);
