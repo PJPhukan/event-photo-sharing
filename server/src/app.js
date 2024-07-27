@@ -2,6 +2,9 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRouter from "./route/user.route.js";
+import eventRouter from "./route/event.route.js";
+import imageRouter from "./route/image.route.js";
+import likeRouter from "./route/like.route.js";
 import { ApiError } from "./utils/ApiError.js";
 const app = express();
 app.use(cors());
@@ -12,6 +15,9 @@ app.use(cookieParser());
 
 //All routes
 app.use("/api/auth/user", userRouter);
+app.use("./api/event", eventRouter);
+app.use("./api/image",imageRouter)
+app.use("./api/like",likeRouter)
 
 app.use((err, req, res, next) => {
   if (err instanceof ApiError) {
