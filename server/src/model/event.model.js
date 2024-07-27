@@ -28,6 +28,15 @@ const EventSchema = new Schema(
     EventType: {
       type: String,
       required: true,
+      enum: [
+        "Wedding",
+        "Convocation",
+        "Marathon",
+        "School",
+        "College",
+        "Social Club",
+        "Corporate Event",
+      ],
     },
     ContactDetails: {
       type: Number,
