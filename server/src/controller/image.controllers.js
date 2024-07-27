@@ -1,4 +1,4 @@
-import { Event } from "../model/eveny.model.js";
+import { Event } from "../model/event.model.js";
 import { User } from "../model/user.model.js";
 import { Image } from "../model/image.model.js";
 import { AsyncHandler } from "../utils/asyncHandler.js";

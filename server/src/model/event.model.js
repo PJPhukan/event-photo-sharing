@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { image } from "../data/eventImage";
+import { image } from "../data/eventImage.js";
 const isInclude = (n) => {
   return n.type.toLowerCase().includes(this.EventType.toLowerCase());
 };
