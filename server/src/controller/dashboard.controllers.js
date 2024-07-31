@@ -1,9 +1,9 @@
-import { User } from "../model/user.model.js";
+import mongoose from "mongoose";
 import { AsyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 import { Like } from "../model/likes.model.js";
-import { Event } from "../model/events.model.js";
+import { Event } from "../model/event.model.js";
 import { Image } from "../model/image.model.js";
 
 const GetTotalLike = AsyncHandler(async (req, res) => {
@@ -19,8 +19,8 @@ const GetTotalLike = AsyncHandler(async (req, res) => {
       $count: "totalLikes",
     },
   ]);
-  console.log("Print total likes: ", TotalLike);
-  if (TotalLike && TotalLike === 0) {
+  // console.log("Print total likes: ", TotalLike);
+  if (TotalLike.length >= 0) {
     return res
       .status(200)
       .json(new ApiResponse(200, TotalLike, "Successfully like data fetched"));
@@ -41,8 +41,8 @@ const GetTotalEvent = AsyncHandler(async (req, res) => {
       $count: "totalEvents",
     },
   ]);
-  console.log("Print Total Event :", TotalEvent);
-  if (TotalEvent && TotalEvent === 0) {
+  // console.log("Print Total Event :", TotalEvent);
+  if (TotalEvent.length >= 0) {
     return res
       .status(200)
       .json(
@@ -66,8 +66,8 @@ const GetTotalImages = AsyncHandler(async (req, res) => {
       $count: "totalImage",
     },
   ]);
-  console.log("Print Total Images: ", TotalImages);
-  if (TotalImages && TotalImages === 0) {
+  // console.log("Print Total Images:  ", TotalImages);
+  if (TotalImages.length >= 0) {
     return res
       .status(200)
       .json(
@@ -91,7 +91,7 @@ const GetTotalVideos = AsyncHandler(async (req, res) => {
       $count: "totalVideo",
     },
   ]);
-  console.log("Print number of total videos: ", TotalVideo);
+  // console.log("Print number of total videos: ", TotalVideo);
   if (TotalVideo || TotalVideo === 0) {
     return res
       .status(200)
@@ -153,14 +153,30 @@ const GetEventData = AsyncHandler(async (req, res) => {
       },
     },
     {
+      $lookup: {
+        from: "likes",
+        localField: "_id",
+        foreignField: "event_id",
+        as: "likes_details",
+        pipeline: [
+          {
+            $count: "totallikes",
+          },
+        ],
+      },
+    },
+    {
       $project: {
-        result: 1,
+        EventName: 1,
+        EventDate: 1,
+        image_details: 1,
         resource_type_details: 1,
+        likes_details: 1,
       },
     },
   ]);
 
-  console.log("Displaying combine details of event data :", combined_details);
+  // console.log("Displaying combine details of event data :", combined_details);
 
   if (combined_details.length >= 0) {
     return res

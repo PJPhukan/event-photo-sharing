@@ -1,19 +1,57 @@
-import React, { useContext, useEffect,useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./dashboard.scss";
-import { Link } from "react-router-dom";
 import DashImg from "../../assets/dashborad-img.jpg";
-import {context} from "../../../Context/context";
+import { context, dashboad } from "../../../Context/context";
 import TableData from "../../component/TableData/TableData";
 import NoFileFound from "../../component/NoFileFound/NoFileFound";
 
 const Dashboard = () => {
+  const [totalLikes, setTotalLikes] = useState(0);
+  const [totalImages, setTotalImages] = useState(0);
+  const [totalEvents, setTotalEvents] = useState(0);
+  const [totalVideo, setTotalVideo] = useState(0);
+  const [events, setEvents] = useState(null);
+  const [noFile, setNoFile] = useState(false);
   const userContext = useContext(context);
-  const { getuser,setcreateEvent } = userContext;
-  const [noFile, setnoFile] = useState(false);
+  const dashboardContext = useContext(dashboad);
+  const { getuser, setcreateEvent } = userContext;
+  const {
+    get_total_likes,
+    get_total_event,
+    get_total_image,
+    get_total_video,
+    get_event_data,
+  } = dashboardContext;
+
+  const dashboardDetails = async () => {
+    const like_result = await get_total_likes();
+    setTotalLikes(like_result.data.data[0]?.totalLikes || 0);
+
+    const image_result = await get_total_image();
+    setTotalImages(image_result.data.data[0]?.totalImage || 0);
+
+    const event_result = await get_total_event();
+    setTotalEvents(event_result.data.data[0]?.totalEvents || 0);
+
+    const video_result = await get_total_video();
+    setTotalVideo(video_result.data.data[0]?.totalVideo || 0);
+
+    const event_data_result = await get_event_data();
+    const eventDetails = event_data_result?.data?.data.event_details;
+    if (eventDetails?.length > 0) {
+      setEvents(eventDetails);
+      setNoFile(false);
+    } else {
+      setEvents(null);
+      setNoFile(true);
+    }
+  };
+
   useEffect(() => {
     getuser();
+    dashboardDetails();
   }, []);
-
+  useEffect(() => {});
   return (
     <>
       <section className="dashboard">
@@ -30,7 +68,10 @@ const Dashboard = () => {
                   videos with friends and family.
                 </div>
                 <div className="create-event">
-                  <button onClick={()=>setcreateEvent(true)}> Create Event</button>
+                  <button onClick={() => setcreateEvent(true)}>
+                    {" "}
+                    Create Event
+                  </button>
                 </div>
               </div>
               <div className="right-box">
@@ -45,7 +86,7 @@ const Dashboard = () => {
                 <i className="bx bx-trending-up"></i>
               </div>
               <div className="bottom">
-                <h2 className="amount">119</h2>
+                <h2 className="amount">{totalImages}</h2>
                 <i className="bx bx-images"></i>
               </div>
             </div>
@@ -56,7 +97,7 @@ const Dashboard = () => {
                 <i className="bx bx-trending-up"></i>
               </div>
               <div className="bottom">
-                <h2 className="amount">1200</h2>
+                <h2 className="amount">{totalVideo}</h2>
                 <i className="bx bxs-videos"></i>
               </div>
             </div>
@@ -67,7 +108,7 @@ const Dashboard = () => {
                 <i className="bx bx-trending-up"></i>
               </div>
               <div className="bottom">
-                <h2 className="amount">4</h2>
+                <h2 className="amount">{totalEvents}</h2>
                 <i className="bx bxs-calendar-event"></i>
               </div>
             </div>
@@ -78,7 +119,7 @@ const Dashboard = () => {
                 <i className="bx bx-trending-up"></i>
               </div>
               <div className="bottom">
-                <h2 className="amount">1200</h2>
+                <h2 className="amount">{totalLikes}</h2>
                 <i className="bx bxs-like"></i>
               </div>
             </div>
@@ -101,14 +142,17 @@ const Dashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <TableData />
-                  <TableData />
-                  <TableData />
+                  {events?.map((e) => {
+                    return <TableData key={e._id} item={e} />;
+                  })}
                 </tbody>
               </table>
             </div>
 
-            <button className="footer-create" onClick={()=>setcreateEvent(true)} >
+            <button
+              className="footer-create"
+              onClick={() => setcreateEvent(true)}
+            >
               Create New Event
             </button>
           </div>
