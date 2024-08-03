@@ -1,0 +1,119 @@
+@import "../../css-config/mixins.scss";
+@import "../../css-config/variables.scss";
+.item-details {
+  width: 100%;
+  min-height: calc(100vh - 60px);
+  position: absolute;
+  background: rgba($color: #000000, $alpha: 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  z-index: 10000;
+  @include md {
+    min-height: calc(100vh - 80px);
+  }
+  .main-box {
+    width: 95%;
+    // border: 2px solid red;
+    background: #fff;
+    border-radius: 10px;
+    padding: 1rem 2rem;
+    position: relative;
+    @include md {
+      width: 50%;
+    }
+
+    .cross-icon {
+      position: absolute;
+      top: 0;
+      right: 0;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      background: transparent;
+      i {
+        font-size: $font-size-large;
+        font-weight: 500;
+        @include md {
+          font-size: $font-size-extra-large;
+        }
+      }
+    }
+
+    .event-name {
+      font-size: $font-size-medium;
+      font-weight: 500;
+      margin: 0.7rem;
+      color: $dashboard-bg-secondary;
+      text-align: center;
+      @include md {
+        font-size: $font-size-large;
+        margin: 1rem;
+      }
+    }
+
+    .media-box {
+      border-radius: 7px;
+      overflow: hidden;
+      margin: 0.7rem 0;
+      // max-height: calc(100vh - 60px);
+      // width: auto;
+      @include md {
+        margin: 1rem 0;
+        border-radius: 10px;
+      }
+      .item-image {
+        width: 100%;
+        height: 100%;
+      }
+      video {
+        height: 100%;
+        height: 100%;
+      }
+    }
+    #love {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      color: red;
+      font-size: $font-size-base;
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .button-box {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+
+      .btn {
+        background: $text-color-primary;
+        color: $dashboard-bg-primary;
+        cursor: pointer;
+        box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        width: 40%;
+        font-size: $font-size-large;
+        padding: .8rem 1.6rem;
+        border: none;
+        border-radius: 5px;
+        
+        @include md{
+          padding: 1rem 2rem;
+          
+          gap: 0.7rem;
+          font-size: $font-size-large;
+        }
+      }
+    }
+  }
+}
