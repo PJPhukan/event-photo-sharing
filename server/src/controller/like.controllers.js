@@ -6,15 +6,19 @@ import { Like } from "../model/likes.model.js";
 
 const NewLike = AsyncHandler(async (req, res) => {
   const { _id } = req.user;
-  const { likeuser, imageId } = req.body;
-  const like = await Like.findOne({ likedUser: likeuser, user: _id });
+  const { owner, imageId, eventId } = req.body;
+  const like = await Like.findOne({ likedUser: _id, image: imageId });
+  // console.log(like);
   if (like) {
-    throw new ApiError(400, "You already liked this user");
+    return res
+      .status(200)
+      .json(new ApiResponse(200, {}, "You are already liked"));
   }
   const newLike = await Like.create({
-    likedUser: likeuser,
-    user: _id,
+    likedUser: _id,
+    user: owner,
     image: imageId,
+    event_id: eventId,
   });
   if (!newLike) {
     throw new ApiError(500, "Failed to create like");
@@ -24,19 +28,20 @@ const NewLike = AsyncHandler(async (req, res) => {
 
 const DeleteLike = AsyncHandler(async (req, res) => {
   const { _id } = req.user;
-  const { likeuser, imageId } = req.body;
-  let like = await Like.findOne({ likedUser: likeuser, user: _id });
+  const { imageId } = req.params;
+  // console.log(imageId);
+  let like = await Like.findOne({ likedUser: _id, image: imageId });
+  // console.log(like);
   if (!like) {
-    throw new ApiError(400, "You did not liked yete");
+    throw new ApiError(400, "You did not liked yet");
   }
-  like = await Like.deleteOne({ likedUser: likeuser, user: _id });
+  like = await Like.deleteOne({ likedUser: _id, image: imageId });
   if (!like) {
-    throw new ApiError(500, "Failed to delete like");
+    throw new ApiError(500, "Failed to dislike the media");
   }
   return res
     .status(200)
-    .json(new ApiResponse(200, "User Unliked successfully"));
+    .json(new ApiResponse(200, "User disliked successfully"));
 });
-
 
 export { NewLike, DeleteLike };

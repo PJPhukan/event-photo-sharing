@@ -5,6 +5,6 @@ const router = Router();
 
 router.route("/like-post").post(VerifyJwtToken, NewLike); //user logged in required
 
-router.route("/unlike-post").delete(VerifyJwtToken, DeleteLike); //user logged in required
+router.route("/unlike-post/:imageId").delete(VerifyJwtToken, DeleteLike); //user logged in required
 
 export default router;
