@@ -16,6 +16,7 @@ import {
   CheckCookie,
   ChangeEmail,
   DeleteAccount,
+  GetUserId
 } from "../controller/user.conrollers.js";
 import { VerifyJwtToken } from "../libs/auth.helpers.js";
 const router = Router();
@@ -54,4 +55,5 @@ router.route("/resetpassword").patch(ResetPassword); //no logged in required
 
 router.route("/deleteaccount").delete(VerifyJwtToken, DeleteAccount); // logged in required
 
+router.route("/get-id").get(VerifyJwtToken, GetUserId);
 export default router;
