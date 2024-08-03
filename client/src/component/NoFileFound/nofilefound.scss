@@ -30,7 +30,7 @@
     }
   }
 
-  .no-event-icon-box{
+  .no-event-icon-box {
     width: 4rem;
     height: 4rem;
     background-color: $text-color-primary;
@@ -39,30 +39,37 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    @include md{
-        width: 6rem;
-    height: 6rem;
+    @include md {
+      width: 6rem;
+      height: 6rem;
     }
-    svg{
-        font-size: 2rem;
-        color: $dashboard-bg-primary;
-        @include md{
-            font-size: 4rem;
-        }
+    svg {
+      font-size: 2rem;
+      color: $dashboard-bg-primary;
+      @include md {
+        font-size: 4rem;
+      }
     }
   }
-  .create-event-btn {
-    text-decoration: none;
-    font-size: $font-size-small;
-    font-weight: 500;
-    cursor: pointer;
-    padding: 0.3rem 1rem;
-    background: linear-gradient(0deg, #003fff, #0b31ac);
-    border-radius: 5px;
+  .create-event {
+    margin: 2rem auto !important;
     @include md {
+      margin: 3rem 0 !important;
+    }
+    button {
+      font-size: $font-size-base;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      padding: 0.5rem 2rem;
+      background: linear-gradient(0deg, #003fff, #0b31ac);
+      border-radius: 5px;
+      color: $text-color-primary;
+      font-weight: 500;
+      font-family: "Tilt Neon", sans-serif;
+      @include md {
         padding: 0.8rem 3rem;
-        font-size: $font-size-base;
-
+      }
     }
   }
 }
