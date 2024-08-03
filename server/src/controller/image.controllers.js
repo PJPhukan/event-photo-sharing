@@ -7,42 +7,54 @@ import { ApiError } from "../utils/ApiError.js";
 import { cloudinaryUpload, cloudinaryDelete } from "../utils/cloudinary.js";
 const UploadImage = AsyncHandler(async (req, res) => {
   const { eventId } = req.params;
-  const { image } = req.files;
-  console.log(image);
+  const files = req.files;
+
+  if (!files || files.length === 0) {
+    throw new ApiError(400, "No such file found");
+  }
 
   const event = await Event.findById(eventId);
   if (!event) throw new ApiError(404, "Event not found !");
   const user = await User.findById(event.user_id);
   if (!user) throw new ApiError(404, "User not found !");
 
-  image.forEach(async (img, index) => {
+  const uploadPromises = files.map(async (img, index) => {
     const localFilePath = req.files[index]?.path;
     if (!localFilePath) {
-      throw new ApiError(404, "Error occured while retriving from req files");
-      return;
+      throw new ApiError(404, "Error occurred while retrieving from req files");
     }
-    const cloudinaryResult = cloudinaryUpload(localFilePath);
-    if (!cloudinaryResult.url) {
+    const cloudinaryResult = await cloudinaryUpload(localFilePath);
+
+    if (!cloudinaryResult) {
       throw new ApiError(
         500,
-        "Error occured while uploading image to cloudinary"
+        "Error occurred while uploading image to cloudinary"
       );
-      return;
     }
-    const images = await Image.create({
+
+    const image = await Image.create({
       imageUrl: cloudinaryResult.url,
       title: cloudinaryResult.signature,
       event_id: eventId,
       user_id: req.user._id,
       image_public_id: cloudinaryResult.public_id,
+      resource_type: cloudinaryResult.resource_type,
     });
-    if (!images) {
+
+    if (!image) {
       throw new ApiError(500, "Internal server error !!");
     }
+    return image;
   });
-  return res
-    .status(200)
-    .json(new ApiResponse(200, "Image uploaded successfully"));
+
+  const uploadedImages = await Promise.all(uploadPromises);
+  if (uploadedImages) {
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(200, uploadedImages, "Images uploaded successfully")
+      );
+  }
 });
 
 const DeleteImage = AsyncHandler(async (req, res) => {
