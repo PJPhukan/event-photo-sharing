@@ -56,7 +56,7 @@ const RegisterUser = AsyncHandler(async (req, res) => {
   }
   const options = {
     httpOnly: true,
-    // secure:true, // Secure in production
+    secure:true, // Secure in production
     sameSite: "Strict", // Helps protect against CSRF attacks
     maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
   };
@@ -113,8 +113,8 @@ const Login = AsyncHandler(async (req, res) => {
   user.password = undefined;
 
   const options = {
-    httpOnly: true,
-    // secure: true, // Secure in production
+    httpOnly: false,
+    secure: false, // Secure in production
     sameSite: "Strict", // Helps protect against CSRF attacks
     maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
   };
@@ -138,8 +138,8 @@ const Logout = AsyncHandler(async (req, res) => {
     throw new ApiError(401, "User Unauthorized !");
   }
   const options = {
-    httpOnly: true,
-    // secure: true, // Secure in production
+    httpOnly: false,
+    secure: false, // Secure in production
     sameSite: "Strict", // Helps protect against CSRF attacks
     maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
   };
@@ -387,6 +387,13 @@ const DeleteAccount = AsyncHandler(async (req, res) => {
   }
 });
 
+const GetUserId = AsyncHandler(async (req, res) => {
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(200, { id: req.user._id }, "User id send successfully")
+    );
+});
 export {
   RegisterUser,
   GerUserDetails,
@@ -403,4 +410,5 @@ export {
   CheckCookie,
   ChangeEmail,
   DeleteAccount,
+  GetUserId,
 };
