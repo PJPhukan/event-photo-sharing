@@ -9,6 +9,7 @@
   padding: 0.5rem;
   font-family: "Tilt Neon", sans-serif;
   z-index: 1;
+  overflow-x: hidden;
   @include lg {
     min-height: calc(100vh);
   }
