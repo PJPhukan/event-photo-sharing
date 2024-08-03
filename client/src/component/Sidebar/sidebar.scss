@@ -11,7 +11,7 @@
   bottom: 0;
   color: $text-color-primary;
   // width: auto;
-  height: 100vh;
+  min-height: 100vh;
   padding: 0 0.2rem;
   overflow: hidden;
   transition: all 0.2s linear;
