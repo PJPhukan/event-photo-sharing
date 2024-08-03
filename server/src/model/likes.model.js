@@ -3,7 +3,7 @@ import mongoose, { Schema } from "mongoose";
 import MongooseAggregate from "mongoose-aggregate-paginate-v2";
 const LikeSchema = new Schema(
   {
-    user: {
+    user: {//image owner
       type: Schema.Types.ObjectId,
       ref: "User",
     },
@@ -11,9 +11,13 @@ const LikeSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Image",
     },
-    likedUser: {
+    likedUser: {//who liked the image
       type: Schema.Types.ObjectId,
       ref: "User",
+    },
+    event_id: {
+      type: Schema.Types.ObjectId,
+      ref: "Event",
     },
   },
   {
