@@ -196,12 +196,12 @@
       white-space: nowrap;
       overflow: hidden;
       color: $text-color-secondary;
-      .show-time {
-        display: none;
-        @include md {
-          display: inline-block;
-        }
-      }
+      // .show-time {
+      //   display: none;
+      //   @include md {
+      //     display: inline-block;
+      //   }
+      // }
     }
     .view-more {
       border: none;
