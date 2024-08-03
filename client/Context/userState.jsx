@@ -1,6 +1,9 @@
-import { useState } from "react";
-import {context} from "./context";
+import { useState, useEffect } from "react";
+import { context } from "./context";
 import axios from "axios";
+
+import { useCookies } from "react-cookie";
+
 const UseState = (props) => {
   //all state management
   const [showSidebar, setshowSidebar] = useState(true); //side bar states
@@ -11,13 +14,21 @@ const UseState = (props) => {
   const [createEvent, setcreateEvent] = useState(false);
   const [editEvent, seteditEvent] = useState(false);
   const [downloadQR, setdownloadQR] = useState(false);
+  const [userId, setuserId] = useState(null);
+  const [token, setToken] = useState("");
+  const [cookies, setCookie] = useCookies();
+  useEffect(() => {
+    const tokenValue = cookies.authToken;
+    // console.log("Token value: ", tokenValue);
+    setToken(tokenValue);
+  });
   //all api's
 
   //REGISTER USER
   const register = async (payload) => {
     try {
       const res = await axios.post("/api/auth/user/register", payload);
-      console.log("Response:", res);
+      // console.log("Response:", res);
       setUser(res.data.data.user);
     } catch (err) {
       // console.log(err.response.data.message);
@@ -140,6 +151,23 @@ const UseState = (props) => {
   const RemoveNotification = async () => {
     console.log("Remove notification");
   };
+
+  const get_user_id = async () => {
+    const user_id_call = async () => {
+      try {
+        const response = await axios.get("/api/auth/user/get-id");
+        setuserId(response.data.data.id);
+        // console.log(token);
+        return response;
+      } catch (error) {
+        // console.log("Error get id");
+        console.log(error);
+      }
+    };
+    await user_id_call();
+  };
+  token ? get_user_id() : console.log("Token not found");
+
   return (
     <context.Provider
       value={{
@@ -168,6 +196,7 @@ const UseState = (props) => {
         createEvent,
         editEvent,
         seteditEvent,
+        userId,
       }}
     >
       {props.children}
