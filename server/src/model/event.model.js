@@ -1,8 +1,8 @@
 import mongoose, { Schema } from "mongoose";
 import { image } from "../data/eventImage.js";
-const isInclude = (n) => {
-  return n.type.toLowerCase().includes(this.EventType.toLowerCase());
-};
+// const isInclude = (n) => {
+//   return n.type.toLowerCase().includes(this.EventType.toLowerCase());
+// };
 const EventSchema = new Schema(
   {
     user_id: {
@@ -45,8 +45,10 @@ const EventSchema = new Schema(
     CoverImage: {
       type: String,
       default: function () {
-        const url = image.filter(isInclude);
-        return url.url;
+        const url = image.filter((img) =>
+          img.type.toLowerCase().includes(this.EventType.toLowerCase())
+        );
+        return url.length > 0 ? url[0].url : ""; // Ensure that a default URL is returned if no match is found
       },
     },
   },
