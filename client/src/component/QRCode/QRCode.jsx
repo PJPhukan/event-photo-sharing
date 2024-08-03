@@ -1,12 +1,14 @@
 import React, { useState, useRef, useContext } from "react";
 import QRCode from "qrcode.react";
 import "./qrcode.scss";
-import {context} from "../../../Context/context";
+import { context, dashboad } from "../../../Context/context";
+
 const QRcode = () => {
-  const [text, setText] = useState("Paragjyoti Phukan");
   const qrRef = useRef();
   const QRContext = useContext(context);
-  const { setdownloadQR} = QRContext;
+  const { setdownloadQR } = QRContext;
+  const dashboadContext = useContext(dashboad);
+  const { qrtext } = dashboadContext;
   const downloadQRCode = () => {
     const canvas = qrRef.current.querySelector("canvas");
     const pngUrl = canvas
@@ -18,20 +20,19 @@ const QRcode = () => {
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
+    setdownloadQR(false);
   };
+
   return (
     <div className="qr-code-main">
       <div className="qr-content">
-        <button
-          className="close-button"
-          onClick={() => setdownloadQR(false)}
-        >
+        <button className="close-button" onClick={() => setdownloadQR(false)}>
           <i className="bx bx-x"></i>
         </button>
         <h5 className="heading">Download QR Code</h5>
         <div className="qr-code-box" ref={qrRef}>
           <QRCode
-            value={text}
+            value={qrtext}
             size={256}
             bgColor="#ffffff"
             fgColor="#000000"
