@@ -124,21 +124,28 @@
                 padding: 0.7rem;
               }
             }
+            input:focus{
+              background: transparent;
+            }
             input::placeholder {
               color: $dashboard-bg-secondary;
               font-family: "Tilt Neon", sans-serif;
             }
           }
+        }
+        .btn-box {
+          display: flex;
+          align-items: center;
           .sub-btn {
             background: black;
             color: white;
-            margin: 1rem;
+            margin: 1rem auto;
             padding: 0.5rem 1.5rem;
             font-size: $font-size-base;
             border-radius: 50px;
             cursor: pointer;
             @include md {
-              margin: 1.2rem;
+              margin: 1.2rem auto;
               padding: 0.5rem 2rem;
               font-size: calc($font-size-base + 3px);
             }
