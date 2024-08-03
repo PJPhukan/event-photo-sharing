@@ -16,7 +16,7 @@ import Dashboard from "./page/Dashboard/Dashboard";
 import Event from "./page/Event/Event";
 import Sidebar from "./component/Sidebar/Sidebar";
 import Topbar from "./component/Topbar/Topbar";
-import {context} from "../Context/context";
+import { context, dashboad } from "../Context/context";
 import Profile from "./page/Profile/Profile";
 import Settings from "./page/Settings/Settings";
 import EventDetails from "./page/EventDetails/EventDetails";
@@ -28,7 +28,6 @@ const Router = () => {
   const userContext = useContext(context);
   const { adminlogin, CheckCookie, createEvent, editEvent, downloadQR } =
     userContext;
-
   useEffect(
     () => {
       CheckCookie();
@@ -42,27 +41,25 @@ const Router = () => {
   return (
     <>
       <BrowserRouter>
-        {/* visit site without log in  */}
-        {!adminlogin && <Navber />}
-        {!adminlogin && (
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/use-for" element={<UseFor />} />
-            <Route path="/faq" element={<Faq />} />
-            <Route path="/testimonial" element={<Testimonial />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/terms-conditions" element={<TermsConditions />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/forgot-password" element={<ForgotPassowrd />} />
-            <Route path="/:userId/:eventId" element={<Selfie />} />
-          </Routes>
-        )}
-        {!adminlogin && <Footer />}
-
-        {/* Logged in users routes  */}
-        {adminlogin && (
+        {!adminlogin ? (
+          <>
+            <Navber />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/use-for" element={<UseFor />} />
+              <Route path="/faq" element={<Faq />} />
+              <Route path="/testimonial" element={<Testimonial />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/terms-conditions" element={<TermsConditions />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/forgot-password" element={<ForgotPassowrd />} />
+              <Route path="/:userId/:eventId" element={<Selfie />} />
+            </Routes>
+            <Footer />
+          </>
+        ) : (
           <div className="dashboard-user">
             {createEvent && <CreateEvent />}
             {editEvent && <EditEvent />}
@@ -70,19 +67,21 @@ const Router = () => {
             <div className="sidebar-right">
               <Topbar />
               {downloadQR && <QRCode />}
-
               <Routes>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/dashboard/event" element={<Event />} />
                 <Route path="/dashboard/favorite" element={<Event />} />
                 <Route path="/dashboard/settings" element={<Settings />} />
                 <Route path="/dashboard/profile" element={<Profile />} />
-                <Route path="/dashboard/event/:id" element={<EventDetails />} />
-                <Route path="/:userId/:eventId" element={<Selfie />} />
+                <Route
+                  path="/dashboard/event/:eventId"
+                  element={<EventDetails />}
+                />
+                <Route path="/event/:userId/:eventId" element={<Selfie />} />
                 {/* TODO */}
                 {/* /dashboard/uploads */}
                 {/* /dashboard/notifications */}
-                {/* /logout  */}
+                {/* /logout */}
               </Routes>
             </div>
           </div>
