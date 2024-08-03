@@ -4,17 +4,19 @@ import { Image } from "../model/image.model.js";
 import { AsyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
-
+import mongoose from "mongoose";
 const CreateEvent = AsyncHandler(async (req, res) => {
   const { name, description, date, location, type, contact } = req.body;
 
-  if (!name && !description && !date && !location && !type && !contact) {
+  if (!name || !description || !date || !location || !type || !contact) {
     throw new ApiError(400, "All fields are required");
   }
+
   let user = await User.findById(req.user._id);
   if (!user) {
     throw new ApiError(404, "User not found !");
   }
+  // console.log(user);
   const event = await Event.create({
     user_id: req.user._id,
     EventName: name,
@@ -70,18 +72,22 @@ const DeleteEvent = AsyncHandler(async (req, res) => {
   const { eventId } = req.params;
   let event = await Event.findById(eventId);
   if (!event) throw new ApiError(404, "Event not found !");
-  let deleteAll = await Image.find({ event_id: eventId });
-  await event.remove();
-  await deleteAll.remove();
+
+  let images = await Image.find({ event_id: eventId });
+  if (images.length > 0) {
+    await Image.deleteMany({ event_id: eventId });
+  }
+
+  await Event.findByIdAndDelete(eventId);
   return res
     .status(200)
-    .json(new ApiResponse(200, event, "Successfully event deleted"));
+    .json(new ApiResponse(200, {}, "Successfully event deleted"));
 });
 
 const GetAllEvent = AsyncHandler(async (req, res) => {
   const events = await Event.find({ user_id: req.user._id });
 
-  if (event.length >= 0)
+  if (events.length >= 0)
     return res
       .status(200)
       .json(new ApiResponse(200, events, "Successfully fetched all events"));
@@ -92,64 +98,15 @@ const GetAllEvent = AsyncHandler(async (req, res) => {
 const EventDetails = AsyncHandler(async (req, res) => {
   const { eventId } = req.params;
   const { _id } = req.user._id;
-
+  // console.log(eventId);
   if (!eventId || !_id) {
     throw new ApiError(401, "Unauthorized");
   }
 
-  // const event_details = await Event.aggregate([
-  //   {
-  //     $match: {
-  //       user_id: mongoose.Types.ObjectId(_id),
-  //       _id: mongoose.Types.ObjectId(eventId),
-  //     },
-  //   },
-  //   {
-  //     $lookup: {
-  //       from: "images",
-  //       localField: "_id",
-  //       foreignField: "event_id",
-  //       as: "event_details",
-  //       pipeline: [
-  //         {
-  //           $lookup: {
-  //             from: "likes",
-  //             localField: "_id",
-  //             foreignField: "image",
-  //             as: "likes",
-  //             pipeline: [
-  //               {
-  //                 $count: "total",
-  //               },
-  //             ],
-  //           },
-  //         },
-  //         {
-  //           $addFields: {
-  //             total_likes: {
-  //               $first: "$likes",
-  //             },
-  //           },
-  //         },
-  //         {
-  //           $project: {
-  //             total_likes: 1,
-  //             imageUrl: 1,
-  //             title: 1,
-  //             image_public_id: 1,
-  //             user_id: 1,
-  //             visibility: 1,
-  //             resource_type: 1,
-  //           },
-  //         },
-  //       ],
-  //     },
-  //   },
-  // ]);
-
   const combined_details = await Event.aggregate([
     {
       $match: {
+        _id: new mongoose.Types.ObjectId(eventId),
         user_id: new mongoose.Types.ObjectId(_id),
       },
     },
@@ -166,11 +123,6 @@ const EventDetails = AsyncHandler(async (req, res) => {
               localField: "_id",
               foreignField: "image",
               as: "likes",
-              pipeline: [
-                {
-                  $count: "totallikes",
-                },
-              ],
             },
           },
         ],
@@ -194,15 +146,10 @@ const EventDetails = AsyncHandler(async (req, res) => {
         ],
       },
     },
-    {
-      $project: {
-        result: 1,
-        resource_type_details: 1,
-      },
-    },
   ]);
 
-  if (combined_details || combined_details === 0) {
+  // console.log("Print Combined details:", combined_details);
+  if (combined_details.length >= 0) {
     return res
       .status(200)
       .json(
