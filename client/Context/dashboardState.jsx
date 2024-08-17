@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { dashboad } from "./context";
 import axios from "axios";
+import * as faceapi from "face-api.js";
 
 const DashboardState = (props) => {
   const [qrtext, setqrtext] = useState("");
@@ -196,6 +197,90 @@ const DashboardState = (props) => {
       console.log(err.response.data.message);
     }
   };
+
+  //RECOGNITION SECTION
+
+  const faceRecognition = async (userImage, dbimage) => {
+    try {
+      await Promise.all([
+        faceapi.nets.ssdMobilenetv1.loadFromUri("/models"),
+        faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
+        faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
+      ]);
+      const Reface = await faceapi.fetchImage(dbimage);
+
+      const facesToCheck = await faceapi.fetchImage(userImage);
+      let refAIData = await faceapi
+        .detectAllFaces(Reface)
+        .withFaceLandmarks()
+        .withFaceDescriptors();
+      let facesToCheckAIData = await faceapi
+        .detectAllFaces(facesToCheck)
+        .withFaceLandmarks()
+        .withFaceDescriptors();
+
+      if (refAIData.length === 0 || facesToCheckAIData.length === 0) {
+        return false;
+      }
+      let faceMatcher = new faceapi.FaceMatcher(refAIData);
+      for (let face of facesToCheckAIData) {
+        const { descriptor } = face;
+        let label = faceMatcher.findBestMatch(descriptor).toString();
+
+        if (!label.includes("unknown")) {
+          return true;
+        }
+      }
+      return false;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const recognize = async (img, dbimage) => {
+    const result = await faceRecognition(img, dbimage);
+    // console.log(result);
+    return result;
+  };
+
+  const get_details = async (userId, eventId) => {
+    try {
+      const response = await axios.get(
+        `/api/face-recognition/get-details/${userId}/${eventId}`
+      );
+      return response?.data?.data?.event_details[0];
+    } catch (error) {
+      console.log("Error occured while fetching event details");
+      console.log(error);
+    }
+  };
+
+  const likeImg = async (payload) => {
+    try {
+      //payload=owner, imageId, eventId
+      const response = await axios.post(
+        "/api/face-recognition/like-image",
+        payload
+      );
+      // console.log(response);
+      return response;
+    } catch (error) {
+      console.log("Error occured while liking event");
+    }
+  };
+
+  const dislikeImg = async (imageId) => {
+    try {
+      //payload=owner, imageId, eventId
+      const response = await axios.patch(
+        `/api/face-recognition/dislike-image/${imageId}`
+      );
+      // console.log(response);
+      return response;
+    } catch (error) {
+      console.log("Error occured while dis-liking event");
+    }
+  };
+
   return (
     <dashboad.Provider
       value={{
@@ -219,6 +304,10 @@ const DashboardState = (props) => {
         dislike,
         eventId,
         seteventId,
+        get_details,
+        likeImg,
+        dislikeImg,
+        recognize,
       }}
     >
       {props.children}
