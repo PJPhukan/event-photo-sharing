@@ -1,15 +1,41 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import "./clickselfie.scss";
-const ClickSelfie = ({ settakeSelfie }) => {
+import { dashboad } from "../../../Context/context";
+const ClickSelfie = ({
+  settakeSelfie,
+  fetchData,
+  setuserImage,
+  setloading,
+}) => {
   const webcamRef = useRef(null);
   const [imageSrc, setImageSrc] = useState(null);
+  const dashboardState = useContext(dashboad);
+  const { recognize } = dashboardState;
 
   const capture = () => {
     setImageSrc(null);
     const imageSrc = webcamRef.current.getScreenshot();
     setImageSrc(imageSrc);
   };
+  useEffect(() => {}, [imageSrc]);
+
+  const SearchImg = async () => {
+    settakeSelfie(false);
+    setloading(true);
+    const userImagePromises = fetchData.map(async (item) => {
+      if (item.resource_type === "image") {
+        const result = await recognize(imageSrc, item.imageUrl);
+        return result ? item : null;
+      }
+      return null;
+    });
+    const userImageResults = await Promise.all(userImagePromises);
+    const userImages = userImageResults.filter((item) => item !== null);
+    setuserImage(userImages);
+    setloading(false);
+  };
+
   return (
     <div className="click-selfie-main">
       <div className="main-content">
@@ -32,9 +58,15 @@ const ClickSelfie = ({ settakeSelfie }) => {
         <div className="button-box">
           <div className="top-button-box">
             <button onClick={capture}>Take</button>
-            <button onClick={capture}>Retake</button>
+            <button onClick={() => setImageSrc(null)}>Retake</button>
           </div>
-          <button className="get-photos">Search Image</button>
+          <button
+            className={`get-photos ${imageSrc ? "" : "disabled"}`}
+            disabled={!imageSrc}
+            onClick={SearchImg}
+          >
+            Search Image
+          </button>
         </div>
       </div>
     </div>
