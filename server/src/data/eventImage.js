@@ -8,19 +8,23 @@ const image = [
     url: "./Images/convocation.webp",
   },
   {
-    type: "sports",
+    type: "Marathon",
     url: "./Images/sports.jpg",
   },
   {
-    type: "school",
+    type: "schools",
     url: "./Images/collegeSchool.jpg",
   },
   {
-    type: "Social",
+    type: "College",
+    url: "./Images/R.jpeg",
+  },
+  {
+    type: "Social Club",
     url: "./Images/clubs.png",
   },
   {
-    type: "Corporate",
+    type: "Corporate Event",
     url: "./Images/corporate.jpeg",
   },
 ];
