@@ -5,7 +5,7 @@
 .click-selfie-main {
   min-width: 100%;
   min-height: 100vh;
-//   border: 2px solid red;
+  //   border: 2px solid red;
   position: fixed;
   z-index: 100;
   background: rgba($color: #000000, $alpha: 0.5);
@@ -103,7 +103,6 @@
           border-radius: 50px;
           font-size: $font-size-base;
         }
-        
       }
       .get-photos {
         border: none;
@@ -115,6 +114,11 @@
         font-size: $font-size-base;
         cursor: pointer;
         width: 60%;
+        opacity: 1;
+
+        &.disabled {
+          opacity: 0.3;
+        }
       }
     }
   }
