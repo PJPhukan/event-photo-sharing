@@ -55,7 +55,7 @@ const Router = () => {
               <Route path="/terms-conditions" element={<TermsConditions />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/forgot-password" element={<ForgotPassowrd />} />
-              <Route path="/:userId/:eventId" element={<Selfie />} />
+              <Route path="/event/:userId/:eventId" element={<Selfie />} />
             </Routes>
             <Footer />
           </>
@@ -78,10 +78,7 @@ const Router = () => {
                   element={<EventDetails />}
                 />
                 <Route path="/event/:userId/:eventId" element={<Selfie />} />
-                {/* TODO */}
-                {/* /dashboard/uploads */}
-                {/* /dashboard/notifications */}
-                {/* /logout */}
+              
               </Routes>
             </div>
           </div>
