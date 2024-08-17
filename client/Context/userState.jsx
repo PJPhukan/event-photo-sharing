@@ -19,7 +19,6 @@ const UseState = (props) => {
   const [cookies, setCookie] = useCookies();
   useEffect(() => {
     const tokenValue = cookies.authToken;
-    // console.log("Token value: ", tokenValue);
     setToken(tokenValue);
   });
   //all api's
@@ -157,16 +156,17 @@ const UseState = (props) => {
       try {
         const response = await axios.get("/api/auth/user/get-id");
         setuserId(response.data.data.id);
-        // console.log(token);
         return response;
       } catch (error) {
-        // console.log("Error get id");
         console.log(error);
       }
     };
     await user_id_call();
   };
-  token ? get_user_id() : console.log("Token not found");
+
+  useEffect(() => {
+    get_user_id();
+  }, []);
 
   return (
     <context.Provider
@@ -197,6 +197,7 @@ const UseState = (props) => {
         editEvent,
         seteditEvent,
         userId,
+        token,
       }}
     >
       {props.children}

@@ -19,6 +19,7 @@ const EventDetails = () => {
     delete_event,
     upload_image,
     seteventId,
+    qrtext,
   } = useContext(dashboad);
   const [showPopUP, setshowPopUP] = useState(false);
   const [files, setfiles] = useState(null);
@@ -28,6 +29,9 @@ const EventDetails = () => {
       await get_event_details(eventId);
     };
     fetchEventDetails();
+    setqrtext(
+      `http://localhost:5173/event/${event_data?.user_id}/${event_data?._id}`
+    );
   }, []);
   useEffect(() => {
     if (files) {
@@ -55,7 +59,7 @@ const EventDetails = () => {
 
   const handleQRCode = () => {
     setqrtext(
-      `http://localhost:5173/event/${event_data.user_id}/${event_data._id}`
+      `http://localhost:5173/event/${event_data?.user_id}/${event_data?._id}`
     );
     setdownloadQR(true);
   };
@@ -78,11 +82,39 @@ const EventDetails = () => {
     seteditEvent(true);
   };
 
+  const ShareImage = async () => {
+    // console.log(object);
+    if (event_data && navigator.share) {
+      try {
+        await navigator.share({
+          title: "memois",
+          url: `http://localhost:5173/event/${event_data.user_id}/${event_data._id}`,
+        });
+      } catch (error) {
+        console.log("Something went wrong while sharing");
+      }
+    } else {
+      navigator.clipboard
+        .writeText(event_data?._id)
+        .then(() => {
+          alert("Link copied to clipboard");
+        })
+        .catch((error) => {
+          console.error("Error copying to clipboard:", error);
+        });
+    }
+  };
   //TODO: Images show
   return (
     event_data && (
       <div className="event-details-main">
-        {imageId && <ItemDetails imageId={imageId} setimageId={setimageId} title={event_data?.EventName}/>}
+        {imageId && (
+          <ItemDetails
+            imageId={imageId}
+            setimageId={setimageId}
+            title={event_data?.EventName}
+          />
+        )}
         <div className="top-details-main">
           <img
             src={event_data.CoverImage ? event_data.CoverImage : ProfileImg}
@@ -138,7 +170,7 @@ const EventDetails = () => {
                       <i className="bx bx-edit-alt"></i>
                       <span>Edit</span>
                     </button>
-                    <button className="more-item">
+                    <button className="more-item" onClick={ShareImage}>
                       <i className="bx bx-share-alt"></i>
                       <span>Share</span>
                     </button>
