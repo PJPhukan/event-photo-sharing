@@ -7,6 +7,7 @@ import imageRouter from "./route/image.route.js";
 import likeRouter from "./route/like.route.js";
 import dashboardRouter from "./route/dashboard.route.js";
 import faceRouter from "./route/recognition.route.js";
+import notifcationRouter from "./route/notification.route.js";
 import { ApiError } from "./utils/ApiError.js";
 const app = express();
 app.use(cors());
@@ -18,10 +19,11 @@ app.use(cookieParser());
 //All routes
 app.use("/api/auth/user", userRouter);
 app.use("/api/event", eventRouter);
-app.use("/api/image",imageRouter)
-app.use("/api/like",likeRouter)
-app.use("/api/dashboard",dashboardRouter)
-app.use("/api/face-recognition",faceRouter)
+app.use("/api/image", imageRouter);
+app.use("/api/like", likeRouter);
+app.use("/api/dashboard", dashboardRouter);
+app.use("/api/face-recognition", faceRouter);
+app.use("/api/notification", notifcationRouter);
 
 app.use((err, req, res, next) => {
   if (err instanceof ApiError) {

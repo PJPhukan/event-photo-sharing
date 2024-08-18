@@ -9,6 +9,7 @@ import {
 } from "../libs/auth.helpers.js";
 import { cloudinaryUpload } from "../utils/cloudinary.js";
 import { transporter } from "../libs/transporter.js";
+import { Notification } from "../model/notification.model.js";
 /**
  //TODO : 
 
@@ -56,7 +57,7 @@ const RegisterUser = AsyncHandler(async (req, res) => {
   }
   const options = {
     httpOnly: true,
-    secure:true, // Secure in production
+    secure: true, // Secure in production
     sameSite: "Strict", // Helps protect against CSRF attacks
     maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
   };
@@ -65,6 +66,17 @@ const RegisterUser = AsyncHandler(async (req, res) => {
     username: user.username,
     email: user.email,
   };
+
+  //Add congratulation message to user
+  const RegisterNotification = await Notification.create({
+    message:
+      "Welcome Aboard! Thank you for joining our community. We're excited to have you with us. Explore, connect, and enjoy all the features we offer. If you have any questions or need help getting started, our support team is here to assist you. Welcome to the family!!",
+    owner_id: user._id,
+    imageId: null,
+    username: null,
+    type: "signup",
+  });
+  console.log("Notification response :", RegisterNotification);
 
   const token = encodeAuthToken(payload);
 
@@ -123,6 +135,17 @@ const Login = AsyncHandler(async (req, res) => {
     username: user.username,
     email: user.email,
   };
+
+  //Add congratulation message to user
+  const LoginNotification = await Notification.create({
+    message:
+      "Welcome Back! We're glad to see you again. Continue where you left off and explore new features we've added just for you. If you need any assistance, feel free to reach out to our support team. Happy browsing!",
+    owner_id: user._id,
+    imageId: null,
+    username: null,
+    type: "login",
+  });
+  // console.log("Notification response :", LoginNotification);
 
   const token = encodeAuthToken(payload);
 
