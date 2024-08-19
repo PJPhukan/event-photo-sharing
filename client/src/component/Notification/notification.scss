@@ -54,11 +54,44 @@
       }
     }
   }
-
+  .button-box {
+    display: flex;
+    justify-content: start;
+    gap: 0.8rem;
+    padding: 0.5rem;
+    @include md {
+      gap: 1rem;
+    }
+    .btn {
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 2px;
+      background: transparent;
+      font-family: "Tilt Neon", sans-serif;
+      cursor: pointer;
+      font-weight: 600;
+      @include md {
+        padding: 0.5rem 1.5rem;
+      }
+      i {
+        font-size: $font-size-base;
+      }
+      &.active {
+        background: $dashboard-bg-white;
+        color: rgb(7, 80, 251);
+      }
+    }
+  }
   .message-box {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
+    overflow-y: auto;
+
+    .no-notification{
+      margin-top: 1rem;
+      text-align: center;
+    }
   }
 }

@@ -1,21 +1,40 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import "./message.scss";
-import profileImg from "../../assets/profile.jpg";
-import {context} from "../../../Context/context";
-const Message = () => {
-  const Contexts = useContext(context);
-  const { RemoveNotification } = Contexts;
+import { dashboad } from "../../../Context/context";
+
+const Message = ({ message, notifications }) => {
+  const dashboardContext = useContext(dashboad);
+  const { mark_as_read, delete_notification } = dashboardContext;
+  const MarkAsRead = async () => {
+    await mark_as_read(message._id);
+  };
+
+  const DeleteNotification = async () => {
+    await delete_notification(message._id);
+  };
+  useEffect(() => {});
+
   return (
-    <div className="message">
-      <div className="left">
-        <div className="like-user-avatar">
-          <i className="bx bxs-like"></i>
-          <img src={profileImg} alt="" />
+    message && (
+      <div className="message">
+        <div className="left">
+          <div className="like-user-avatar">
+            {message.type === "like" ? (
+              <i className="bx bxs-like" style={{ background: "#003fff" }}></i>
+            ) : (
+              <i className="bx bxs-message" style={{ background: "#7ed87e" }}></i>
+            )}
+            <img src={message.avatar} alt="" />
+          </div>
+          <p className="message-text">{message.message}</p>
         </div>
-        <p className="message-text">Paragjyoti Likes your photo.</p>
+        {message.read ? (
+          <i className="bx bx-trash" onClick={DeleteNotification}></i>
+        ) : (
+          <i className="bx bx-check-double" onClick={MarkAsRead}></i>
+        )}
       </div>
-      <i className="bx bx-check-double" onClick={RemoveNotification}></i>
-    </div>
+    )
   );
 };
 

@@ -261,10 +261,11 @@ const DashboardState = (props) => {
         "/api/face-recognition/like-image",
         payload
       );
-      // console.log(response);
+      console.log(response);
       return response;
     } catch (error) {
       console.log("Error occured while liking event");
+      console.log(error)
     }
   };
 
@@ -281,6 +282,48 @@ const DashboardState = (props) => {
     }
   };
 
+  //Notification
+
+  //get all notification
+  const get_all_notification = async () => {
+    try {
+      const response = await axios.get(
+        "/api/notification/get-all-notification"
+      );
+      return response?.data?.data;
+    } catch (error) {
+      console.log("Error occured while fetching notification");
+      console.log(error);
+    }
+  };
+
+  //mark as read notification
+  const mark_as_read = async (notificationId) => {
+    try {
+      const response = await axios.patch(
+        `/api/notification/mark-as-read/${notificationId}`
+      );
+      // console.log(response);
+      return response?.data?.message;
+    } catch (error) {
+      console.log("Error occured while marking notification as read");
+      console.log(error);
+    }
+  };
+
+  //delete notification
+  const delete_notification = async (notificationId) => {
+    try {
+      const response = await axios.delete(
+        `/api/notification/delete-notification/${notificationId}`
+      );
+      // console.log(response);
+      return response?.data?.message;
+    } catch (error) {
+      console.log("Error occured while deleting notification");
+      console.log(error);
+    }
+  };
   return (
     <dashboad.Provider
       value={{
@@ -308,6 +351,9 @@ const DashboardState = (props) => {
         likeImg,
         dislikeImg,
         recognize,
+        get_all_notification,
+        mark_as_read,
+        delete_notification,
       }}
     >
       {props.children}

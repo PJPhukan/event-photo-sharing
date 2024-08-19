@@ -10,7 +10,7 @@ const getAllNotification = AsyncHandler(async (req, res) => {
   const notifications = await Notification.find({ owner_id: req.user._id })
     .sort({ createdAt: -1 })
     .exec();
-  console.log("All notification:", notifications);
+ 
 
   if (notifications.length >= 0) {
     return res
@@ -47,6 +47,7 @@ const deleteNotification = AsyncHandler(async (req, res) => {
   if (!notification) {
     throw new ApiError(404, "Notification not found");
   }
+
   return res
     .status(200)
     .json(new ApiResponse(200, {}, "Successfully notification deleted"));

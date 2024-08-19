@@ -29,10 +29,11 @@ const SelfieItem = ({ item }) => {
   const dashboardContext = useContext(dashboad);
   const userContext = useContext(context);
   const { likeImg, dislikeImg } = dashboardContext;
+  const { new_likes, dislike } = dashboardContext;
   const { userId, token } = userContext;
   // console.log(userId, token);
   const isLikesUser = () => {
-    if (userId) {
+    if (localStorage.getItem("token")) {
       const findUserById = (array) => {
         return array?.find((obj) => obj.likedUser === userId);
       };
@@ -95,7 +96,7 @@ const SelfieItem = ({ item }) => {
         imageId: item?._id,
         eventId: item?.event_id,
       };
-      await likeImg(payload);
+      await new_likes(payload);
       setisLiked(true);
       setTimeout(() => {
         setLoveStyle({
@@ -104,28 +105,27 @@ const SelfieItem = ({ item }) => {
         });
       }, 800);
     } else {
-      // console.log("Value of token :", token);
       navigate("/login");
     }
   };
 
   const handleLike = async () => {
-    if (userId) {
+    if (localStorage.getItem("token")) {
       if (!isLiked) {
         const payload = {
           owner: item?.user_id,
           imageId: item?._id,
           eventId: item?.event_id,
         };
-        await likeImg(payload);
+        await new_likes(payload);
         setisLiked(true);
       } else {
         const imageId = item?._id;
-        await dislikeImg(imageId);
+        await dislike(imageId);
         setisLiked(false);
       }
     } else {
-      // console.log("Value of token :", token);
+      console.log("Value of token :", token);
       navigate("/login");
     }
   };

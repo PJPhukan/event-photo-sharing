@@ -6,11 +6,10 @@ import { Like } from "../model/likes.model.js";
 import { Notification } from "../model/notification.model.js";
 import { Image } from "../model/image.model.js";
 const NewLike = AsyncHandler(async (req, res) => {
-  const { _id, username } = req.user;
+  const { _id, username, avatar } = req.user;
   const { owner, imageId, eventId } = req.body;
   const like = await Like.findOne({ likedUser: _id, image: imageId });
   const image = await Image.findById(imageId);
-  // console.log(like);
   if (like) {
     return res
       .status(200)
@@ -25,8 +24,9 @@ const NewLike = AsyncHandler(async (req, res) => {
   if (!newLike) {
     throw new ApiError(500, "Failed to create like");
   }
+
   //Add congratulation message to user
-  const LikeResponse = await Notification.create({
+  await Notification.create({
     message: `${username} liked your ${
       image.resource_type ? image.resource_type : "photo"
     }.`,
@@ -34,9 +34,8 @@ const NewLike = AsyncHandler(async (req, res) => {
     imageId: imageId,
     username: username,
     type: "like",
+    avatar,
   });
-  
-  console.log("Notification response :", LikeResponse);
 
   return res.status(200).json(new ApiResponse(200, "User liked successfully"));
 });
@@ -55,13 +54,11 @@ const DeleteLike = AsyncHandler(async (req, res) => {
     throw new ApiError(500, "Failed to dislike the media");
   }
   //delete notification that user
-  const deleteLikeNotification = await Notifications.deleteOne({
+  await Notification.deleteOne({
     user_id: _id,
     username,
     imageId,
   });
-
-  console.log("Delete notification result ", deleteLikeNotification);
 
   return res
     .status(200)

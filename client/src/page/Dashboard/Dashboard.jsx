@@ -4,6 +4,7 @@ import DashImg from "../../assets/dashborad-img.jpg";
 import { context, dashboad } from "../../../Context/context";
 import TableData from "../../component/TableData/TableData";
 import NoFileFound from "../../component/NoFileFound/NoFileFound";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [totalLikes, setTotalLikes] = useState(0);
@@ -15,6 +16,7 @@ const Dashboard = () => {
   const userContext = useContext(context);
   const dashboardContext = useContext(dashboad);
   const { getuser, setcreateEvent } = userContext;
+  const navigator = useNavigate();
   const {
     get_total_likes,
     get_total_event,
@@ -47,9 +49,17 @@ const Dashboard = () => {
     }
   };
 
+  if (!localStorage.getItem("token")) {
+    navigator("/login");
+  }
+
   useEffect(() => {
-    getuser();
-    dashboardDetails();
+    if (localStorage.getItem("token")) {
+      getuser();
+      dashboardDetails();
+    } else {
+      navigator("/login");
+    }
   }, []);
   useEffect(() => {});
   return (
