@@ -17,10 +17,10 @@ const UseState = (props) => {
   const [userId, setuserId] = useState(null);
   const [token, setToken] = useState("");
   const [cookies, setCookie] = useCookies();
-  useEffect(() => {
-    const tokenValue = cookies.authToken;
-    setToken(tokenValue);
-  });
+  // useEffect(() => {
+  //   const tokenValue = cookies.authToken;
+  //   setToken(tokenValue);
+  // });
   //all api's
 
   //REGISTER USER
@@ -29,6 +29,8 @@ const UseState = (props) => {
       const res = await axios.post("/api/auth/user/register", payload);
       // console.log("Response:", res);
       setUser(res.data.data.user);
+      setToken(res.data.data.user._id);
+      setuserId(res.data.data.user._id);
     } catch (err) {
       // console.log(err.response.data.message);
       setError(err.response.data.message);
@@ -41,10 +43,13 @@ const UseState = (props) => {
       const res = await axios.post("/api/auth/user/login", payload);
       if (res.data.success) {
         setUser(res.data.data.user);
+        // console.log("Token value which is recieve from ", res.data.data.token);
+        localStorage.setItem("token", res.data.data.token);
+        setToken(res.data.data.user._id);
+        setuserId(res.data.data.user._id);
       }
       return res;
     } catch (err) {
-      // console.log(err.response.data.message);
       console.log(err);
       setError(err.response.data.message);
     }
@@ -151,22 +156,24 @@ const UseState = (props) => {
     console.log("Remove notification");
   };
 
-  const get_user_id = async () => {
-    const user_id_call = async () => {
-      try {
-        const response = await axios.get("/api/auth/user/get-id");
-        setuserId(response.data.data.id);
-        return response;
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    await user_id_call();
-  };
+  // const get_user_id = async () => {
+  //   const user_id_call = async () => {
+  //     try {
+  //       const response = await axios.get("/api/auth/user/get-id");
+  //       setuserId(response.data.data.id);
+  //       return response;
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   await user_id_call();
+  // };
 
-  useEffect(() => {
-    get_user_id();
-  }, []);
+  // useEffect(() => {
+  //   if (token) {
+  //     get_user_id();
+  //   }
+  // }, []);
 
   return (
     <context.Provider

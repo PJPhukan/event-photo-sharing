@@ -69,14 +69,13 @@ const RegisterUser = AsyncHandler(async (req, res) => {
 
   //Add congratulation message to user
   const RegisterNotification = await Notification.create({
-    message:
-      "Welcome Aboard! Thank you for joining our community. We're excited to have you with us. Explore, connect, and enjoy all the features we offer. If you have any questions or need help getting started, our support team is here to assist you. Welcome to the family!!",
+    message: "Welcome! Your account has been created successfully.",
     owner_id: user._id,
     imageId: null,
     username: null,
     type: "signup",
+    avatar: user.avatar,
   });
-  console.log("Notification response :", RegisterNotification);
 
   const token = encodeAuthToken(payload);
 
@@ -137,15 +136,14 @@ const Login = AsyncHandler(async (req, res) => {
   };
 
   //Add congratulation message to user
-  const LoginNotification = await Notification.create({
-    message:
-      "Welcome Back! We're glad to see you again. Continue where you left off and explore new features we've added just for you. If you need any assistance, feel free to reach out to our support team. Happy browsing!",
+  await Notification.create({
+    message: "Login successful! Let’s get started.",
     owner_id: user._id,
     imageId: null,
     username: null,
     type: "login",
+    avatar: user.avatar,
   });
-  // console.log("Notification response :", LoginNotification);
 
   const token = encodeAuthToken(payload);
 

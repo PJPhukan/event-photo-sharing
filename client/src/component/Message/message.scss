@@ -3,7 +3,8 @@
 
 .message {
   min-height: 4rem;
-  //   border: 1px solid red;
+  // border: 1px solid red;
+  width: 100%;
   font-size: $font-size-base;
   display: flex;
   justify-content: space-between;
@@ -24,8 +25,9 @@
         right: 0;
         font-size: calc($font-size-base - 3px);
         padding: 5px;
-        background: $dashboard-bg-blue;
+        // background: $dashboard-bg-blue;
         color: $text-color-primary;
+        
       }
       img {
         width: 3rem;

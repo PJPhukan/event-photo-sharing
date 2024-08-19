@@ -1,5 +1,4 @@
 import React from "react";
-import loadingGif from "../../assets/spinner.gif";
 import "./loader.scss";
 const Loader = () => {
   return (
