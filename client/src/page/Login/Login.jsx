@@ -1,7 +1,7 @@
 import "./login.scss";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {context} from "../../../Context/context";
+import { context } from "../../../Context/context";
 const Login = () => {
   const navigate = useNavigate();
   const usecontext = useContext(context);
@@ -11,6 +11,12 @@ const Login = () => {
     username: "",
     password: "",
   });
+
+  // useEffect(() => {
+  //   if (localStorage.getItem("token") || localStorage.getItem("userId")) {
+  //     navigate("/");
+  //   }
+  // }, []);
 
   const HandleLogIn = async () => {
     const response = await login(loginuser);

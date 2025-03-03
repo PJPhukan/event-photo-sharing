@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import "./message.scss";
 import { dashboad } from "../../../Context/context";
 
-const Message = ({ message, notifications }) => {
+const Message = ({ message}) => {
   const dashboardContext = useContext(dashboad);
   const { mark_as_read, delete_notification } = dashboardContext;
   const MarkAsRead = async () => {

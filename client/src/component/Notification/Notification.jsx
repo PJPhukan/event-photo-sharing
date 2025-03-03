@@ -15,21 +15,23 @@ const Notification = () => {
   const [showUnread, setshowUnread] = useState(false);
   const [showRead, setshowRead] = useState(false);
   const [notifications, setnotifications] = useState(null);
-  const [messages, setmessages] = useState(null);
+  const [allMessage, setallMessage] = useState(null);
+  const [readMessage, setreadMessage] = useState(null);
+  const [unreadMessage, setunreadMessage] = useState(null);
 
   const get_all = async () => {
     const result = await get_all_notification();
     setnotifications(result);
-    setmessages(result);
+    setallMessage(result);
   };
   useEffect(() => {
-    get_all();
-  }, []);
-
-  useEffect(() => {}, [messages, setmessages]);
+    if (localStorage.getItem("token")) {
+      get_all();
+    }
+  });
 
   const NotificationAll = async () => {
-    setmessages(notifications);
+    setallMessage(notifications);
     setshowAll(true);
     setshowUnread(false);
     setshowRead(false);
@@ -40,7 +42,7 @@ const Notification = () => {
     const filteredNotification = notifications?.filter((item) => {
       return !item.read;
     });
-    setmessages(filteredNotification);
+    setunreadMessage(filteredNotification);
     setshowAll(false);
     setshowUnread(true);
     setshowRead(false);
@@ -50,7 +52,7 @@ const Notification = () => {
     const filteredNotification = notifications?.filter((item) => {
       return item.read;
     });
-    setmessages(filteredNotification);
+    setreadMessage(filteredNotification);
     setshowAll(false);
     setshowUnread(false);
     setshowRead(true);
@@ -92,21 +94,28 @@ const Notification = () => {
             </button>
           </div>
           <div className="message-box">
-            {messages?.length > 0 ? (
-              messages?.map((item) => {
-                return (
-                  <Message
-                    key={item._id}
-                    message={item}
-                    notifications={notifications}
-                  />
-                );
-              })
-            ) : (
+            {showAll &&
+              allMessage?.length > 0 &&
+              allMessage.map((item) => (
+                <Message key={item._id} message={item} />
+              ))}
+            {showUnread &&
+              unreadMessage?.length > 0 &&
+              unreadMessage.map((item) => (
+                <Message key={item._id} message={item} />
+              ))}
+            {showRead &&
+              readMessage?.length > 0 &&
+              readMessage.map((item) => (
+                <Message key={item._id} message={item} />
+              ))}
+            {(!allMessage?.length && showAll) ||
+            (!unreadMessage?.length && showUnread) ||
+            (!readMessage?.length && showRead) ? (
               <div className="no-notification">
                 Don't have any notifications
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       )}

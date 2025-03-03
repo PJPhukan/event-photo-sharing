@@ -254,34 +254,6 @@ const DashboardState = (props) => {
     }
   };
 
-  const likeImg = async (payload) => {
-    try {
-      //payload=owner, imageId, eventId
-      const response = await axios.post(
-        "/api/face-recognition/like-image",
-        payload
-      );
-      console.log(response);
-      return response;
-    } catch (error) {
-      console.log("Error occured while liking event");
-      console.log(error)
-    }
-  };
-
-  const dislikeImg = async (imageId) => {
-    try {
-      //payload=owner, imageId, eventId
-      const response = await axios.patch(
-        `/api/face-recognition/dislike-image/${imageId}`
-      );
-      // console.log(response);
-      return response;
-    } catch (error) {
-      console.log("Error occured while dis-liking event");
-    }
-  };
-
   //Notification
 
   //get all notification
@@ -348,8 +320,6 @@ const DashboardState = (props) => {
         eventId,
         seteventId,
         get_details,
-        likeImg,
-        dislikeImg,
         recognize,
         get_all_notification,
         mark_as_read,

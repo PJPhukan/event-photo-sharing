@@ -4,8 +4,7 @@ import { Link } from "react-router-dom";
 const UseFor = ({ item }) => {
   return (
     <>
-      <div className="card" data-aos="fade-up"
-     data-aos-anchor-placement="top-bottom">
+      <div className="card-use-for" >
         <img src={item.image} alt="" />
         <div className="card-text">
           <div className="card-heading">{item.title}</div>

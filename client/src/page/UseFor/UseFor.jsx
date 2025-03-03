@@ -8,7 +8,8 @@ const UseFor = () => {
       <div className="main-content">
         <div className="heading" data-aos="fade-up"
      data-aos-anchor-placement="top-bottom">Works for all types of Events</div>
-        <div className="card-section">
+        <div className="card-section" data-aos="fade-up"
+     data-aos-anchor-placement="top-bottom">
           {useforData.map((item) => {
             return <UseForComponent key={item.id} item={item} />;
           })}

@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { dashboad, context } from "../../../Context/context";
+import { dashboad } from "../../../Context/context";
 import { useNavigate } from "react-router-dom";
 import "./selfieitem.scss";
 const SelfieItem = ({ item }) => {
@@ -27,15 +27,14 @@ const SelfieItem = ({ item }) => {
 
   //ALL CONTEXT
   const dashboardContext = useContext(dashboad);
-  const userContext = useContext(context);
-  const { likeImg, dislikeImg } = dashboardContext;
   const { new_likes, dislike } = dashboardContext;
-  const { userId, token } = userContext;
   // console.log(userId, token);
   const isLikesUser = () => {
-    if (localStorage.getItem("token")) {
+    if (localStorage.getItem("userId")) {
       const findUserById = (array) => {
-        return array?.find((obj) => obj.likedUser === userId);
+        return array?.find(
+          (obj) => obj.likedUser === localStorage.getItem("userId")
+        );
       };
       let islike = findUserById(item?.likes);
       if (islike) {
@@ -70,7 +69,7 @@ const SelfieItem = ({ item }) => {
     }
   };
 
-  //TODO:Download logic
+  //TODO:Download logic(no logged in required)
   const DownloadImage = (e) => {
     // console.log("Download image was clicked");
     const link = document.createElement("a");
@@ -86,7 +85,7 @@ const SelfieItem = ({ item }) => {
     // setimageId(item?._id);
   };
   const handleDoubleClick = async () => {
-    if (userId) {
+    if (localStorage.getItem("userId")) {
       setLoveStyle({
         opacity: 1,
         transform: "translate(-50%, -50%) scale(3)",
@@ -125,7 +124,6 @@ const SelfieItem = ({ item }) => {
         setisLiked(false);
       }
     } else {
-      console.log("Value of token :", token);
       navigate("/login");
     }
   };

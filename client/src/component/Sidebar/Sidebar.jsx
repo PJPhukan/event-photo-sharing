@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./sidebar.scss";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import {context} from "../../../Context/context";
+import { context } from "../../../Context/context";
 const Sidebar = () => {
   const navigate = useNavigate();
   const usercontext = useContext(context);
@@ -31,9 +31,13 @@ const Sidebar = () => {
   useEffect(() => {}, [location]);
 
   const HandleLogout = async () => {
-    await logout();
-    setadminlogin(false);
-    navigate("/");
+    const response = await logout();
+    if (response.success) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("userId");
+      setadminlogin(false);
+      navigate("/");
+    }
   };
 
   const ToggleNotification = () => {
@@ -65,7 +69,9 @@ const Sidebar = () => {
           <Link
             to="/dashboard/profile"
             className={`${
-              location.pathname === "/dashboard/profile" || checkUrl("profile")? "active" : " "
+              location.pathname === "/dashboard/profile" || checkUrl("profile")
+                ? "active"
+                : " "
             }`}
           >
             <li>
@@ -77,7 +83,9 @@ const Sidebar = () => {
           <Link
             to="/dashboard/event"
             className={`${
-              location.pathname === "/dashboard/event" || checkUrl("event")? "active" : " "
+              location.pathname === "/dashboard/event" || checkUrl("event")
+                ? "active"
+                : " "
             }`}
           >
             <li>
@@ -89,7 +97,10 @@ const Sidebar = () => {
           <Link
             to="/dashboard/collections"
             className={`${
-              location.pathname === "/dashboard/collections" || checkUrl("collections") ? "active" : " "
+              location.pathname === "/dashboard/collections" ||
+              checkUrl("collections")
+                ? "active"
+                : " "
             }`}
           >
             <li>
@@ -101,7 +112,10 @@ const Sidebar = () => {
           <Link
             to="/dashboard/favorite"
             className={`${
-              location.pathname === "/dashboard/favorite" || checkUrl("favorite") ? "active" : " "
+              location.pathname === "/dashboard/favorite" ||
+              checkUrl("favorite")
+                ? "active"
+                : " "
             }`}
           >
             <li>
@@ -119,7 +133,10 @@ const Sidebar = () => {
           <Link
             to="/dashboard/settings"
             className={`${
-              location.pathname === "/dashboard/settings" || checkUrl("settings") ? "active" : " "
+              location.pathname === "/dashboard/settings" ||
+              checkUrl("settings")
+                ? "active"
+                : " "
             }`}
           >
             <li>
