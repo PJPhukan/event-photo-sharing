@@ -37,7 +37,7 @@ const Router = () => {
   );
 
   // useEffect(() => {}, [adminlogin]);
-
+// console.log(adminlogin);
   return (
     <>
       <BrowserRouter>

@@ -25,17 +25,19 @@ const NewLike = AsyncHandler(async (req, res) => {
     throw new ApiError(500, "Failed to create like");
   }
 
-  //Add congratulation message to user
-  await Notification.create({
-    message: `${username} liked your ${
-      image.resource_type ? image.resource_type : "photo"
-    }.`,
-    owner_id: owner,
-    imageId: imageId,
-    username: username,
-    type: "like",
-    avatar,
-  });
+  
+  if (image.user_id !== _id) {
+    await Notification.create({
+      message: `${username} liked your ${
+        image.resource_type ? image.resource_type : "photo"
+      }.`,
+      owner_id: owner,
+      imageId: imageId,
+      username: username,
+      type: "like",
+      avatar,
+    });
+  }
 
   return res.status(200).json(new ApiResponse(200, "User liked successfully"));
 });

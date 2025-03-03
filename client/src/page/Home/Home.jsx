@@ -1,5 +1,5 @@
 import "./home.scss";
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import HomeImg from "../../assets/home-image.png";
 import UseFor from "../UseFor/UseFor";
@@ -7,6 +7,8 @@ import HowWork from "../HowWork/HowWork";
 import Faq from "../Faq/Faq";
 import Testimonial from "../Testimonial/Testimonial";
 const Home = () => {
+  useEffect(() => {}, []);
+
   return (
     <>
       <section className="home-section">
@@ -40,12 +42,14 @@ const Home = () => {
               <button>Completely Free</button>
             </div>
 
-            <div
-              className="home-create-event"
-            >
-              <Link to="/create-event" 
-              data-aos="fade-up"
-              data-aos-anchor-placement="top-bottom">Create Event</Link>
+            <div className="home-create-event">
+              <Link
+                to="/create-event"
+                data-aos="fade-up"
+                data-aos-anchor-placement="top-bottom"
+              >
+                Create Event
+              </Link>
             </div>
           </div>
           <div className="image-content">

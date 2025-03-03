@@ -16,42 +16,57 @@ const UseState = (props) => {
   const [downloadQR, setdownloadQR] = useState(false);
   const [userId, setuserId] = useState(null);
   const [token, setToken] = useState("");
-  const [cookies, setCookie] = useCookies();
   // useEffect(() => {
   //   const tokenValue = cookies.authToken;
   //   setToken(tokenValue);
   // });
   //all api's
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      setadminlogin(false);
+    }
+  }, []);
 
   //REGISTER USER
   const register = async (payload) => {
+    setError(null);
     try {
       const res = await axios.post("/api/auth/user/register", payload);
       // console.log("Response:", res);
       setUser(res.data.data.user);
-      setToken(res.data.data.user._id);
-      setuserId(res.data.data.user._id);
+      // setToken(res.data.data.user._id);
+      localStorage.setItem("userId", res.data.data.user._id);
+      // setuserId(res.data.data.user._id);
     } catch (err) {
       // console.log(err.response.data.message);
       setError(err.response.data.message);
+      setTimeout(() => {
+        setError(null);
+      }, 2000);
     }
   };
 
   //LOGGED IN USER
   const login = async (payload) => {
+    setError(null);
     try {
       const res = await axios.post("/api/auth/user/login", payload);
       if (res.data.success) {
         setUser(res.data.data.user);
-        // console.log("Token value which is recieve from ", res.data.data.token);
+        console.log("Token value which is recieve from ", res.data.data.token); // TODO: remove after check the authenticaion
         localStorage.setItem("token", res.data.data.token);
-        setToken(res.data.data.user._id);
-        setuserId(res.data.data.user._id);
+        localStorage.setItem("userId", res.data.data.user._id);
+        // setToken(res.data.data.user._id);
+        // setuserId(res.data.data.user._id);
       }
       return res;
     } catch (err) {
       console.log(err);
       setError(err.response.data.message);
+
+      setTimeout(() => {
+        setError(null);
+      }, 2000);
     }
   };
 
@@ -71,8 +86,8 @@ const UseState = (props) => {
   //LOGOUT
   const logout = async () => {
     try {
-      await axios.post("/api/auth/user/logout");
-      console.log("Logout succesfully");
+      const res = await axios.post("/api/auth/user/logout");
+      return res.data;
     } catch (err) {
       console.log(err.response.data.message);
       setError(err.response.data.message);

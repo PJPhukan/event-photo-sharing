@@ -82,7 +82,7 @@ const Item = ({ item, setimageId }) => {
   };
 
   const show_image = () => {
-    setimageId(item?._id);
+    // setimageId(item?._id);
   };
   const handleDoubleClick = async () => {
     setLoveStyle({
