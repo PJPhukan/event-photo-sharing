@@ -6,7 +6,7 @@ const data = [
         id: 1,
         question: "How accurate is Memois's Facial Recognition?",
         answer:
-          "Memzo uses the most advanced Facial Recognition Al, with a 99.3% accuracy. It even works on blurry images, large group photos, photos with side faces, photos with face masks. People are usually blown away by the accuracy.",
+          "Memois uses advanced facial recognition with high matching accuracy. It works well across group photos, side faces, and many real event-photo conditions.",
       },
       {
         id: 2,
@@ -29,7 +29,7 @@ const data = [
         id: 1,
         question: "Is my data secure and private?",
         answer:
-          "Yes, your data is 100% secure and private. We never share your data with anyone. Memzo is a completely private photo sharing platform. All photos are stored on highly secured AWS S3 buckets with specific user permission policy to ensure security and privacy at all times",
+          "Yes, your data is kept private and secure. Memois is designed as a private photo-sharing platform, and event access is restricted to the people you choose to invite.",
       },
       {
         id: 2,
@@ -41,13 +41,13 @@ const data = [
         id: 3,
         question: "Who can view the photos?",
         answer:
-          "No one except the guests you invite to your event. Memzo is a completely private photo sharing platform and no one except those you invite can view the photos.",
+          "Only the guests you invite to your event can view the photos. Memois is built to keep event galleries private.",
       },
       {
         id: 4,
         question: "Are there ads on Memzo?",
         answer:
-          "Memzo is a completely ad-free and 100% private photo sharing platform. We don’t show any ads and nor do we use your data for any other activity. That’s our promise to you.",
+          "Memois is ad-free and privacy-focused. We do not turn the product into an ad-driven feed experience.",
       },
     ],
   },
@@ -58,19 +58,19 @@ const data = [
         id: 1,
         question: "How to create an event on Memzo?",
         answer:
-          "Just go to event-create and in 3 simple steps you will be able to create an event on Memzo",
+          "Go to event creation and follow the simple setup flow to create your event in a few steps.",
       },
       {
         id: 2,
         question: "How can I upload photos on Memois?",
         answer:
-          "You can either select photos and upload directly on Memzo or paste your google drive link and we pull the photos data directly from your drive.",
+          "You can upload media directly inside Memois or use supported cloud-drive based workflows where available.",
       },
       {
         id: 3,
         question: "How can I use Google drive to upload photos?",
         answer:
-          "You just need to paste your google drive link while creating the event. We use the official google drive APIs to directly pull the data from google servers and add those photos to your event.",
+          "You can paste your Google Drive link during event setup when that workflow is enabled, and the platform can pull the event media into your gallery.",
       },
     ],
   },

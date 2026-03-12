@@ -75,7 +75,7 @@ const data = [
       "id": "9",
       "userName": "Chloe Dubois",
       "message": "So easy to use! Our birthday party photos were organized perfectly. Love the face recognition!",
-      image: "./user-man.webp",
+      "image": "./user-man.webp",
       "country": "France",
       "date": "2024-05-20",
       "rating": 5

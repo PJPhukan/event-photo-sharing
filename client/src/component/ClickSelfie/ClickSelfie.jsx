@@ -1,15 +1,19 @@
+
 import React, { useContext, useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import "./clickselfie.scss";
 import { dashboad } from "../../../Context/context";
+import LoadingButton from "../LoadingButton/LoadingButton";
 const ClickSelfie = ({
   settakeSelfie,
   fetchData,
   setuserImage,
   setloading,
+  setIsSearchingResults,
 }) => {
   const webcamRef = useRef(null);
   const [imageSrc, setImageSrc] = useState(null);
+  const [isSearching, setIsSearching] = useState(false);
   const dashboardState = useContext(dashboad);
   const { recognize } = dashboardState;
 
@@ -19,22 +23,33 @@ const ClickSelfie = ({
     setImageSrc(imageSrc);
   };
   useEffect(() => {}, [imageSrc]);
-
   const SearchImg = async () => {
-    settakeSelfie(false);
+    console.log('🚀 SearchImg called! Images:', fetchData?.length || 0, imageSrc ? '✅' : '❌');
+    
     setloading(true);
-    const userImagePromises = fetchData.map(async (item) => {
+    setIsSearching(true);
+    
+    const userImagePromises = fetchData.map(async (item, index) => {
       if (item.resource_type === "image") {
+        console.log(`🔍 Checking image ${index}:`, item.imageUrl);
         const result = await recognize(imageSrc, item.imageUrl);
+        console.log(`✅ Image ${index} result:`, result);
         return result ? item : null;
       }
       return null;
     });
+    
     const userImageResults = await Promise.all(userImagePromises);
     const userImages = userImageResults.filter((item) => item !== null);
+    console.log('🎯 Final matches:', userImages.length);
+    
     setuserImage(userImages);
     setloading(false);
+    setIsSearching(false);
+    setIsSearchingResults(true);
+    settakeSelfie(false);
   };
+
 
   return (
     <div className="click-selfie-main">
@@ -60,13 +75,15 @@ const ClickSelfie = ({
             <button onClick={capture}>Take</button>
             <button onClick={() => setImageSrc(null)}>Retake</button>
           </div>
-          <button
+          <LoadingButton
             className={`get-photos ${imageSrc ? "" : "disabled"}`}
             disabled={!imageSrc}
+            loading={isSearching}
+            loadingText="Searching"
             onClick={SearchImg}
           >
             Search Image
-          </button>
+          </LoadingButton>
         </div>
       </div>
     </div>

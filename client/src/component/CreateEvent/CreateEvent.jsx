@@ -1,11 +1,12 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import "./createevent.scss";
 import { MdDescription } from "react-icons/md";
 import { FiType } from "react-icons/fi";
-import Logo from "../../assets/logo1.png";
+import Logo from "../../assets/logo.png";
 import { context } from "../../../Context/context";
 import { dashboad } from "../../../Context/context";
 import { useNavigate } from "react-router-dom";
+import LoadingButton from "../LoadingButton/LoadingButton";
 
 const CreateEvent = () => {
   const UserContext = useContext(context);
@@ -22,10 +23,16 @@ const CreateEvent = () => {
     type: "",
     contact: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
     const res = await create_event(eventDetails);
-    // console.log("Print response datda:", res.data.data._id);
+    setIsSubmitting(false);
+    if (!res?.data?.data?._id) {
+      return;
+    }
     setcreateEvent(false);
     navigate(`/dashboard/event/${res.data.data._id}`);
   };
@@ -42,7 +49,7 @@ const CreateEvent = () => {
         <div className="left content-item">
           <img src={Logo} alt="Memois" className="logo" />
           <h5 className="heading">Create Event</h5>
-          <form method="post">
+          <form method="post" onSubmit={handleSubmit}>
             <div className="input-item">
               <label htmlFor="event-name">
                 <i className="bx bx-calendar-event"></i>
@@ -136,9 +143,15 @@ const CreateEvent = () => {
             </div>
           </form>
           <div className="btn-box">
-            <button type="submit" className="sub-btn" onClick={handleSubmit}>
+            <LoadingButton
+              type="submit"
+              className="sub-btn"
+              loading={isSubmitting}
+              loadingText="Creating event"
+              onClick={handleSubmit}
+            >
               Create Event
-            </button>
+            </LoadingButton>
           </div>
         </div>
         <div className="right content-item">

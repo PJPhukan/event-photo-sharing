@@ -31,48 +31,44 @@ const Testimonial = () => {
   }, []);
 
   return (
-    <>
-      <section className="testimonial-section">
-        <div className="main-content">
-          <div className="heading" data-aos="fade-up"
-     data-aos-anchor-placement="top-bottom">Customer Testimonials</div>
-          <div className="sub-heading" data-aos="fade-up"
-     data-aos-anchor-placement="top-bottom">
-            Great website, highly recommended for all your needs.
-          </div>
-          <div className="testimonial-content">
-            <Swiper
-              slidesPerView={numberItem}
-              spaceBetween={15}
-              autoplay={{
-                delay: 2500,
-                disableOnInteraction: false,
-              }}
-              loop={true}
-              pagination={{
-                clickable: true,
-              }}
-              modules={[Autoplay]}
-              className="mySwiper"
-            >
-              {data.map((card) => {
-                return (
-                  <SwiperSlide key={card.id}>
-                    <TestimonialCard card={card} />
-                  </SwiperSlide>
-                );
-              })}
-            </Swiper>
-          </div>
-
-          <div className="show-off">
-            {showOffData.map((item) => {
-              return <ShowOffCard key={item.id} item={item} />;
-            })}
+    <section className="testimonial-section">
+      <div className="main-content">
+        <div className="testimonial-copy" data-aos="fade-up" data-aos-anchor-placement="top-bottom">
+          <div className="heading">Customer Testimonials</div>
+          <div className="sub-heading">
+            Hosts, guests, and event teams use Memois to make photo delivery feel faster, cleaner, and more private.
           </div>
         </div>
-      </section>
-    </>
+
+        <div className="show-off">
+          {showOffData.map((item) => {
+            return <ShowOffCard key={item.id} item={item} />;
+          })}
+        </div>
+
+        <div className="testimonial-content">
+          <Swiper
+            slidesPerView={numberItem}
+            spaceBetween={16}
+            autoplay={{
+              delay: 2800,
+              disableOnInteraction: false,
+            }}
+            loop={true}
+            modules={[Autoplay]}
+            className="mySwiper"
+          >
+            {data.map((card) => {
+              return (
+                <SwiperSlide key={card.id}>
+                  <TestimonialCard card={card} />
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
+        </div>
+      </div>
+    </section>
   );
 };
 

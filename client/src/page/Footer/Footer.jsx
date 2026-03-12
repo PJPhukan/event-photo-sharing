@@ -2,108 +2,91 @@ import React from "react";
 import "./footer.scss";
 import { FaMobileAlt, FaLocationArrow, FaEnvelope } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import logo from "../../assets/logo.png";
+
 const Footer = () => {
   return (
-    <>
-      <footer className="footer" 
-            data-aos="fade-up"
-            data-aos-anchor-placement="top-bottom">
-        <div className="footer-content">
-          <div className="col">
-            <div
-              className="title"
-              
-            >
-              About
+    <footer
+      className="footer"
+      data-aos="fade-up"
+      data-aos-anchor-placement="top-bottom"
+    >
+      <div className="footer-content">
+        <div className="footer-top">
+          <div className="brand-col">
+            <div className="brand-head">
+              <div className="brand-identity">
+                <img src={logo} alt="Memois logo" />
+                <div className="brand-mark">
+                  mem<span>ois</span>
+                </div>
+              </div>
+              <div className="brand-subtext">Event photo sharing</div>
             </div>
-            <div
-              className="text"
-              
-            >
-              Mêmois is your go-to platform for capturing and sharing life's
-              special moments effortlessly. With user-friendly features like
-              easy album creation, collaborative sharing, and customizable
-              privacy settings, Mêmois ensures your memories are safely stored
-              and shared with loved ones. Plus, our advanced face recognition
-              technology adds an extra layer of convenience by helping you
-              organize and identify individuals in your photos and videos. Join
-              Mêmois today to preserve and cherish every moment with ease and
-              joy.
+            <div className="brand-text">
+              Private event galleries with face-based discovery, smoother guest access,
+              and cleaner sharing for hosts.
+            </div>
+            <div className="brand-actions">
+              <Link to="/login" state={{ redirectToCreateEvent: true }}>
+                Create Event
+              </Link>
+              <Link to="/about" className="secondary-link">
+                Know More
+              </Link>
             </div>
           </div>
-          <div
-            className="col"
-          >
+
+          <div className="links-col">
             <div className="title">Contact</div>
             <div className="c-content">
               <FaLocationArrow />
-              <div className="text">New Delhi, India ,7002020</div>
+              <div className="text">Guwahati Assam, India</div>
             </div>
             <div className="c-content">
               <FaMobileAlt />
-              <div className="text">Phone:+91 2839 2390 12</div>
+              <div className="text">Phone: +91 7002 9251 94</div>
             </div>
             <div className="c-content">
               <FaEnvelope />
-              <div className="text">Email:memois2024@gmail.com</div>
+              <div className="text">Email: support@memois.com</div>
             </div>
           </div>
-          <div
-            className="col"
-          >
+
+          <div className="links-col">
             <div className="title">Use Cases</div>
-            <span className="text">
-              <Link to="/wedding">Weddings</Link>
-            </span>
-            <span className="text">
-              <Link to="/private-event">Private Events</Link>
-            </span>
-            <span className="text">
-              <Link to="/college">College Events</Link>
-            </span>
-            <span className="text">
-              <Link to="/sports">Sporting Events</Link>
-            </span>
-            <span className="text">
-              <Link to="/club">Social Clubs</Link>
-            </span>
-            <span className="text">
-              <Link to="/corporate">Corporate Events</Link>
-            </span>
+            <Link className="text" to="/use-for/weddings">Weddings</Link>
+            <Link className="text" to="/use-for/convocations">Convocations</Link>
+            <Link className="text" to="/use-for/marathons-cyclothons">Marathons</Link>
+            <Link className="text" to="/use-for/schools-colleges">Schools & Colleges</Link>
+            <Link className="text" to="/use-for/social-clubs">Social Clubs</Link>
+            <Link className="text" to="/use-for/corporate-events">Corporate Events</Link>
           </div>
-          <div
-            className="col"
-          >
+
+          <div className="links-col">
             <div className="title">Quick Links</div>
-            <span className="text">
-              <Link to="/">Home</Link>
-            </span>
-            <span className="text">
-              <Link to="/about">About</Link>
-            </span>
-            <span className="text">
-              <Link to="/use-for">Use for</Link>
-            </span>
-            <span className="text">
-              <Link to="/privacy-policy">Privacy Policy</Link>
-            </span>
-            <span className="text">
-              <Link to="/terms-conditions">Terns & Conditions</Link>
-            </span>
-            <span className="text">
-              <Link to="/faq">FAQ</Link>
-            </span>
+            <Link className="text" to="/">Home</Link>
+            <Link className="text" to="/about">About</Link>
+            <Link className="text" to="/use-for">Use Cases</Link>
+            <Link className="text" to="/faq">FAQs</Link>
+            <Link className="text" to="/privacy-policy">Privacy Policy</Link>
+            <Link className="text" to="/terms-conditions">Terms & Conditions</Link>
           </div>
-          <div
-            className="bottom-bar"
-          >
-            <div className="text">
-              © Memois Pvt. limited. All Rights Reserved
-            </div>
+
+          <div className="links-col">
+            <div className="title">Product</div>
+            <div className="text">Private sharing</div>
+            <div className="text">Face recognition</div>
+            <div className="text">Photo and video delivery</div>
+            <div className="text">Event-first experience</div>
           </div>
         </div>
-      </footer>
-    </>
+
+        <div className="bottom-bar">
+          <div className="text">© Memois Pvt. Limited. All rights reserved.</div>
+        </div>
+      </div>
+    </footer>
   );
 };
 

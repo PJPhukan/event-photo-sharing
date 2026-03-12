@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./dashboard.scss";
 import DashImg from "../../assets/dashborad-img.jpg";
 import { context, dashboad } from "../../../Context/context";
@@ -49,10 +49,6 @@ const Dashboard = () => {
     }
   };
 
-  if (!localStorage.getItem("token")) {
-    navigator("/login");
-  }
-
   useEffect(() => {
     if (localStorage.getItem("token")) {
       getuser();
@@ -60,8 +56,8 @@ const Dashboard = () => {
     } else {
       navigator("/login");
     }
-  }, []);
-  useEffect(() => {});
+  }, [navigator]);
+
   return (
     <>
       <section className="dashboard">

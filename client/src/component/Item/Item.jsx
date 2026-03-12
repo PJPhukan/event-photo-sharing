@@ -1,8 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "./item.scss";
 import { context, dashboad } from "../../../Context/context";
 import ItemDetails from "../ItemDetails/ItemDetails";
-const Item = ({ item, setimageId }) => {
+import LoadingButton from "../LoadingButton/LoadingButton";
+import { downloadMedia } from "../../lib/downloadMedia";
+
+const Item = ({ item, setimageId, onDeleteComplete }) => {
   //ALL USE-EFFECT
   useEffect(() => {
     item;
@@ -17,6 +20,8 @@ const Item = ({ item, setimageId }) => {
   //ALL USE-STATE
   const [isLiked, setisLiked] = useState(false);
   const [showDropdown, setshowDropdown] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const dropdownRef = useRef(null);
   const [loveStyle, setLoveStyle] = useState({
     opacity: 0,
     transform: "translate(-50%, -50%) scale(0)",
@@ -25,7 +30,7 @@ const Item = ({ item, setimageId }) => {
   //ALL CONTEXT
   const dashboardContext = useContext(dashboad);
   const userContext = useContext(context);
-  const { new_likes, dislike } = dashboardContext;
+  const { new_likes, dislike, delete_image } = dashboardContext;
   const { userId } = userContext;
 
   const isLikesUser = () => {
@@ -42,8 +47,14 @@ const Item = ({ item, setimageId }) => {
 
   // console.log(item);
   //TODO:Delete logic
-  const DeleteImage = (id) => {
-    console.log("Delete image was clicked");
+  const DeleteImage = async () => {
+    setIsDeleting(true);
+    const result = await delete_image(item?._id);
+    setIsDeleting(false);
+    if (result?.data?.success) {
+      setshowDropdown(false);
+      onDeleteComplete?.();
+    }
   };
 
   //TODO:Share logic
@@ -71,14 +82,16 @@ const Item = ({ item, setimageId }) => {
   };
 
   //TODO:Download logic
-  const DownloadImage = (e) => {
-    console.log("Download image was clicked");
-    const link = document.createElement("a");
-    link.href = item.imageUrl;
-    link.download = item.title || "download";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const DownloadImage = async () => {
+    try {
+      await downloadMedia({
+        url: item.imageUrl,
+        filename: item.title || "download",
+        resourceType: item.resource_type,
+      });
+    } catch (error) {
+      window.open(item.imageUrl, "_blank", "noopener,noreferrer");
+    }
   };
 
   const show_image = () => {
@@ -123,6 +136,27 @@ const Item = ({ item, setimageId }) => {
   };
 
   const len = item?.likes?.length;
+
+  useEffect(() => {
+    if (!showDropdown) {
+      return undefined;
+    }
+
+    const handleOutsideClick = (event) => {
+      if (!dropdownRef.current?.contains(event.target)) {
+        setshowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("touchstart", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("touchstart", handleOutsideClick);
+    };
+  }, [showDropdown]);
+
   return (
     <div
       className="item"
@@ -152,6 +186,7 @@ const Item = ({ item, setimageId }) => {
         <i className="bx bx-dots-vertical-rounded"></i>
       </div>
       <div
+        ref={dropdownRef}
         className={`dropdown-menu-more ${
           showDropdown ? "show-dropdown-menu" : ""
         }`}
@@ -173,10 +208,15 @@ const Item = ({ item, setimageId }) => {
           <i className="bx bx-download"></i>
           Download
         </button>
-        <button className="more-item" onClick={DeleteImage}>
+        <LoadingButton
+          className="more-item"
+          onClick={DeleteImage}
+          loading={isDeleting}
+          loadingText="Deleting"
+        >
           <i className="bx bx-trash"></i>
           Delete
-        </button>
+        </LoadingButton>
       </div>
     </div>
   );

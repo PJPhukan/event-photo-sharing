@@ -1,18 +1,12 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { dashboad } from "../../../Context/context";
 import { useNavigate } from "react-router-dom";
 import "./selfieitem.scss";
+import { downloadMedia } from "../../lib/downloadMedia";
 const SelfieItem = ({ item }) => {
-  //ALL USE-EFFECT
-  useEffect(() => {
-    item;
-  });
-
   useEffect(() => {
     isLikesUser();
-  }, []);
-
-  useEffect(() => {}, [item?.likes]);
+  }, [item?.likes]);
 
   const navigate = useNavigate();
 
@@ -20,6 +14,7 @@ const SelfieItem = ({ item }) => {
   //ALL USE-STATE
   const [isLiked, setisLiked] = useState(false);
   const [showDropdown, setshowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
   const [loveStyle, setLoveStyle] = useState({
     opacity: 0,
     transform: "translate(-50%, -50%) scale(0)",
@@ -28,7 +23,7 @@ const SelfieItem = ({ item }) => {
   //ALL CONTEXT
   const dashboardContext = useContext(dashboad);
   const { new_likes, dislike } = dashboardContext;
-  // console.log(userId, token);
+
   const isLikesUser = () => {
     if (localStorage.getItem("userId")) {
       const findUserById = (array) => {
@@ -70,18 +65,19 @@ const SelfieItem = ({ item }) => {
   };
 
   //TODO:Download logic(no logged in required)
-  const DownloadImage = (e) => {
-    // console.log("Download image was clicked");
-    const link = document.createElement("a");
-    link.href = item.imageUrl;
-    link.download = item.title || "download";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const DownloadImage = async () => {
+    try {
+      await downloadMedia({
+        url: item.imageUrl,
+        filename: item.title || "download",
+        resourceType: item.resource_type,
+      });
+    } catch (error) {
+      window.open(item.imageUrl, "_blank", "noopener,noreferrer");
+    }
   };
 
   const show_image = () => {
-    console.log("image was clicked");
     // setimageId(item?._id);
   };
   const handleDoubleClick = async () => {
@@ -129,6 +125,27 @@ const SelfieItem = ({ item }) => {
   };
 
   const len = item?.likes?.length;
+
+  useEffect(() => {
+    if (!showDropdown) {
+      return undefined;
+    }
+
+    const handleOutsideClick = (event) => {
+      if (!dropdownRef.current?.contains(event.target)) {
+        setshowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("touchstart", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("touchstart", handleOutsideClick);
+    };
+  }, [showDropdown]);
+
   return (
     <div
       className="item"
@@ -158,6 +175,7 @@ const SelfieItem = ({ item }) => {
         <i className="bx bx-dots-vertical-rounded"></i>
       </div>
       <div
+        ref={dropdownRef}
         className={`dropdown-menu-more ${
           showDropdown ? "show-dropdown-menu" : ""
         }`}

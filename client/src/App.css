@@ -6,16 +6,42 @@
   margin: 0;
   box-sizing: border-box;
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+html.lenis {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 :root {
   --text-color-primary: #ffffff;
   --text-color-secondary: #ffffff80;
   --text-color-pink: #FF039A;
 }
 body {
-  /* background: url(./assets/bg.jpg) no-repeat center center/cover; */
-  background: #020219;
+  background: transparent;
   object-fit: cover;
-  background-attachment: fixed;
   color: var(--text-color-primary);
   font-family: "Montserrat", sans-serif;
 }

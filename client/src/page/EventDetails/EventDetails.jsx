@@ -1,15 +1,17 @@
-import React, { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import "./eventdetails.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import ProfileImg from "../../assets/collLogo.png";
 import Item from "../../component/Item/Item";
 import { context, dashboad } from "../../../Context/context";
 import ItemDetails from "../../component/ItemDetails/ItemDetails";
+import { APP_URL } from "../../lib/config";
+import LoadingButton from "../../component/LoadingButton/LoadingButton";
 
 const EventDetails = () => {
   const navigate = useNavigate();
   const { eventId } = useParams();
-  const { seteditEvent, setdownloadQR, userId } = useContext(context);
+  const { seteditEvent, setdownloadQR } = useContext(context);
   const [imageId, setimageId] = useState(null);
   // const [details, setdetails] = useState(null);
   const {
@@ -19,20 +21,22 @@ const EventDetails = () => {
     delete_event,
     upload_image,
     seteventId,
-    qrtext,
   } = useContext(dashboad);
   const [showPopUP, setshowPopUP] = useState(false);
   const [files, setfiles] = useState(null);
+  const [loadingAction, setLoadingAction] = useState("");
+  const popupRef = useRef(null);
 
   useEffect(() => {
     const fetchEventDetails = async () => {
-      await get_event_details(eventId);
+      const response = await get_event_details(eventId);
+      const details = response?.data?.data?.event_details?.[0];
+      if (details) {
+        setqrtext(`${APP_URL}/event/${details.user_id}/${details._id}`);
+      }
     };
     fetchEventDetails();
-    setqrtext(
-      `http://localhost:5173/event/${event_data?.user_id}/${event_data?._id}`
-    );
-  }, []);
+  }, [eventId, get_event_details, setqrtext]);
   useEffect(() => {
     if (files) {
       ImageUpload();
@@ -58,28 +62,34 @@ const EventDetails = () => {
   };
 
   const handleQRCode = () => {
-    setqrtext(
-      `http://localhost:5173/event/${event_data?.user_id}/${event_data?._id}`
-    );
+    setqrtext(`${APP_URL}/event/${event_data?.user_id}/${event_data?._id}`);
     setdownloadQR(true);
   };
 
   const DeleteEvent = async () => {
+    setLoadingAction("delete");
     await delete_event(event_data._id);
+    setLoadingAction("");
     navigate("/dashboard/event");
   };
 
   const ImageUpload = async () => {
+    setLoadingAction("upload");
     const formData = new FormData();
     for (let i = 0; i < files.length; i++) {
       formData.append("image", files[i]);
     }
     await upload_image(event_data._id, formData);
+    setLoadingAction("");
   };
 
   const handleEditEvent = () => {
     seteventId(event_data?._id);
     seteditEvent(true);
+  };
+
+  const refreshEventDetails = async () => {
+    await get_event_details(eventId);
   };
 
   const ShareImage = async () => {
@@ -88,14 +98,14 @@ const EventDetails = () => {
       try {
         await navigator.share({
           title: "memois",
-          url: `http://localhost:5173/event/${event_data.user_id}/${event_data._id}`,
+          url: `${APP_URL}/event/${event_data.user_id}/${event_data._id}`,
         });
       } catch (error) {
         console.log("Something went wrong while sharing");
       }
     } else {
       navigator.clipboard
-        .writeText(event_data?._id)
+        .writeText(`${APP_URL}/event/${event_data?.user_id}/${event_data?._id}`)
         .then(() => {
           alert("Link copied to clipboard");
         })
@@ -104,6 +114,26 @@ const EventDetails = () => {
         });
     }
   };
+
+  useEffect(() => {
+    if (!showPopUP) {
+      return undefined;
+    }
+
+    const handleOutsideClick = (event) => {
+      if (!popupRef.current?.contains(event.target)) {
+        setshowPopUP(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("touchstart", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("touchstart", handleOutsideClick);
+    };
+  }, [showPopUP]);
   //TODO: Images show
   return (
     event_data && (
@@ -136,7 +166,9 @@ const EventDetails = () => {
                 <div className="right-item-button">
                   <label htmlFor="upload">
                     <i className="bx bx-cloud-upload"></i>
-                    <span className="upload-text">Upload</span>
+                    <span className="upload-text">
+                      {loadingAction === "upload" ? "Uploading..." : "Upload"}
+                    </span>
                   </label>
                   <input
                     type="file"
@@ -153,6 +185,7 @@ const EventDetails = () => {
                     }}
                   ></i>
                   <div
+                    ref={popupRef}
                     className={`pop-up-menu ${
                       showPopUP ? "active-pop-up" : ""
                     }`}
@@ -178,10 +211,15 @@ const EventDetails = () => {
                       <i className="bx bx-qr"></i>
                       <span>QR Code</span>
                     </button>
-                    <button className="more-item" onClick={DeleteEvent}>
+                    <LoadingButton
+                      className="more-item"
+                      loading={loadingAction === "delete"}
+                      loadingText="Deleting"
+                      onClick={DeleteEvent}
+                    >
                       <i className="bx bx-trash"></i>
                       <span>Delete</span>
-                    </button>
+                    </LoadingButton>
                   </div>
                 </div>
               </div>
@@ -211,7 +249,12 @@ const EventDetails = () => {
           {event_data.image_details.length > 0 &&
             event_data.image_details.map((item) => {
               return (
-                <Item item={item} key={item._id} setimageId={setimageId} />
+                <Item
+                  item={item}
+                  key={item._id}
+                  setimageId={setimageId}
+                  onDeleteComplete={refreshEventDetails}
+                />
               );
             })}
         </div>

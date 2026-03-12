@@ -6,8 +6,11 @@ import { MdDelete } from "react-icons/md";
 import { FaRegEye } from "react-icons/fa";
 import { context } from "../../../Context/context";
 import { dashboad } from "../../../Context/context";
+import LoadingButton from "../LoadingButton/LoadingButton";
 const EventCard = ({ data }) => {
   const [showEventPopUP, setshowEventPopUP] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const popupRef = useRef(null);
   const { seteditEvent, downloadQR, setdownloadQR } = useContext(context);
   const DashboardContext = useContext(dashboad);
   const { delete_event, setqrtext } = DashboardContext;
@@ -18,8 +21,9 @@ const EventCard = ({ data }) => {
   };
 
   const DeleteEvent = async () => {
-    const res = await delete_event(data._id);
-    // console.log(res.data.success);
+    setIsDeleting(true);
+    await delete_event(data._id);
+    setIsDeleting(false);
   };
 
   const getSubstring = (str, len) => {
@@ -50,6 +54,26 @@ const EventCard = ({ data }) => {
     setqrtext(`http://localhost:5173/event/${data.user_id}/${data._id}`);
     setdownloadQR(true);
   };
+
+  useEffect(() => {
+    if (!showEventPopUP) {
+      return undefined;
+    }
+
+    const handleOutsideClick = (event) => {
+      if (!popupRef.current?.contains(event.target)) {
+        setshowEventPopUP(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("touchstart", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("touchstart", handleOutsideClick);
+    };
+  }, [showEventPopUP]);
   return (
     <div className="event-card">
       <div className="top-box">
@@ -104,6 +128,7 @@ const EventCard = ({ data }) => {
         </button>
 
         <div
+          ref={popupRef}
           className={`pop-up-model ${
             showEventPopUP ? "active-event-pop-up" : ""
           }`}
@@ -122,10 +147,15 @@ const EventCard = ({ data }) => {
             <i className="bx bx-qr"></i>
             <span>QR Code</span>
           </button>
-          <button className="pop-up-item" onClick={DeleteEvent}>
+          <LoadingButton
+            className="pop-up-item"
+            onClick={DeleteEvent}
+            loading={isDeleting}
+            loadingText="Deleting event"
+          >
             <MdDelete />
             <span>Delete Event</span>
-          </button>
+          </LoadingButton>
         </div>
       </div>
     </div>

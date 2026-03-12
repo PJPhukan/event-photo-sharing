@@ -25,43 +25,45 @@ const Faq = () => {
     setEventactive(true);
   };
   return (
-    <>
-      <section className="faq-section">
-        <div className="main-content">
-          <div className="heading" data-aos="fade-up"
-     data-aos-anchor-placement="top-bottom">Frequently Asked Questions</div>
-          <div className="sub-heading" data-aos="fade-up"
-     data-aos-anchor-placement="top-bottom">
-            We are here to help with any questions you have about security,
-            recognition, photos and others
-          </div>
-          <div className="button-box" data-aos="fade-up"
-     data-aos-anchor-placement="top-bottom">
-            <div onClick={FaceRecognitionhandle}>
-              <FaqButton text="Face Recognition" active={face} />
-            </div>
-            <div onClick={Privacyhandle}>
-              <FaqButton text="Privacy" active={privacy} />
-            </div>
-            <div onClick={Eventhandle}>
-              <FaqButton text="Create Event" active={eventactive} />
+    <section className="faq-section">
+      <div className="main-content">
+        <div className="faq-layout">
+          <div className="faq-copy" data-aos="fade-up" data-aos-anchor-placement="top-bottom">
+            <div className="heading">Frequently Asked Questions</div>
+            <div className="sub-heading">
+              Clear answers about face recognition, privacy, and event setup so
+              guests and hosts know exactly how Memois works.
             </div>
           </div>
 
-          <div className={`faq-question ${face ? "active" : "inactive"}`}>
-            <FaqQuestion item={data[0].item} />
-          </div>
-          <div className={`faq-question ${privacy ? "active" : "inactive"}`}>
-            <FaqQuestion item={data[1].item} />
-          </div>
-          <div
-            className={`faq-question ${eventactive ? "active" : "inactive"}`}
-          >
-            <FaqQuestion item={data[2].item} />
+          <div className="faq-shell" data-aos="fade-up" data-aos-anchor-placement="top-bottom">
+            <div className="button-box">
+              <div onClick={FaceRecognitionhandle}>
+                <FaqButton text="Face Recognition" active={face} />
+              </div>
+              <div onClick={Privacyhandle}>
+                <FaqButton text="Privacy" active={privacy} />
+              </div>
+              <div onClick={Eventhandle}>
+                <FaqButton text="Create Event" active={eventactive} />
+              </div>
+            </div>
+
+            <div className={`faq-question ${face ? "active" : "inactive"}`}>
+              <FaqQuestion item={data[0].item} />
+            </div>
+            <div className={`faq-question ${privacy ? "active" : "inactive"}`}>
+              <FaqQuestion item={data[1].item} />
+            </div>
+            <div
+              className={`faq-question ${eventactive ? "active" : "inactive"}`}
+            >
+              <FaqQuestion item={data[2].item} />
+            </div>
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 };
 

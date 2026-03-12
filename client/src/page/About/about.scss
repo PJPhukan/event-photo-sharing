@@ -1,1 +1,374 @@
 @import "../../css-config/mixins.scss";
+@import "../../css-config/variables.scss";
+
+.about-page {
+  position: relative;
+  overflow: hidden;
+
+  .about-shell {
+    max-width: 1360px;
+    margin: 0 auto;
+    padding: 1.2rem 1rem 2.6rem;
+
+    @include md {
+      padding: 3rem 2.5rem 5rem;
+    }
+
+    @include xl {
+      padding: 4rem 4.5rem 6rem;
+    }
+  }
+
+  .eyebrow,
+  .card-label {
+    display: inline-flex;
+    padding: 0.6rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.04);
+    color: $text-color-secondary;
+    font-size: calc($font-size-small + 1px);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .about-hero {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+
+    @include lg {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      gap: 3rem;
+    }
+  }
+
+  .about-copy {
+    h1 {
+      margin: 1.1rem 0 1rem;
+      max-width: 12ch;
+      font-size: clamp(2rem, 4.4vw, 4rem);
+      line-height: 1.02;
+      letter-spacing: -0.05em;
+
+      span {
+        background: linear-gradient(135deg, #ffffff 0%, #ff79ca 45%, #ff8a00 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
+
+    p {
+      max-width: 560px;
+      color: $text-color-secondary;
+      font-size: calc($font-size-small + 1px);
+      line-height: 1.65;
+    }
+  }
+
+  .feature-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+
+    span {
+      padding: 0.8rem 1rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.04);
+      font-size: calc($font-size-small + 1px);
+    }
+  }
+
+    .about-actions {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      width: 100%;
+      gap: 0.65rem;
+      margin-top: 2rem;
+      align-items: center;
+      justify-content: center;
+
+      a {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0.78rem 1rem;
+        border-radius: 999px;
+        font-size: $font-size-small;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .primary-action {
+        background: linear-gradient(135deg, #ff039a, #ff7b00);
+        box-shadow: 0 18px 36px rgba(255, 3, 154, 0.22);
+      }
+
+      .secondary-action {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.04);
+        color: $text-color-secondary;
+      }
+
+      @include md {
+        justify-content: center;
+        gap: 1rem;
+
+        a {
+          padding: 0.82rem 1.5rem;
+          font-size: calc($font-size-base - 1px);
+        }
+      }
+    }
+
+    .hero-actions {
+      @include lg {
+        grid-column: 1 / -1;
+        margin-top: -0.25rem;
+      }
+    }
+
+  .about-visual {
+    display: none;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: -7rem;
+
+    .visual-stage {
+      position: relative;
+      width: min(520px, 100%);
+      aspect-ratio: 1 / 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      margin-top: 3.35rem;
+      margin-left: 2rem;
+    }
+
+    .visual-aura,
+    .visual-orbit,
+    .visual-pulse {
+      position: absolute;
+      border-radius: 50%;
+    }
+
+    .visual-aura {
+      inset: 10%;
+      background: radial-gradient(circle, rgba(255, 121, 202, 0.18), rgba(255, 122, 0, 0.05) 62%, transparent 78%);
+      filter: blur(16px);
+    }
+
+    .orbit-one {
+      inset: 10%;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      animation: aboutSpin 20s linear infinite;
+    }
+
+    .orbit-two {
+      inset: 22%;
+      border: 1px dashed rgba(255, 3, 154, 0.26);
+      animation: aboutSpinReverse 16s linear infinite;
+    }
+
+    .visual-pulse {
+      width: 82%;
+      height: 82%;
+      background: radial-gradient(circle, rgba(255, 3, 154, 0.18), transparent 62%);
+      filter: blur(16px);
+      animation: aboutPulse 4s ease-in-out infinite;
+    }
+
+    .visual-card {
+      position: absolute;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(7, 10, 32, 0.88);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+      backdrop-filter: blur(16px);
+    }
+
+    .main-card {
+      width: 72%;
+      padding: 1.4rem;
+      border-radius: 28px;
+      transform: rotate(-6deg);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: $text-color-secondary;
+      font-size: calc($font-size-small + 1px);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, #47ff8a, #1fca64);
+      box-shadow: 0 0 12px rgba(71, 255, 138, 0.42);
+    }
+
+    .card-title {
+      margin: 1rem 0 1.2rem;
+      font-size: clamp(1.2rem, 2vw, 1.8rem);
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .card-lines {
+      display: grid;
+      gap: 0.65rem;
+
+      span {
+        display: block;
+        height: 10px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+      }
+
+      span:nth-child(1) {
+        width: 80%;
+      }
+
+      span:nth-child(2) {
+        width: 66%;
+      }
+
+      span:nth-child(3) {
+        width: 52%;
+      }
+    }
+
+    .floating-card {
+      padding: 0.75rem 0.95rem;
+      border-radius: 999px;
+      font-size: $font-size-small;
+      font-weight: 600;
+    }
+
+    .top-card {
+      top: 18%;
+      right: 4%;
+      animation: aboutFloat 4.4s ease-in-out infinite;
+    }
+
+    .bottom-card {
+      left: 5%;
+      bottom: 18%;
+      animation: aboutFloat 4.4s ease-in-out infinite 1s;
+    }
+
+    .side-card {
+      top: 48%;
+      right: -2%;
+      animation: aboutFloat 4.8s ease-in-out infinite 0.5s;
+    }
+
+    @include lg {
+      display: flex;
+    }
+  }
+
+  .about-grid {
+    display: grid;
+    gap: 1.2rem;
+    margin-top: 3.5rem;
+
+    @include lg {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    }
+  }
+
+  .info-card,
+  .closing-banner {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+  }
+
+  .info-card {
+    padding: 1.6rem;
+    border-radius: 28px;
+
+    h2 {
+      margin: 1rem 0;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      line-height: 1.08;
+    }
+
+    p,
+    li {
+      color: $text-color-secondary;
+      line-height: 1.8;
+    }
+
+    ul {
+      margin-top: 1rem;
+      padding-left: 1rem;
+    }
+
+    li + li {
+      margin-top: 0.8rem;
+    }
+  }
+
+  .closing-banner {
+    margin-top: 2.4rem;
+    padding: 1.4rem 1.6rem;
+    border-radius: 24px;
+
+    p {
+      color: $text-color-primary;
+      font-size: calc($font-size-medium - 2px);
+      line-height: 1.8;
+      text-align: center;
+    }
+  }
+}
+
+@keyframes aboutSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes aboutSpinReverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes aboutPulse {
+  0%,
+  100% {
+    transform: scale(0.96);
+    opacity: 0.68;
+  }
+  50% {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+}
+
+@keyframes aboutFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}

@@ -1,9 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "./notification.scss";
 import Message from "../Message/Message";
 import { context, dashboad } from "../../../Context/context";
+import { useLocation } from "react-router-dom";
 
 const Notification = () => {
+  const notificationRef = useRef(null);
+  const location = useLocation();
   const UserContext = useContext(context);
   const { showNotification, setshowNotification } = UserContext;
   const dashboardContext = useContext(dashboad);
@@ -29,6 +32,30 @@ const Notification = () => {
       get_all();
     }
   });
+
+  useEffect(() => {
+    setshowNotification(false);
+  }, [location.pathname, setshowNotification]);
+
+  useEffect(() => {
+    if (!showNotification) {
+      return undefined;
+    }
+
+    const handleOutsideClick = (event) => {
+      if (!notificationRef.current?.contains(event.target)) {
+        setshowNotification(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("touchstart", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("touchstart", handleOutsideClick);
+    };
+  }, [showNotification, setshowNotification]);
 
   const NotificationAll = async () => {
     setallMessage(notifications);
@@ -62,6 +89,7 @@ const Notification = () => {
     <>
       {showNotification && (
         <div
+          ref={notificationRef}
           className={`${
             showNotification ? "notification-active" : ""
           } notification`}

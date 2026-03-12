@@ -1,45 +1,31 @@
 @import "../../css-config/mixins.scss";
 @import "../../css-config/variables.scss";
+
 .box {
   .show-off-card {
-    min-width: 11rem;
-    background-color: rgba(255, 255, 255, 0.15);
-    border-radius: 5px;
-    padding: 5px 10px;
+    min-width: 100%;
+    padding: 1rem 1rem 1.1rem;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(10px);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    position: relative;
-  
-    @include xl {
-      min-width: 20rem;
-    }
-
-    // img {
-    //   width: 5rem;
-    //   height: 5rem;
-    //   object-fit: cover;
-
-    // }
+    text-align: center;
 
     .amount {
-      font-size: $font-size-large;
-      font-weight: 400;
-      @include xl {
-        font-size: $font-size-extra-large;
-      }
+      font-size: clamp(1.7rem, 3vw, 2.4rem);
+      font-weight: 700;
+      line-height: 1;
     }
 
     .content {
-      font-size: $font-size-base;
-      text-align: center;
-      @include xl {
-        font-size: $font-size-large;
-      }
+      margin-top: 0.45rem;
+      font-size: calc($font-size-small + 1px);
       color: $text-color-secondary;
+      line-height: 1.6;
     }
   }
 }

@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./itemdetails.scss";
-import image from "../../assets/car.jpg";
-import video from "../../assets/video.mp4";
 import { dashboad } from "../../../Context/context";
+import { downloadMedia } from "../../lib/downloadMedia";
 
 const ItemDetails = ({ imageId, setimageId, title }) => {
   const [loveStyle, setLoveStyle] = useState({
@@ -39,14 +38,16 @@ const ItemDetails = ({ imageId, setimageId, title }) => {
     setimageId(null);
   };
 
-  const DownloadImage = (e) => {
-    console.log("Download image was clicked");
-    const link = document.createElement("a");
-    link.href = image_data?.imageUrl;
-    link.download = image_data.title || "download";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const DownloadImage = async () => {
+    try {
+      await downloadMedia({
+        url: image_data?.imageUrl,
+        filename: image_data?.title || "download",
+        resourceType: image_data?.resource_type,
+      });
+    } catch (error) {
+      window.open(image_data?.imageUrl, "_blank", "noopener,noreferrer");
+    }
   };
 
   const ShareImage = async () => {

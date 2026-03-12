@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import "./sidebar.scss";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { context } from "../../../Context/context";
+import LoadingButton from "../LoadingButton/LoadingButton";
+import logo from "../../assets/logo.png";
 const Sidebar = () => {
   const navigate = useNavigate();
   const usercontext = useContext(context);
@@ -13,6 +15,7 @@ const Sidebar = () => {
     setshowNotification,
   } = usercontext;
   const [Showmobile, setShowmobile] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   let location = useLocation();
   useEffect(() => {
     const handleResize = () => {
@@ -31,7 +34,9 @@ const Sidebar = () => {
   useEffect(() => {}, [location]);
 
   const HandleLogout = async () => {
+    setIsLoggingOut(true);
     const response = await logout();
+    setIsLoggingOut(false);
     if (response.success) {
       localStorage.removeItem("token");
       localStorage.removeItem("userId");
@@ -54,7 +59,14 @@ const Sidebar = () => {
           Showmobile ? "mobile-show" : ""
         }`}
       >
-        <div className="logo">Memois</div>
+        <div className="logo">
+          <img src={logo} alt="Memois" />
+          <div className="logo-copy">
+            <div className="logo-mark">
+              mem<span>ois</span>
+            </div>
+          </div>
+        </div>
         <div className="nav-item">
           <Link
             to="/"
@@ -144,12 +156,16 @@ const Sidebar = () => {
               <span>Settings</span>
             </li>
           </Link>
-          <button onClick={HandleLogout}>
+          <LoadingButton
+            onClick={HandleLogout}
+            loading={isLoggingOut}
+            loadingText="Logging out"
+          >
             <li className="logout">
               <i className="bx bx-log-out"></i>
               <span>Logout</span>
             </li>
-          </button>
+          </LoadingButton>
         </div>
       </div>
     </>

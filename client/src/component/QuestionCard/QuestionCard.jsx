@@ -1,17 +1,14 @@
-import React, { useState } from "react";
-import "./questioncard.scss";
-const QuestionCard = ({ card }) => {
-  const [active, setActive] = useState(false);
-  const ShowAnswer = () => {
-    setActive(!active);
-  };
+import React from "react";
+import "./questionCard.scss";
+
+const QuestionCard = ({ card, active, onToggle }) => {
   return (
     <div className="question-card">
-      <div className="question" >
-        <span onClick={ShowAnswer}>{card.question} </span>
+      <div className="question">
+        <span onClick={onToggle}>{card.question} </span>
         <i
           className={`bx bx-chevron-down ${active ? "show" : ""}`}
-          onClick={ShowAnswer}
+          onClick={onToggle}
         ></i>
       </div>
       <div className={`answer ${active ? "active" : ""}`}>{card.answer}</div>

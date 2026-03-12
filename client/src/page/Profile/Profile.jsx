@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./profile.scss";
 import { context } from "../../../Context/context";
+import LoadingButton from "../../component/LoadingButton/LoadingButton";
 
 const Profile = () => {
   const UserContext = useContext(context);
@@ -8,6 +9,7 @@ const Profile = () => {
     UserContext;
   const [avatarImg, setAvatarImg] = useState(null);
   const [coverImg, setCoverImg] = useState(null);
+  const [loadingAction, setLoadingAction] = useState("");
 
   const [initialized, setInitialized] = useState(false);
 
@@ -47,24 +49,35 @@ const Profile = () => {
 
   const ChangeUserAvatar = async (e) => {
     const file = e.target.files[0];
+    if (!file) {
+      return;
+    }
+    setLoadingAction("avatar");
     setAvatarImg(file);
     const formdata = new FormData();
     formdata.append("avatar", file);
     await ChangeAvatar(formdata);
+    setLoadingAction("");
   };
 
   const ChangeUserCoverImg = async (e) => {
     const file = e.target.files[0];
+    if (!file) {
+      return;
+    }
+    setLoadingAction("cover");
     setCoverImg(file);
     const formdata = new FormData();
     formdata.append("coverImg", file);
     await ChangeCoverImage(formdata);
+    setLoadingAction("");
   };
 
   const UpdateDetails = async (e) => {
     e.preventDefault();
+    setLoadingAction("profile");
     await UpdateUserDetails(euser);
-    console.log("User update successfully");
+    setLoadingAction("");
   };
 
   const emailOnchange = () => {};
@@ -75,7 +88,9 @@ const Profile = () => {
           <div className="cover-image">
             <label htmlFor="edit-cover">
               <i className="bx bxs-camera"></i>
-              <span>Edit Cover Photo</span>
+              <span>
+                {loadingAction === "cover" ? "Uploading cover..." : "Edit Cover Photo"}
+              </span>
             </label>
             <input
               type="file"
@@ -175,12 +190,14 @@ const Profile = () => {
                 </div>
               </div>
               <div className="btn">
-                <input
+                <LoadingButton
                   type="submit"
-                  value="Edit Your Profile"
-                  // onSubmit={UpdateDetails}
+                  loading={loadingAction === "profile"}
+                  loadingText="Saving profile"
                   onClick={UpdateDetails}
-                />
+                >
+                  Edit Your Profile
+                </LoadingButton>
               </div>
             </form>
           </div>

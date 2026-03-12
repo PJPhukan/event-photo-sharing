@@ -1,22 +1,24 @@
 import "./editevent.scss";
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { MdDescription } from "react-icons/md";
 import { FiType } from "react-icons/fi";
-import Logo from "../../assets/logo1.png";
+import Logo from "../../assets/logo.png";
 import { context, dashboad } from "../../../Context/context";
+import { useNavigate } from "react-router-dom";
+import LoadingButton from "../LoadingButton/LoadingButton";
 
 const EditEvent = () => {
   const { seteditEvent } = useContext(context);
   const dashboardContext = useContext(dashboad);
-  const { get_event_details, eventId, event_data } = dashboardContext;
+  const { get_event_details, edit_event, eventId, event_data } = dashboardContext;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const get_details = async () => {
-      const result = await get_event_details(eventId);
-      return result.data?.data?.event_details[0];
+      await get_event_details(eventId);
     };
-    const response = get_details();
-  }, []);
+    get_details();
+  }, [eventId, get_event_details]);
 
   const [initialized, setinitialized] = useState(false);
   const [eevent, setEevent] = useState({
@@ -27,12 +29,15 @@ const EditEvent = () => {
     etype: "",
     econtact: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   useEffect(() => {
     if (event_data && !initialized) {
       setEevent({
         ename: event_data?.EventName || "",
         edescription: event_data?.EventDescription || "",
-        edate: event_data?.EventDate || "",
+        edate: event_data?.EventDate
+          ? new Date(event_data.EventDate).toISOString().slice(0, 16)
+          : "",
         elocation: event_data?.EventLocation || "",
         etype: event_data?.EventType || "",
         econtact: event_data?.ContactDetails || "",
@@ -41,11 +46,14 @@ const EditEvent = () => {
     }
   }, [event_data, initialized]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    //TODO: send data to the backend and navigate to that page
-    console.log("Submitting event details");
-    console.log(eevent);
+    setIsSubmitting(true);
+    await edit_event(eevent, eventId);
+    await get_event_details(eventId);
+    setIsSubmitting(false);
+    seteditEvent(false);
+    navigate(`/dashboard/event/${eventId}`);
   };
 
   const Onchange = (e) => {
@@ -62,7 +70,7 @@ const EditEvent = () => {
           <div className="content-item">
             <img src={Logo} alt="Memois" className="logo" />
             <h5 className="heading">Change Event Details</h5>
-            <form method="post">
+            <form method="post" onSubmit={handleSubmit}>
               <div className="input-item">
                 <label htmlFor="event-name">
                   <i className="bx bx-calendar-event"></i>
@@ -149,9 +157,15 @@ const EditEvent = () => {
               </div>
             </form>
             <div className="btn-box">
-              <button className="sub-btn" onClick={handleSubmit}>
+              <LoadingButton
+                className="sub-btn"
+                type="button"
+                loading={isSubmitting}
+                loadingText="Saving changes"
+                onClick={handleSubmit}
+              >
                 Save Changes
-              </button>
+              </LoadingButton>
             </div>
           </div>
         </div>

@@ -1,92 +1,68 @@
 @import "../../css-config/mixins.scss";
 @import "../../css-config/variables.scss";
+
 .testimonial-section {
   max-width: 100%;
   position: relative;
-  height: 100%;
-
   box-sizing: border-box;
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background: url(../../assets/bg3.jpg) no-repeat center center/cover;
-    object-fit: cover;
-    opacity: 0.2;
-    z-index: -1;
-  }
 
   .main-content {
-    max-width: 100%;
+    max-width: 1360px;
     margin: 0 auto;
+    padding: 2.2rem 1rem 1.4rem;
 
-    .heading {
-      text-align: center;
-      padding-top: 1rem;
-      font-weight: 500;
-      font-size: $font-size-large;
-
-      @include md {
-        font-size: $font-size-extra-large;
-      }
-    }
-
-    .sub-heading {
-      color: $text-color-secondary;
-      text-align: center;
-      font-size: $font-size-small;
-      margin-bottom: 2rem;
-      @include md {
-        font-size: $font-size-base;
-      }
-    }
-
-    .testimonial-content {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-      gap: 1rem;
-      margin: 1rem 0.5rem;
-      margin-top: 3rem;
-      @include md {
-        margin: auto;
-      }
-    }
-
-    .show-off {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 2rem auto;
-      gap: .5rem;
-      flex-wrap: wrap;
-      @include xl{
-        gap: 1rem;
-
-      }
-      
-    }
     @include md {
-      max-width: calc(100% - 20px);
-      padding: 10px 40px;
-      align-items: start;
-      justify-content: space-between;
+      padding: 4rem 2.5rem 3rem;
     }
-    @include lg {
-      max-width: calc(100% - 40px);
-    }
+
     @include xl {
-      max-width: calc(100% - 70px);
-    }
-    @include xxl {
-      max-width: calc(100% - 110px);
+      padding: 4.5rem 4.5rem 3.5rem;
     }
   }
-  @include lg {
-    min-height: calc(100vh - 70px);
+
+  .testimonial-copy {
+    width: min(760px, 100%);
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .heading {
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.05em;
+  }
+
+  .sub-heading {
+    margin-top: 1rem;
+    color: $text-color-secondary;
+    font-size: calc($font-size-small + 1px);
+    line-height: 1.7;
+  }
+
+  .show-off {
+    display: grid;
+    gap: 0.9rem;
+    margin: 2rem auto 0;
+
+    @include md {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @include xl {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .testimonial-content {
+    margin-top: 2rem;
+  }
+
+  .mySwiper {
+    padding: 0.4rem 0 0.8rem;
+  }
+
+  .swiper-slide {
+    height: auto;
   }
 }

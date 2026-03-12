@@ -1,7 +1,23 @@
-import { useEffect, useState } from "react";
+/* eslint-disable react/prop-types */
+import { useState } from "react";
 import { dashboad } from "./context";
 import axios from "axios";
 import * as faceapi from "face-api.js";
+
+let faceModelsPromise;
+
+const loadFaceModels = () => {
+  // Cache model loading so repeated selfie matches do not re-download weights.
+  if (!faceModelsPromise) {
+    faceModelsPromise = Promise.all([
+      faceapi.nets.ssdMobilenetv1.loadFromUri("/models"),
+      faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
+      faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
+    ]);
+  }
+
+  return faceModelsPromise;
+};
 
 const DashboardState = (props) => {
   const [qrtext, setqrtext] = useState("");
@@ -15,8 +31,7 @@ const DashboardState = (props) => {
       const res = await axios.post("/api/event/create-event", payload);
       return res;
     } catch (err) {
-      console.log("Error occured while creating event");
-      console.log(err.response.data.message);
+      console.log(err.response?.data?.message || "Error occured while creating event");
     }
   };
 
@@ -26,8 +41,7 @@ const DashboardState = (props) => {
       const res = await axios.delete(`/api/event/delete-event/${eventId}`);
       return res;
     } catch (err) {
-      console.log("Error occured while deleting event :");
-      console.log(err.response.data.message);
+      console.log(err.response?.data?.message || "Error occured while deleting event");
     }
   };
 
@@ -38,10 +52,9 @@ const DashboardState = (props) => {
         `/api/event/edit-event/${eventId}`,
         payload
       );
-      console.log("Response:", res);
+      return res;
     } catch (err) {
-      console.log("Error occured while editing event :");
-      console.log(err.response.data.message);
+      console.log(err.response?.data?.message || "Error occured while editing event");
     }
   };
 
@@ -51,8 +64,7 @@ const DashboardState = (props) => {
       const res = await axios.get("/api/event/get-events");
       return res;
     } catch (err) {
-      console.log("Error occured while fetching all event :");
-      console.log(err.response.data.message);
+      console.log(err.response?.data?.message || "Error occured while fetching all event");
     }
   };
 
@@ -65,8 +77,7 @@ const DashboardState = (props) => {
       setevent_data(result);
       return res;
     } catch (err) {
-      console.log("Error occured while fetching event details :");
-      console.log(err.response.data.message);
+      console.log(err.response?.data?.message || "Error occured while fetching event details");
     }
   };
 
@@ -78,8 +89,7 @@ const DashboardState = (props) => {
       const res = await axios.get("/api/dashboard/get-total-likes");
       return res;
     } catch (err) {
-      console.log("Error occured while fetching total likes :");
-      console.log(err.response.data.message);
+      console.log(err.response?.data?.message || "Error occured while fetching total likes");
     }
   };
 
@@ -89,8 +99,7 @@ const DashboardState = (props) => {
       const res = await axios.get("/api/dashboard/get-total-event");
       return res;
     } catch (err) {
-      console.log("Error occured while fetching total event :");
-      console.log(err.response.data.message);
+      console.log(err.response?.data?.message || "Error occured while fetching total event");
     }
   };
 
@@ -100,8 +109,7 @@ const DashboardState = (props) => {
       const res = await axios.get("/api/dashboard/get-total-image");
       return res;
     } catch (err) {
-      console.log("Error occured while fetching total image :");
-      console.log(err.response.data.message);
+      console.log(err.response?.data?.message || "Error occured while fetching total image");
     }
   };
 
@@ -111,8 +119,7 @@ const DashboardState = (props) => {
       const res = await axios.get("/api/dashboard/get-total-video");
       return res;
     } catch (err) {
-      console.log("Error occured while fetching total video :");
-      console.log(err.response.data.message);
+      console.log(err.response?.data?.message || "Error occured while fetching total video");
     }
   };
 
@@ -123,8 +130,7 @@ const DashboardState = (props) => {
       // console.log(response);
       return res;
     } catch (err) {
-      console.log("Error occured while fetching event data :");
-      console.log(err.response.data.message);
+      console.log(err.response?.data?.message || "Error occured while fetching event data");
     }
   };
 
@@ -140,20 +146,17 @@ const DashboardState = (props) => {
       // console.log("Response", res);
       return res;
     } catch (err) {
-      console.log("Error occured while uploading image/videos:");
-      console.log(err.response.data.message);
+      console.log(err.response?.data?.message || "Error occured while uploading media");
     }
   };
 
   //delete image
   const delete_image = async (imageId) => {
     try {
-      const res = await axios.get(`/api/image/delete-image/${imageId}`);
-      console.log("Response :", res);
+      const res = await axios.delete(`/api/image/delete-image/${imageId}`);
       return res;
     } catch (err) {
-      console.log("Error occured while deleting image :");
-      console.log(err.response.data.message);
+      console.log(err.response?.data?.message || "Error occured while deleting image");
     }
   };
 
@@ -164,8 +167,7 @@ const DashboardState = (props) => {
       // console.log("Response ", res);
       return res;
     } catch (err) {
-      console.log("Error occured while fetching image details :");
-      console.log(err.response.data.message);
+      console.log(err.response?.data?.message || "Error occured while fetching image details");
     }
   };
 
@@ -179,8 +181,7 @@ const DashboardState = (props) => {
       // console.log("Response ", res);
       return res;
     } catch (err) {
-      console.log("Error occured while user liked in picture:");
-      console.log(err.response.data.message);
+      console.log(err.response?.data?.message || "Error occured while liking media");
     }
   };
 
@@ -193,8 +194,7 @@ const DashboardState = (props) => {
       // console.log("Response ", res);
       return res;
     } catch (err) {
-      console.log("Error occured while user disliked in picture:");
-      console.log(err.response.data.message);
+      console.log(err.response?.data?.message || "Error occured while disliking media");
     }
   };
 
@@ -202,11 +202,7 @@ const DashboardState = (props) => {
 
   const faceRecognition = async (userImage, dbimage) => {
     try {
-      await Promise.all([
-        faceapi.nets.ssdMobilenetv1.loadFromUri("/models"),
-        faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
-        faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
-      ]);
+      await loadFaceModels();
       const Reface = await faceapi.fetchImage(dbimage);
 
       const facesToCheck = await faceapi.fetchImage(userImage);
@@ -222,15 +218,28 @@ const DashboardState = (props) => {
       if (refAIData.length === 0 || facesToCheckAIData.length === 0) {
         return false;
       }
-      let faceMatcher = new faceapi.FaceMatcher(refAIData);
-      for (let face of facesToCheckAIData) {
-        const { descriptor } = face;
-        let label = faceMatcher.findBestMatch(descriptor).toString();
-
-        if (!label.includes("unknown")) {
-          return true;
+      // Threshold-based matching (no training needed) - LOGIC FIXED
+      console.log(`🔍 Comparing ${refAIData.length} gallery faces vs ${facesToCheckAIData.length} selfie faces`);
+      
+      let bestMatch = 1.0; // Track closest match
+      
+      for (let refFace of refAIData) {
+        for (let selfieFace of facesToCheckAIData) {
+          const distance = faceapi.euclideanDistance(
+            refFace.descriptor, 
+            selfieFace.descriptor
+          );
+          console.log(`📏 Distance: ${distance.toFixed(3)} (threshold: <0.6)`);
+          
+          if (distance < bestMatch) bestMatch = distance;
+          
+          if (distance < 0.55) { // Tighter - filter single photos
+            console.log('🎉 FACE MATCH FOUND!');
+            return true;
+          }
         }
       }
+      console.log(`❌ No good matches. Best: ${bestMatch.toFixed(3)}`);
       return false;
     } catch (error) {
       console.log(error);
@@ -250,7 +259,6 @@ const DashboardState = (props) => {
       return response?.data?.data?.event_details[0];
     } catch (error) {
       console.log("Error occured while fetching event details");
-      console.log(error);
     }
   };
 
@@ -265,7 +273,6 @@ const DashboardState = (props) => {
       return response?.data?.data;
     } catch (error) {
       console.log("Error occured while fetching notification");
-      console.log(error);
     }
   };
 
@@ -279,7 +286,6 @@ const DashboardState = (props) => {
       return response?.data?.message;
     } catch (error) {
       console.log("Error occured while marking notification as read");
-      console.log(error);
     }
   };
 
@@ -293,7 +299,6 @@ const DashboardState = (props) => {
       return response?.data?.message;
     } catch (error) {
       console.log("Error occured while deleting notification");
-      console.log(error);
     }
   };
   return (

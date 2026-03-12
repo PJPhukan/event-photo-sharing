@@ -36,18 +36,51 @@
     padding: 0 0.5rem;
   }
   .logo {
-    // text-transform: uppercase;
-    text-align: center;
-    padding: 1.7rem;
-    letter-spacing: 3px;
-    font-size: $font-size-medium;
-    font-family: "Dancing Script", cursive;
-    font-weight: 900;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 1.2rem 0.9rem 1rem;
+    text-align: left;
 
     @include md {
-      letter-spacing: 5px;
-      padding: 2rem;
-      font-size: $font-size-large;
+      padding: 1.4rem 0.9rem 1.2rem;
+    }
+
+    img {
+      width: 2.3rem;
+      height: 2.3rem;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.24));
+
+      @include md {
+        width: 2.6rem;
+        height: 2.6rem;
+      }
+    }
+
+    .logo-copy {
+      min-width: 0;
+    }
+
+    .logo-mark {
+      font-family: "Dancing Script", cursive;
+      font-weight: 900;
+      letter-spacing: 1px;
+      font-size: calc($font-size-medium + 2px);
+      line-height: 1;
+
+      span {
+        color: $text-color-pink;
+      }
+    }
+
+    .logo-subtitle {
+      margin-top: 0.18rem;
+      font-size: 10px;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.68);
+      white-space: nowrap;
     }
   }
 

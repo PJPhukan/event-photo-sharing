@@ -1,5 +1,5 @@
 import React from "react";
-import "./UseFor.scss"
+import "./usefor.scss";
 import { Link } from "react-router-dom";
 const UseFor = ({ item }) => {
   return (

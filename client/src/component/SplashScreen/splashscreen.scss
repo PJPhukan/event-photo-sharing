@@ -1,0 +1,237 @@
+.splash-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 360ms ease, visibility 360ms ease;
+
+  &.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  &.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .splash-backdrop {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at top, rgba(255, 3, 154, 0.12), transparent 34%),
+      radial-gradient(circle at bottom right, rgba(255, 153, 0, 0.1), transparent 28%),
+      linear-gradient(180deg, #040511 0%, #020219 100%);
+  }
+
+  .splash-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(20px);
+    animation: floatOrb 4.5s ease-in-out infinite;
+  }
+
+  .orb-one {
+    width: 220px;
+    height: 220px;
+    top: 14%;
+    left: 10%;
+    background: rgba(255, 3, 154, 0.24);
+  }
+
+  .orb-two {
+    width: 260px;
+    height: 260px;
+    right: 8%;
+    bottom: 12%;
+    background: rgba(255, 166, 0, 0.18);
+    animation-delay: 0.8s;
+  }
+
+  .splash-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .wordmark-frame {
+    position: relative;
+    overflow: hidden;
+    padding: 0.4rem 1rem;
+  }
+
+  .wordmark-glow {
+    position: absolute;
+    inset: 8% -2%;
+    background: radial-gradient(circle, rgba(255, 3, 154, 0.22), transparent 60%);
+    filter: blur(22px);
+    animation: glowShift 1.8s ease-out forwards;
+  }
+
+  .splash-wordmark {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: baseline;
+    font-size: clamp(2.9rem, 9vw, 6.8rem);
+    font-weight: 800;
+    line-height: 0.94;
+    text-transform: lowercase;
+    letter-spacing: 0.03em;
+    animation: wordmarkRise 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  .word-start,
+  .word-end {
+    display: inline-block;
+  }
+
+  .word-start {
+    color: rgba(255, 255, 255, 0.94);
+    animation: wordSliceLeft 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  .word-end {
+    color: var(--text-color-pink);
+    text-shadow: 0 0 28px rgba(255, 3, 154, 0.28);
+    animation: wordSliceRight 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  .splash-brandline {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.7rem;
+    opacity: 0;
+    transform: translateY(14px);
+    animation: fadeBrandline 0.8s ease forwards;
+    animation-delay: 0.5s;
+  }
+
+  .splash-logo {
+    width: 62px;
+    height: 62px;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.28));
+  }
+
+  .splash-tagline {
+    color: rgba(255, 255, 255, 0.66);
+    font-size: 0.95rem;
+    text-align: center;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .splash-loader {
+    display: flex;
+    gap: 0.45rem;
+    margin-top: 0.4rem;
+
+    span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, #ff039a, #ff8a00);
+      animation: bounceDot 0.9s ease-in-out infinite;
+    }
+
+    span:nth-child(2) {
+      animation-delay: 0.12s;
+    }
+
+    span:nth-child(3) {
+      animation-delay: 0.24s;
+    }
+  }
+}
+
+@keyframes floatOrb {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, -14px, 0) scale(1.04);
+  }
+}
+
+@keyframes glowShift {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes wordmarkRise {
+  0% {
+    opacity: 0;
+    transform: translateY(34px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes wordSliceLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-36px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes wordSliceRight {
+  0% {
+    opacity: 0;
+    transform: translateX(36px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeBrandline {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounceDot {
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.45;
+  }
+  40% {
+    transform: translateY(-6px);
+    opacity: 1;
+  }
+}

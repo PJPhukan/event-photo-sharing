@@ -3,43 +3,68 @@
 
 .question-card {
   display: flex;
-  justify-content: start;
   flex-direction: column;
-  border: 1px solid white;
-  background-color: rgba($color: #6C6C6C, $alpha: 0.25);
-  padding: 17px 25px;
-  border-radius: 5px;
-  @include md{
-    padding: 20px 30px;
+  border: 0 !important;
+  outline: 0;
+  box-shadow: none !important;
+  background: rgba(255, 255, 255, 0.025) !important;
+  padding: 0.95rem 1rem;
+  border-radius: 16px;
+  transition: background 0.25s ease;
+
+  @include md {
+    padding: 1.15rem 1.25rem;
   }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.04) !important;
+  }
+
   .question {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    gap: 1rem;
+
     span {
       font-size: $font-size-base;
       font-weight: 500;
+      line-height: 1.5;
+      cursor: pointer;
     }
-    i{
-        font-size: $font-size-large;
-        cursor: pointer;
-        transition: .3s;
-        &.show{
-            transform: rotate(180deg);
-        }
+
+    i {
+      font-size: calc($font-size-large + 2px);
+      cursor: pointer;
+      transition: transform 0.25s ease;
+
+      &.show {
+        transform: rotate(180deg);
+      }
     }
   }
 
-  .answer{
-    font-size: $font-size-small;
-    margin-top: .5rem;
-    display: none;
-    transition: .3s;
-    &.active{
-        transition: .3s;
-        display: block;
+  .answer {
+    font-size: calc($font-size-small + 1px);
+    line-height: 1.7;
+    color: $text-color-secondary;
+    margin-top: 0;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-6px);
+    will-change: max-height, opacity, transform;
+    transition:
+      max-height 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+      margin-top 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.28s ease,
+      transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+
+    &.active {
+      margin-top: 0.85rem;
+      max-height: 260px;
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 }
