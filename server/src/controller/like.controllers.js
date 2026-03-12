@@ -8,8 +8,15 @@ import { Image } from "../model/image.model.js";
 const NewLike = AsyncHandler(async (req, res) => {
   const { _id, username, avatar } = req.user;
   const { owner, imageId, eventId } = req.body;
+  if (!owner || !imageId || !eventId) {
+    throw new ApiError(400, "owner, imageId and eventId are required");
+  }
+
   const like = await Like.findOne({ likedUser: _id, image: imageId });
   const image = await Image.findById(imageId);
+  if (!image) {
+    throw new ApiError(404, "Image not found");
+  }
   if (like) {
     return res
       .status(200)
@@ -26,7 +33,7 @@ const NewLike = AsyncHandler(async (req, res) => {
   }
 
   
-  if (image.user_id !== _id) {
+  if (image.user_id.toString() !== _id.toString()) {
     await Notification.create({
       message: `${username} liked your ${
         image.resource_type ? image.resource_type : "photo"
@@ -57,9 +64,10 @@ const DeleteLike = AsyncHandler(async (req, res) => {
   }
   //delete notification that user
   await Notification.deleteOne({
-    user_id: _id,
+    owner_id: like.user,
     username,
     imageId,
+    type: "like",
   });
 
   return res

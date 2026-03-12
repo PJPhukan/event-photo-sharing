@@ -28,8 +28,8 @@ const getAllNotification = AsyncHandler(async (req, res) => {
 
 const markNotificationAsRead = AsyncHandler(async (req, res) => {
   const { notificationId } = req.params;
-  const notification = await Notification.findByIdAndUpdate(
-    notificationId,
+  const notification = await Notification.findOneAndUpdate(
+    { _id: notificationId, owner_id: req.user._id },
     { read: true },
     { new: true }
   );
@@ -43,7 +43,10 @@ const markNotificationAsRead = AsyncHandler(async (req, res) => {
 
 const deleteNotification = AsyncHandler(async (req, res) => {
   const { notificationId } = req.params;
-  const notification = await Notification.findByIdAndDelete(notificationId);
+  const notification = await Notification.findOneAndDelete({
+    _id: notificationId,
+    owner_id: req.user._id,
+  });
   if (!notification) {
     throw new ApiError(404, "Notification not found");
   }

@@ -24,16 +24,74 @@ import { Notification } from "../model/notification.model.js";
  * logout
  */
 
-let VerificationOtp = null;
+const buildCookieOptions = () => {
+  const isProduction = process.env.NODE_ENV === "production";
+
+  return {
+    // Railway + Vercel deployments need cross-site cookies in production.
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? "None" : "Lax",
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  };
+};
+
+const resetOtpStore = new Map();
+
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const usernamePattern = /^[a-zA-Z0-9._]{3,20}$/;
+const phonePattern = /^\d{10,15}$/;
+const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
+
+const normalizeEmail = (value = "") => value.trim().toLowerCase();
+const normalizeUsername = (value = "") => value.trim().toLowerCase();
+
+const assertValidPassword = (password) => {
+  if (!passwordPattern.test(password)) {
+    throw new ApiError(
+      400,
+      "Password must be at least 8 characters and include letters and numbers"
+    );
+  }
+};
 
 const RegisterUser = AsyncHandler(async (req, res) => {
   const { username, fullname, email, password, phoneNumber } = req.body;
+  const normalizedUsername = normalizeUsername(username);
+  const normalizedEmail = normalizeEmail(email);
+  const normalizedFullname = fullname?.trim();
+  const normalizedPhoneNumber = `${phoneNumber ?? ""}`.trim();
 
-  if (!username && !fullname && !email && !password && !phoneNumber) {
+  if (
+    !normalizedUsername ||
+    !normalizedFullname ||
+    !normalizedEmail ||
+    !password ||
+    !normalizedPhoneNumber
+  ) {
     throw new ApiError(400, "All field are required");
   }
 
-  let user = await User.findOne({ $or: [{ email }, { username }] });
+  if (!usernamePattern.test(normalizedUsername)) {
+    throw new ApiError(
+      400,
+      "Username must be 3-20 characters and use only letters, numbers, dots or underscores"
+    );
+  }
+
+  if (!emailPattern.test(normalizedEmail)) {
+    throw new ApiError(400, "Please enter a valid email address");
+  }
+
+  if (!phonePattern.test(normalizedPhoneNumber)) {
+    throw new ApiError(400, "Please enter a valid phone number");
+  }
+
+  assertValidPassword(password);
+
+  let user = await User.findOne({
+    $or: [{ email: normalizedEmail }, { username: normalizedUsername }],
+  });
 
   if (user) {
     throw new ApiError(409, "User Already exist");
@@ -42,11 +100,11 @@ const RegisterUser = AsyncHandler(async (req, res) => {
   const securePassword = await GenerateHashedPassword(password);
 
   user = await User.create({
-    username,
-    fullname,
-    email,
+    username: normalizedUsername,
+    fullname: normalizedFullname,
+    email: normalizedEmail,
     password: securePassword,
-    phoneNumber,
+    phoneNumber: Number(normalizedPhoneNumber),
     coverImage: null,
   });
 
@@ -55,12 +113,6 @@ const RegisterUser = AsyncHandler(async (req, res) => {
   if (!user) {
     throw new ApiError(500, "Internal server error !!");
   }
-  const options = {
-    httpOnly: true,
-    secure: true, // Secure in production
-    sameSite: "Strict", // Helps protect against CSRF attacks
-    maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-  };
   const payload = {
     _id: user._id,
     username: user.username,
@@ -81,7 +133,7 @@ const RegisterUser = AsyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .cookie("authToken", token, options)
+    .cookie("authToken", token, buildCookieOptions())
     .json(
       new ApiResponse(200, { user, token }, "User successfully registered")
     );
@@ -106,11 +158,17 @@ const GerUserDetails = AsyncHandler(async (req, res) => {
 
 const Login = AsyncHandler(async (req, res) => {
   const { username, password } = req.body;
+  const identifier = `${username ?? ""}`.trim();
 
-  if (!username && !password) {
+  if (!identifier || !password) {
     throw new ApiError(400, "username and password are required !");
   }
-  let user = await User.findOne({ username });
+
+  const loginQuery = emailPattern.test(identifier)
+    ? { email: normalizeEmail(identifier) }
+    : { username: normalizeUsername(identifier) };
+
+  let user = await User.findOne(loginQuery);
 
   if (!user) {
     throw new ApiError(404, "Please authenticate with valid credentials");
@@ -123,12 +181,6 @@ const Login = AsyncHandler(async (req, res) => {
 
   user.password = undefined;
 
-  const options = {
-    httpOnly: false,
-    secure: false, // Secure in production
-    sameSite: "Strict", // Helps protect against CSRF attacks
-    maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-  };
   const payload = {
     _id: user._id,
     username: user.username,
@@ -149,7 +201,7 @@ const Login = AsyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .cookie("authToken", token, options)
+    .cookie("authToken", token, buildCookieOptions())
     .json(new ApiResponse(200, { user, token }, "User successfully logged in"));
 });
 
@@ -158,15 +210,9 @@ const Logout = AsyncHandler(async (req, res) => {
   if (!user) {
     throw new ApiError(401, "User Unauthorized !");
   }
-  const options = {
-    httpOnly: false,
-    secure: false, // Secure in production
-    sameSite: "Strict", // Helps protect against CSRF attacks
-    maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-  };
   return res
     .status(200)
-    .clearCookie("authToken", options)
+    .clearCookie("authToken", buildCookieOptions())
     .json(new ApiResponse(200, {}, "User logged out successfully"));
 });
 
@@ -206,6 +252,10 @@ const UpdateUserDetails = AsyncHandler(async (req, res) => {
 
 const ChangePassword = AsyncHandler(async (req, res) => {
   const { newPassword, oldPassword } = req.body;
+  if (!newPassword || !oldPassword) {
+    throw new ApiError(400, "Old password and new password are required");
+  }
+
   let user = await User.findById(req.user._id);
   if (!user) {
     throw new ApiError(401, "Plase authenticate with a valid user credentials");
@@ -215,9 +265,11 @@ const ChangePassword = AsyncHandler(async (req, res) => {
   if (!checkPassword) {
     throw new ApiError(401, "Old password is incorrect !");
   }
-  user = await User.findOneAndUpdate(req.user._id, {
+  const hashedPassword = await GenerateHashedPassword(newPassword);
+
+  user = await User.findByIdAndUpdate(req.user._id, {
     $set: {
-      password: newPassword,
+      password: hashedPassword,
     },
   }).select("-password");
 
@@ -235,6 +287,10 @@ const ChangePassword = AsyncHandler(async (req, res) => {
 
 const ChangeEmail = AsyncHandler(async (req, res) => {
   const { email, password } = req.body;
+  if (!email || !password) {
+    throw new ApiError(400, "Email and password are required");
+  }
+
   let user = await User.findById(req.user._id);
   if (!user) {
     throw new ApiError(401, "Plase authenticate with a valid user credentials");
@@ -244,7 +300,7 @@ const ChangeEmail = AsyncHandler(async (req, res) => {
   if (!checkPassword) {
     throw new ApiError(401, "Password is incorrect !");
   }
-  user = await User.findOneAndUpdate(req.user._id, {
+  user = await User.findByIdAndUpdate(req.user._id, {
     $set: {
       email,
     },
@@ -257,15 +313,17 @@ const ChangeEmail = AsyncHandler(async (req, res) => {
 
 const ChangeMobileNumber = AsyncHandler(async (req, res) => {
   const { newNumber, oldNumber } = req.body;
-  if (!newNumber && !oldNumber) {
+  if (!newNumber || !oldNumber) {
     throw new ApiError(400, "All fields are required !");
   }
   let user = await User.findById(req.user._id)?.select("-password");
   if (!user) throw new ApiError(404, "User not found !");
+  if (`${user.phoneNumber}` !== `${oldNumber}`) {
+    throw new ApiError(400, "Old phone number does not match");
+  }
   user.phoneNumber = newNumber;
 
   user = await user.save({ validateBeforeSave: false });
-  console.log("189 : ", user);
 
   return res
     .status(200)
@@ -285,11 +343,13 @@ const ChangeAvater = AsyncHandler(async (req, res) => {
     $set: {
       avatar: cloudinaryUrl.url,
     },
-  })?.select("-password");
+  }, { new: true })?.select("-password");
   if (!user) {
     throw new ApiError(500, "Error occured while updating avater ");
   }
-  return res.status(200).json(200, user, "Avatar change successfully");
+  return res
+    .status(200)
+    .json(new ApiResponse(200, { user }, "Avatar changed successfully"));
 });
 
 const ChangeCoverImage = AsyncHandler(async (req, res) => {
@@ -307,75 +367,113 @@ const ChangeCoverImage = AsyncHandler(async (req, res) => {
     $set: {
       coverImage: cloudinaryCoverUrl.url,
     },
-  })?.select("-password");
+  }, { new: true })?.select("-password");
 
   if (!user) {
     throw new ApiError(500, " Error occured while updating cover image ");
   }
-  return res.status(200).json(200, user, "Cover image update successfully");
+  return res
+    .status(200)
+    .json(new ApiResponse(200, { user }, "Cover image updated successfully"));
 });
 
 const CheckCookie = AsyncHandler(async (req, res) => {
-  const token = req.cookies?.authToken;
+  const token =
+    req.cookies?.authToken ||
+    req.header("Authorization")?.replace("Bearer ", "");
   return res
     .status(200)
     .json(new ApiResponse(200, { token }, "Token fetched successfully !"));
 });
-//TODO:-> Using link
-let Useremail = null;
 const ForgotPassword = AsyncHandler(async (req, res) => {
-  const { email } = req.body;
-  let user = await User.findOne(email);
+  const normalizedEmail = normalizeEmail(req.body.email);
+  if (!normalizedEmail) {
+    throw new ApiError(400, "Email is required");
+  }
+
+  if (!emailPattern.test(normalizedEmail)) {
+    throw new ApiError(400, "Please enter a valid email address");
+  }
+
+  let user = await User.findOne({ email: normalizedEmail });
   if (!user) {
     throw new ApiError(400, "User is not found !");
   }
-  VerificationOtp = Math.round(100000 + (999999 - 100000) * Math.random());
+  const verificationOtp = Math.floor(100000 + Math.random() * 900000).toString();
+  resetOtpStore.set(normalizedEmail, {
+    otp: verificationOtp,
+    expiresAt: Date.now() + 10 * 60 * 1000,
+  });
 
   const mailOptions = {
-    from: process.env.PRODUCTION_EMAIL,
-    to: email,
+    from: process.env.EMAIL_USER,
+    to: normalizedEmail,
     subject: "Password Reset OTP for Your Account\n",
 
-    text: `We have received a request to reset the password for your account associated with Memois\n\n\n Your Varification Code :${VerificationOtp} . 
-    ${Link}`,
+    text: `We received a request to reset your Memois password.\n\nVerification code: ${verificationOtp}\nThis code expires in 10 minutes.`,
   };
   try {
     await transporter.sendMail(mailOptions);
   } catch (error) {
     throw new ApiError(500, error.message || "Error while sending otp");
   }
-  Useremail = email;
-  return res.status(200).json(200, otp, "OTP send successfully");
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "OTP sent successfully"));
 });
 
 const VerifyOTP = AsyncHandler(async (req, res) => {
-  const { otp } = req.body;
+  const email = normalizeEmail(req.body.email);
+  const otp = `${req.body.otp ?? ""}`.trim();
+  const resetRequest = resetOtpStore.get(email);
 
-  if (otp !== VerificationOtp) {
+  if (!email || !otp) {
+    throw new ApiError(400, "Email and otp are required");
+  }
+
+  if (!resetRequest || !otp || Date.now() > resetRequest.expiresAt) {
+    throw new ApiError(401, "Verification code expired or invalid");
+  }
+
+  if (`${otp}` !== `${resetRequest.otp}`) {
     throw new ApiError(401, "Invalid Varification code ");
   }
 
-  return res.status(200).json(200, "OTP Verification successfully");
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "OTP verified successfully"));
 });
 
 const ResetPassword = AsyncHandler(async (req, res) => {
+  const email = normalizeEmail(req.body.email);
+  const otp = `${req.body.otp ?? ""}`.trim();
   const { newPassword } = req.body;
+  const resetRequest = resetOtpStore.get(email);
+
+  if (!email || !otp || !newPassword) {
+    throw new ApiError(400, "Email, otp and newPassword are required");
+  }
+
+  if (!resetRequest || Date.now() > resetRequest.expiresAt) {
+    throw new ApiError(401, "Verification code expired or invalid");
+  }
+
+  if (`${otp}` !== `${resetRequest.otp}`) {
+    throw new ApiError(401, "Invalid verification code");
+  }
+
+  assertValidPassword(newPassword);
 
   const secPassword = await GenerateHashedPassword(newPassword);
 
-  let user = await User.findOneAndUpdate(Useremail, {
+  let user = await User.findOneAndUpdate({ email }, {
     $set: {
       password: secPassword,
     },
-  })?.select("-password");
+  }, { new: true })?.select("-password");
   if (!user) {
     throw new ApiError(500, "Error occured while changing password");
   }
-
-  const options = {
-    httpOnly: true,
-    secure: true,
-  };
 
   const payload = {
     _id: user._id,
@@ -384,10 +482,11 @@ const ResetPassword = AsyncHandler(async (req, res) => {
   };
 
   const token = encodeAuthToken(payload);
+  resetOtpStore.delete(email);
 
   return res
     .status(200)
-    .cookie("authToken", token, options)
+    .cookie("authToken", token, buildCookieOptions())
     .json(
       new ApiResponse(200, { user, token }, "User password change successfully")
     );

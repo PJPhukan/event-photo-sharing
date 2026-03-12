@@ -15,7 +15,9 @@ const CompareHashedPassword = async (password, oldPassword) => {
 
 //encode jwt token
 const encodeAuthToken = (payload) => {
-  return jwt.sign(payload, process.env.JWT_SECRET);
+  return jwt.sign(payload, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN || "7d",
+  });
 };
 
 //decode jwt token

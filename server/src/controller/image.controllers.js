@@ -5,6 +5,7 @@ import { AsyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 import { cloudinaryUpload, cloudinaryDelete } from "../utils/cloudinary.js";
+
 const UploadImage = AsyncHandler(async (req, res) => {
   const { eventId } = req.params;
   const files = req.files;
@@ -15,6 +16,9 @@ const UploadImage = AsyncHandler(async (req, res) => {
 
   const event = await Event.findById(eventId);
   if (!event) throw new ApiError(404, "Event not found !");
+  if (event.user_id.toString() !== req.user._id.toString()) {
+    throw new ApiError(403, "You do not have access to this event");
+  }
   const user = await User.findById(event.user_id);
   if (!user) throw new ApiError(404, "User not found !");
 
@@ -61,28 +65,33 @@ const DeleteImage = AsyncHandler(async (req, res) => {
   const { imageId } = req.params;
   const image = await Image.findById(imageId);
   if (!image) throw new ApiError(404, "Image not found !");
-  const user = await User.findById(image.user_id);
-  if (!user) throw new ApiError(404, "User not found !");
+  if (image.user_id.toString() !== req.user._id.toString()) {
+    throw new ApiError(403, "You do not have access to this image");
+  }
 
-  const deletedImage = await cloudinaryDelete(image.image_public_id);
-  if (!deletedImage.result) {
+  const deletedImage = await cloudinaryDelete(
+    image.image_public_id,
+    image.resource_type
+  );
+  if (!deletedImage || deletedImage.result !== "ok") {
     throw new ApiError(
       500,
       "Error occured while deleting image from cloudinary"
     );
   }
-  const result = await User.findByIdAndDelete(imageId);
-  if (result) {
-    return res
-      .status(200)
-      .json(new ApiResponse(200, "Image deleted successfully"));
-  }
+  await Image.findByIdAndDelete(imageId);
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Image deleted successfully"));
 });
 
 const GetImage = AsyncHandler(async (req, res) => {
   const { imageId } = req.params;
   const image = await Image.findById(imageId);
   if (!image) throw new ApiError(404, "Image not found");
+  if (image.user_id.toString() !== req.user._id.toString()) {
+    throw new ApiError(403, "You do not have access to this image");
+  }
   return res
     .status(200)
     .json(new ApiResponse(200, { image }, "Image fetched successfully"));

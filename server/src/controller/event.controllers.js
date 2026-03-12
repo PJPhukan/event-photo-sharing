@@ -5,6 +5,27 @@ import { AsyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 import mongoose from "mongoose";
+import { cloudinaryDelete } from "../utils/cloudinary.js";
+import { Like } from "../model/likes.model.js";
+import { Notification } from "../model/notification.model.js";
+
+const ensureOwnedEvent = async (eventId, userId) => {
+  if (!mongoose.Types.ObjectId.isValid(eventId)) {
+    throw new ApiError(400, "Invalid event id");
+  }
+
+  const event = await Event.findById(eventId);
+  if (!event) {
+    throw new ApiError(404, "Event not found !");
+  }
+
+  if (event.user_id.toString() !== userId.toString()) {
+    throw new ApiError(403, "You do not have access to this event");
+  }
+
+  return event;
+};
+
 const CreateEvent = AsyncHandler(async (req, res) => {
   const { name, description, date, location, type, contact } = req.body;
 
@@ -38,8 +59,7 @@ const EditEvent = AsyncHandler(async (req, res) => {
   const { eventId } = req.params;
   const { ename, edescription, edate, elocation, etype, econtact } = req.body;
 
-  let event = await Event.findById(eventId);
-  if (!event) throw new ApiError(404, "Event not found !");
+  let event = await ensureOwnedEvent(eventId, req.user._id);
 
   const UpdateEvent = {};
 
@@ -70,14 +90,20 @@ const EditEvent = AsyncHandler(async (req, res) => {
 
 const DeleteEvent = AsyncHandler(async (req, res) => {
   const { eventId } = req.params;
-  let event = await Event.findById(eventId);
-  if (!event) throw new ApiError(404, "Event not found !");
+  await ensureOwnedEvent(eventId, req.user._id);
 
   let images = await Image.find({ event_id: eventId });
   if (images.length > 0) {
+    await Promise.all(
+      images.map((image) =>
+        cloudinaryDelete(image.image_public_id, image.resource_type)
+      )
+    );
     await Image.deleteMany({ event_id: eventId });
   }
 
+  await Like.deleteMany({ event_id: eventId });
+  await Notification.deleteMany({ imageId: { $in: images.map((img) => img._id) } });
   await Event.findByIdAndDelete(eventId);
   return res
     .status(200)
@@ -97,7 +123,7 @@ const GetAllEvent = AsyncHandler(async (req, res) => {
 
 const EventDetails = AsyncHandler(async (req, res) => {
   const { eventId } = req.params;
-  const { _id } = req.user._id;
+  const { _id } = req.user;
   // console.log(eventId);
   if (!eventId || !_id) {
     throw new ApiError(401, "Unauthorized");

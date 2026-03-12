@@ -7,7 +7,7 @@ import { Event } from "../model/event.model.js";
 import { Image } from "../model/image.model.js";
 
 const GetTotalLike = AsyncHandler(async (req, res) => {
-  const { _id } = req.user._id;
+  const { _id } = req.user;
 
   const TotalLike = await Like.aggregate([
     {
@@ -29,7 +29,7 @@ const GetTotalLike = AsyncHandler(async (req, res) => {
 });
 
 const GetTotalEvent = AsyncHandler(async (req, res) => {
-  const { _id } = req.user._id;
+  const { _id } = req.user;
 
   const TotalEvent = await Event.aggregate([
     {
@@ -53,7 +53,7 @@ const GetTotalEvent = AsyncHandler(async (req, res) => {
 });
 
 const GetTotalImages = AsyncHandler(async (req, res) => {
-  const { _id } = req.user._id;
+  const { _id } = req.user;
 
   const TotalImages = await Image.aggregate([
     {
@@ -78,7 +78,7 @@ const GetTotalImages = AsyncHandler(async (req, res) => {
 });
 
 const GetTotalVideos = AsyncHandler(async (req, res) => {
-  const { _id } = req.user._id;
+  const { _id } = req.user;
 
   const TotalVideo = await Image.aggregate([
     {
@@ -103,7 +103,7 @@ const GetTotalVideos = AsyncHandler(async (req, res) => {
 });
 
 const GetEventData = AsyncHandler(async (req, res) => {
-  const { _id } = req.user._id;
+  const { _id } = req.user;
 
   const combined_details = await Event.aggregate([
     {

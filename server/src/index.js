@@ -1,11 +1,8 @@
 import "dotenv/config";
-import express from "express";
 import { app } from "./app.js";
 import { MongoConnect } from "./db/index.js";
 
 const port = process.env.PORT || 4000;
-
-
 
 MongoConnect()
   .then(() => {

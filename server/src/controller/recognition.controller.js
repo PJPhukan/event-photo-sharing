@@ -5,6 +5,8 @@ import mongoose from "mongoose";
 import { User } from "../model/user.model.js";
 import { Like } from "../model/likes.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
+import { Image } from "../model/image.model.js";
+import { Notification } from "../model/notification.model.js";
 const GetDetails = AsyncHandler(async (req, res) => {
   const { userId, eventId } = req.params;
   // console.log("userId: ", userId);
@@ -69,10 +71,15 @@ const GetDetails = AsyncHandler(async (req, res) => {
 const UserLike = AsyncHandler(async (req, res) => {
   const { _id, username, avatar } = req.user;
   const { owner, imageId, eventId } = req.body;
+  if (!owner || !imageId || !eventId) {
+    throw new ApiError(400, "owner, imageId and eventId are required");
+  }
+
   const like = await Like.findOne({ likedUser: _id, image: imageId });
-  
-  console.log(like);
   const image = await Image.findById(imageId);
+  if (!image) {
+    throw new ApiError(404, "Image not found");
+  }
 
   if (like) {
     return res
@@ -88,26 +95,25 @@ const UserLike = AsyncHandler(async (req, res) => {
   if (!newLike) {
     throw new ApiError(500, "Failed to create like");
   }
-  console.log(newLike);
 
-  //Add congratulation message to user
-  const LikeResponse = await Notification.create({
-    message: `${username} liked your ${
-      image.resource_type ? image.resource_type : "photo"
-    }.`,
-    owner_id: owner,
-    imageId: imageId,
-    username: username,
-    type: "like",
-    avatar,
-  });
+  if (image.user_id.toString() !== _id.toString()) {
+    await Notification.create({
+      message: `${username} liked your ${
+        image.resource_type ? image.resource_type : "photo"
+      }.`,
+      owner_id: owner,
+      imageId: imageId,
+      username: username,
+      type: "like",
+      avatar,
+    });
+  }
 
-  console.log("Like Response from recogition");
   return res.status(200).json(new ApiResponse(200, "User liked successfully"));
 });
 
 const UserDislike = AsyncHandler(async (req, res) => {
-  const { _id } = req.user;
+  const { _id, username } = req.user;
   const { imageId } = req.params;
   // console.log(imageId);
   let like = await Like.findOne({ likedUser: _id, image: imageId });
@@ -120,13 +126,12 @@ const UserDislike = AsyncHandler(async (req, res) => {
     throw new ApiError(500, "Failed to dislike the media");
   }
   //delete notification that user
-  const deleteLikeNotification = await Notification.deleteOne({
-    user_id: _id,
+  await Notification.deleteOne({
+    owner_id: like.user,
     username,
     imageId,
+    type: "like",
   });
-
-  console.log("Delete notification result ", deleteLikeNotification);
 
   return res
     .status(200)
