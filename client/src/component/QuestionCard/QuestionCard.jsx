@@ -1,5 +1,5 @@
 import React from "react";
-import "./QuestionCard.scss";
+import "./questioncard.scss";
 
 const QuestionCard = ({ card, active, onToggle }) => {
   return (
