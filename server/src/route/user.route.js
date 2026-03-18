@@ -4,7 +4,12 @@ import {
   RegisterUser,
   GerUserDetails,
   Login,
+  LoginWithTwoFactor,
   Logout,
+  GetTwoFactorStatus,
+  SetupTwoFactor,
+  VerifyTwoFactor,
+  DisableTwoFactor,
   ChangePassword,
   ChangeMobileNumber,
   ChangeAvater,
@@ -16,7 +21,7 @@ import {
   CheckCookie,
   ChangeEmail,
   DeleteAccount,
-  GetUserId
+  GetUserId,
 } from "../controller/user.conrollers.js";
 import { VerifyJwtToken } from "../libs/auth.helpers.js";
 const router = Router();
@@ -26,6 +31,12 @@ router.route("/register").post(RegisterUser); //No logged in required
 router.route("/getdetails").get(VerifyJwtToken, GerUserDetails); //user logged in required
 
 router.route("/login").post(Login); //no logged in required
+router.route("/login-2fa").post(LoginWithTwoFactor); //no logged in required
+
+router.route("/2fa/status").get(VerifyJwtToken, GetTwoFactorStatus);
+router.route("/2fa/setup").post(VerifyJwtToken, SetupTwoFactor);
+router.route("/2fa/verify").post(VerifyJwtToken, VerifyTwoFactor);
+router.route("/2fa/disable").post(VerifyJwtToken, DisableTwoFactor);
 
 router.route("/logout").post(VerifyJwtToken, Logout); //user logged in required
 

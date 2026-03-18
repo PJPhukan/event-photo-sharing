@@ -1,0 +1,142 @@
+@import "../../css-config/mixins.scss";
+@import "../../css-config/variables.scss";
+
+.collection-details {
+  max-width: 100%;
+  min-height: 100vh;
+  background: $dashboard-bg-secondary;
+  padding: 0.75rem;
+  font-family: "Tilt Neon", sans-serif;
+  color: $text-color-primary;
+
+  @include lg {
+    padding: 1.5rem;
+  }
+
+  .collection-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+    padding: 1rem 1.2rem;
+    background: $dashboard-bg-primary;
+    border-radius: 16px;
+    border: 1px solid #ffffff14;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+
+    h2 {
+      font-size: $font-size-large;
+      margin-bottom: 0.25rem;
+    }
+
+    p {
+      color: $text-color-secondary;
+      font-size: $font-size-small;
+    }
+  }
+
+  .view-toggle {
+    display: flex;
+    gap: 0.4rem;
+    background: $dashboard-bg-primary;
+    padding: 0.3rem;
+    border-radius: 8px;
+    border: 1px solid #ffffff1a;
+
+    button {
+      border: none;
+      background: transparent;
+      color: $text-color-primary;
+      padding: 0.4rem 0.7rem;
+      border-radius: 6px;
+      font-family: "Tilt Neon", sans-serif;
+      font-size: $font-size-small;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+
+      &.active {
+        background: $dashboard-bg-secondary;
+      }
+    }
+  }
+
+  .collection-empty {
+    background: $dashboard-bg-primary;
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    color: $text-color-secondary;
+  }
+
+  .collection-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+  }
+
+  .collection-table {
+    background: $dashboard-bg-primary;
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid #ffffff1a;
+    overflow-x: auto;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: $font-size-small;
+
+      th,
+      td {
+        padding: 0.7rem 0.6rem;
+        text-align: left;
+        border-bottom: 1px solid #ffffff1a;
+        color: $text-color-primary;
+      }
+
+      th {
+        color: $text-color-secondary;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-size: 12px;
+      }
+    }
+
+    .media-cell {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+
+      img,
+      video {
+        width: 46px;
+        height: 46px;
+        border-radius: 8px;
+        object-fit: cover;
+        background: #0b0b0b;
+        display: block;
+      }
+    }
+
+    .table-actions {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+
+      button {
+        background: transparent;
+        border: 1px solid #ffffff1f;
+        color: $text-color-primary;
+        padding: 0.35rem 0.6rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px;
+      }
+    }
+  }
+}

@@ -14,3 +14,27 @@ axios.interceptors.request.use((config) => {
   return config;
 });
 
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const status = error?.response?.status;
+    const message = error?.response?.data?.message || "";
+    const normalized = String(message).toLowerCase();
+
+    if (
+      status === 401 ||
+      status === 409 ||
+      normalized.includes("invalid signature") ||
+      normalized.includes("not authorized") ||
+      normalized.includes("invalid authentication")
+    ) {
+      window.localStorage.removeItem("token");
+      window.localStorage.removeItem("userId");
+      if (window.location.pathname.startsWith("/dashboard")) {
+        window.location.replace("/login");
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);

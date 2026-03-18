@@ -1,0 +1,168 @@
+@import "../../css-config/mixins.scss";
+@import "../../css-config/variables.scss";
+
+.collection-picker-overlay {
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  z-index: 1500;
+  padding: 1rem;
+  pointer-events: none;
+}
+
+.collection-picker {
+  width: min(420px, 100%);
+  max-width: calc(100vw - 32px);
+  background: $dashboard-bg-primary;
+  border-radius: 14px;
+  border: 1px solid #ffffff1f;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+  color: $text-color-primary;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  bottom: 24px;
+  pointer-events: auto;
+  animation: slideUp 0.18s ease;
+}
+
+.collection-picker.anchor-right {
+  right: 24px;
+}
+
+.collection-picker.anchor-left {
+  left: 24px;
+}
+
+@media (max-width: 768px) {
+  .collection-picker {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    width: auto;
+  }
+}
+
+.picker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.2rem 0.6rem;
+
+  h3 {
+    font-size: $font-size-base;
+  }
+
+  .close-btn {
+    background: transparent;
+    border: none;
+    color: $text-color-primary;
+    font-size: $font-size-large;
+    cursor: pointer;
+  }
+}
+
+.picker-body {
+  padding: 0.6rem 1.2rem 1rem;
+}
+
+.collection-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.collection-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: $dashboard-bg-third;
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+  cursor: pointer;
+  border: 1px solid #ffffff12;
+  transition: background 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-1px);
+  }
+
+  input {
+    accent-color: #003fff;
+  }
+
+  .collection-name {
+    flex: 1;
+  }
+
+  .collection-count {
+    font-size: $font-size-small;
+    color: $text-color-secondary;
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: $text-color-secondary;
+
+  .empty-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: $dashboard-bg-third;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: $text-color-primary;
+  }
+}
+
+.picker-footer {
+  padding: 0.9rem 1.2rem 1.2rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.primary-btn {
+  background: linear-gradient(90deg, #003fff, #0b31ac);
+  border: none;
+  color: $text-color-primary;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+}
+
+.single-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: $text-color-secondary;
+}
+
+.single-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: $dashboard-bg-third;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: $text-color-primary;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

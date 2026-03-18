@@ -10,7 +10,15 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const usecontext = useContext(context);
-  const { login, error, setadminlogin, setcreateEvent, setError, showToast } =
+  const {
+    login,
+    loginWithTwoFactor,
+    error,
+    setadminlogin,
+    setcreateEvent,
+    setError,
+    showToast,
+  } =
     usecontext;
 
   const [loginuser, setUser] = useState({
@@ -21,6 +29,11 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [twoFactorRequired, setTwoFactorRequired] = useState(false);
+  const [twoFactorToken, setTwoFactorToken] = useState("");
+  const [twoFactorCode, setTwoFactorCode] = useState("");
+  const [useBackupCode, setUseBackupCode] = useState(false);
+  const [backupCode, setBackupCode] = useState("");
 
   useEffect(() => {
     const savedUsername = localStorage.getItem("memois_remembered_username");
@@ -69,8 +82,63 @@ const Login = () => {
     });
     setIsSubmitting(false);
 
+    if (response?.data?.requiresTwoFactor) {
+      setTwoFactorRequired(true);
+      setTwoFactorToken(response.data.twoFactorToken || "");
+      showToast("Enter your 2FA code to continue", "info");
+      return;
+    }
+
     if (response?.success) {
       if (rememberMe) {
+        localStorage.setItem("memois_remembered_username", identifier);
+        localStorage.setItem("memois_remember_me", "true");
+      } else {
+        localStorage.removeItem("memois_remembered_username");
+        localStorage.removeItem("memois_remember_me");
+      }
+
+      setadminlogin(true);
+      if (location.state?.redirectToCreateEvent) {
+        setcreateEvent(true);
+        navigate("/dashboard/event");
+        return;
+      }
+      navigate("/");
+    }
+  };
+
+  const handleTwoFactorVerify = async (e) => {
+    e.preventDefault();
+    if (!twoFactorToken) {
+      showToast("Two-factor session expired. Please login again.", "error");
+      setTwoFactorRequired(false);
+      return;
+    }
+
+    const payload = {
+      twoFactorToken,
+      token: useBackupCode ? undefined : twoFactorCode.trim(),
+      backupCode: useBackupCode ? backupCode.trim() : undefined,
+    };
+
+    if (useBackupCode && !payload.backupCode) {
+      showToast("Backup code is required", "error");
+      return;
+    }
+
+    if (!useBackupCode && !payload.token) {
+      showToast("Verification code is required", "error");
+      return;
+    }
+
+    setIsSubmitting(true);
+    const response = await loginWithTwoFactor(payload);
+    setIsSubmitting(false);
+
+    if (response?.success) {
+      const identifier = loginuser.username.trim();
+      if (rememberMe && identifier) {
         localStorage.setItem("memois_remembered_username", identifier);
         localStorage.setItem("memois_remember_me", "true");
       } else {
@@ -111,7 +179,8 @@ const Login = () => {
               Sign in to manage your events, upload media, and share private galleries.
             </div>
             <div className="error-box">{error}</div>
-            <form method="post" autoComplete="off" onSubmit={HandleLogIn}>
+            {!twoFactorRequired ? (
+              <form method="post" autoComplete="off" onSubmit={HandleLogIn}>
               <div className="trap-fields" aria-hidden="true">
                 <input type="text" name="fake-username" autoComplete="username" tabIndex="-1" />
                 <input
@@ -186,7 +255,46 @@ const Login = () => {
               >
                 Log In
               </LoadingButton>
-            </form>
+              </form>
+            ) : (
+              <form method="post" autoComplete="off" onSubmit={handleTwoFactorVerify}>
+                <div className="input-box">
+                  <label htmlFor="login-2fa-code">
+                    {useBackupCode ? "Backup code" : "Authenticator code"}
+                  </label>
+                  <input
+                    type="text"
+                    id="login-2fa-code"
+                    placeholder={useBackupCode ? "Enter backup code" : "6-digit code"}
+                    value={useBackupCode ? backupCode : twoFactorCode}
+                    onChange={(e) =>
+                      useBackupCode
+                        ? setBackupCode(e.target.value)
+                        : setTwoFactorCode(e.target.value)
+                    }
+                  />
+                </div>
+                <div className="auth-meta">
+                  <label className="remember-row">
+                    <input
+                      type="checkbox"
+                      checked={useBackupCode}
+                      onChange={(e) => setUseBackupCode(e.target.checked)}
+                    />
+                    <span className="remember-box"></span>
+                    <span>Use backup code</span>
+                  </label>
+                </div>
+                <LoadingButton
+                  className="login-button"
+                  type="submit"
+                  loading={isSubmitting}
+                  loadingText="Verifying"
+                >
+                  Verify
+                </LoadingButton>
+              </form>
+            )}
 
             <div className="social-auth">
               <div className="divider">

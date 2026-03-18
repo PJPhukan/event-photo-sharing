@@ -8,6 +8,8 @@ import likeRouter from "./route/like.route.js";
 import dashboardRouter from "./route/dashboard.route.js";
 import faceRouter from "./route/recognition.route.js";
 import notifcationRouter from "./route/notification.route.js";
+import favoriteRouter from "./route/favorite.route.js";
+import collectionRouter from "./route/collection.route.js";
 import { ApiError } from "./utils/ApiError.js";
 const app = express();
 
@@ -46,6 +48,8 @@ app.use("/api/like", likeRouter);
 app.use("/api/dashboard", dashboardRouter);
 app.use("/api/face-recognition", faceRouter);
 app.use("/api/notification", notifcationRouter);
+app.use("/api/favorite", favoriteRouter);
+app.use("/api/collection", collectionRouter);
 
 app.use((_req, _res, next) => {
   next(new ApiError(404, "Route not found"));

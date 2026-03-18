@@ -13,6 +13,12 @@ const GetDetails = AsyncHandler(async (req, res) => {
   if (!userId || !eventId) {
     throw new ApiError(401, "Unauthorized");
   }
+  if (
+    !mongoose.Types.ObjectId.isValid(userId) ||
+    !mongoose.Types.ObjectId.isValid(eventId)
+  ) {
+    throw new ApiError(400, "Invalid user or event id");
+  }
   const user = await User.findById(userId);
 
   if (!user) {
@@ -74,6 +80,13 @@ const UserLike = AsyncHandler(async (req, res) => {
   if (!owner || !imageId || !eventId) {
     throw new ApiError(400, "owner, imageId and eventId are required");
   }
+  if (
+    !mongoose.Types.ObjectId.isValid(owner) ||
+    !mongoose.Types.ObjectId.isValid(imageId) ||
+    !mongoose.Types.ObjectId.isValid(eventId)
+  ) {
+    throw new ApiError(400, "Invalid owner, image, or event id");
+  }
 
   const like = await Like.findOne({ likedUser: _id, image: imageId });
   const image = await Image.findById(imageId);
@@ -116,18 +129,21 @@ const UserDislike = AsyncHandler(async (req, res) => {
   const { _id, username } = req.user;
   const { imageId } = req.params;
   // console.log(imageId);
-  let like = await Like.findOne({ likedUser: _id, image: imageId });
+  if (!mongoose.Types.ObjectId.isValid(imageId)) {
+    throw new ApiError(400, "Invalid image id");
+  }
+  const existingLike = await Like.findOne({ likedUser: _id, image: imageId });
   // console.log(like);
-  if (!like) {
+  if (!existingLike) {
     throw new ApiError(400, "You did not liked yet");
   }
-  like = await Like.deleteOne({ likedUser: _id, image: imageId });
-  if (!like) {
+  const deleteResult = await Like.deleteOne({ likedUser: _id, image: imageId });
+  if (!deleteResult?.deletedCount) {
     throw new ApiError(500, "Failed to dislike the media");
   }
   //delete notification that user
   await Notification.deleteOne({
-    owner_id: like.user,
+    owner_id: existingLike.user,
     username,
     imageId,
     type: "like",

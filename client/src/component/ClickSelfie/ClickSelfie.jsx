@@ -28,19 +28,16 @@ const ClickSelfie = ({
     
     setloading(true);
     setIsSearching(true);
-    
-    const userImagePromises = fetchData.map(async (item, index) => {
-      if (item.resource_type === "image") {
-        console.log(`🔍 Checking image ${index}:`, item.imageUrl);
-        const result = await recognize(imageSrc, item.imageUrl);
-        console.log(`✅ Image ${index} result:`, result);
-        return result ? item : null;
-      }
-      return null;
-    });
-    
-    const userImageResults = await Promise.all(userImagePromises);
-    const userImages = userImageResults.filter((item) => item !== null);
+
+    const userImages = [];
+    for (let index = 0; index < fetchData.length; index += 1) {
+      const item = fetchData[index];
+      if (item?.resource_type !== "image") continue;
+      console.log(`🔍 Checking image ${index}:`, item.imageUrl);
+      const result = await recognize(imageSrc, item.imageUrl);
+      console.log(`✅ Image ${index} result:`, result);
+      if (result) userImages.push(item);
+    }
     console.log('🎯 Final matches:', userImages.length);
     
     setuserImage(userImages);

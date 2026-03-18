@@ -50,6 +50,28 @@ const userSchema = new Schema(
     coverImage: {
       type: String,
     },
+    twoFactorEnabled: {
+      type: Boolean,
+      default: false,
+    },
+    twoFactorSecret: {
+      type: String,
+      default: null,
+    },
+    twoFactorTempSecret: {
+      type: String,
+      default: null,
+    },
+    twoFactorBackupCodes: [
+      {
+        codeHash: { type: String, required: true },
+        used: { type: Boolean, default: false },
+      },
+    ],
+    twoFactorLastUsedStep: {
+      type: Number,
+      default: null,
+    },
   },
   {
     timestamps: true,

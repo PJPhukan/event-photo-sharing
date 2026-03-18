@@ -107,6 +107,7 @@ const Navber = () => {
               key={item.to}
               to={item.to}
               className={isActivePath(location.pathname, item.to) ? "active" : ""}
+              onClick={closeMenu}
             >
               {item.label}
             </Link>
@@ -118,10 +119,11 @@ const Navber = () => {
             to="/login"
             state={{ redirectToCreateEvent: true }}
             className="desktop-create"
+            onClick={closeMenu}
           >
             Create Event
           </Link>
-          <Link to="/login" className="desktop-login">
+          <Link to="/login" className="desktop-login" onClick={closeMenu}>
             Login
           </Link>
         </div>

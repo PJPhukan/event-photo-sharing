@@ -5,23 +5,29 @@
 
 .sidebar {
   font-family: "Tilt Neon", sans-serif;
-  position: sticky;
+  position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
   color: $text-color-primary;
   // width: auto;
   min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
   padding: 0 0.2rem;
   overflow: hidden;
+  overflow-y: auto;
   transition: all 0.2s linear;
   background: $dashboard-bg-primary;
   transition: all 0.3s;
+  z-index: 1000;
   &.show {
     width: 15rem;
   }
   &.hide {
     width: 0rem;
+    pointer-events: none;
   }
   &.mobile-show {
     top: 60px;
@@ -62,6 +68,21 @@
       min-width: 0;
     }
 
+    .sidebar-close {
+      margin-left: auto;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: $text-color-primary;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: $font-size-medium;
+    }
+
     .logo-mark {
       font-family: "Dancing Script", cursive;
       font-weight: 900;
@@ -88,11 +109,12 @@
     display: flex;
     flex-direction: column;
     align-items: start;
-    justify-content: center;
+    justify-content: flex-start;
     padding: 0.2rem 0.3rem;
-    gap: 0.3rem;
+    gap: 0;
     position: relative;
     height: auto;
+    flex: 1;
     @include md {
       gap: 0.5rem;
       padding: 0.5rem;
@@ -141,4 +163,70 @@
       // }
     }
   }
+
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    width: 100%;
+    flex: 1;
+  }
+
+  .logout-row {
+    width: 100%;
+    padding: 0.6rem 0.5rem 0.9rem;
+    margin-top: auto;
+  }
+
+  .logout-button {
+    width: 100%;
+    background: rgba(255, 62, 62, 0.12);
+    color: #ff5f5f;
+    border: 1px solid rgba(255, 62, 62, 0.35);
+    border-radius: 8px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0.9rem 1.3rem;
+    font-family: "Tilt Neon", sans-serif;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+
+    &:hover {
+      background: rgba(255, 62, 62, 0.2);
+      transform: translateY(-1px);
+    }
+
+    li {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    height: calc(100vh - 60px);
+  }
+
+  .sidebar.mobile-show {
+    height: calc(100vh - 60px);
+    bottom: 0;
+  }
+
+  .nav-item {
+    min-height: 0;
+  }
+
+  .logout-row {
+    position: static;
+    width: 100%;
+    padding: 0.6rem 0.5rem 0.9rem;
+  }
+}
+
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 999;
 }

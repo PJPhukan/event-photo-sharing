@@ -7,6 +7,7 @@ import { context, dashboad } from "../../../Context/context";
 import ItemDetails from "../../component/ItemDetails/ItemDetails";
 import { APP_URL } from "../../lib/config";
 import LoadingButton from "../../component/LoadingButton/LoadingButton";
+import { downloadMedia } from "../../lib/downloadMedia";
 
 const EventDetails = () => {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ const EventDetails = () => {
   const [showPopUP, setshowPopUP] = useState(false);
   const [files, setfiles] = useState(null);
   const [loadingAction, setLoadingAction] = useState("");
+  const [viewMode, setViewMode] = useState("grid");
   const popupRef = useRef(null);
 
   useEffect(() => {
@@ -90,6 +92,25 @@ const EventDetails = () => {
 
   const refreshEventDetails = async () => {
     await get_event_details(eventId);
+  };
+
+  const handleDownload = async (item) => {
+    try {
+      await downloadMedia({
+        url: item.imageUrl,
+        filename: item.title || "download",
+        resourceType: item.resource_type,
+      });
+    } catch (error) {
+      window.open(item.imageUrl, "_blank", "noopener,noreferrer");
+    }
+  };
+
+  const handleDeleteMedia = async (imageId) => {
+    setLoadingAction(`delete-${imageId}`);
+    await delete_image(imageId);
+    setLoadingAction("");
+    await refreshEventDetails();
   };
 
   const ShareImage = async () => {
@@ -177,6 +198,22 @@ const EventDetails = () => {
                     onChange={(e) => setfiles(e.target.files)}
                   />
                 </div>
+                <div className="view-toggle">
+                  <button
+                    className={viewMode === "grid" ? "active" : ""}
+                    onClick={() => setViewMode("grid")}
+                    type="button"
+                  >
+                    <i className="bx bx-grid-alt"></i>
+                  </button>
+                  <button
+                    className={viewMode === "table" ? "active" : ""}
+                    onClick={() => setViewMode("table")}
+                    type="button"
+                  >
+                    <i className="bx bx-table"></i>
+                  </button>
+                </div>
                 <div className="right-item-pop-up-button">
                   <i
                     className="bx bx-dots-vertical-rounded"
@@ -245,19 +282,83 @@ const EventDetails = () => {
           </div>
         </div>
 
-        <div className="event-items">
-          {event_data.image_details.length > 0 &&
-            event_data.image_details.map((item) => {
-              return (
-                <Item
-                  item={item}
-                  key={item._id}
-                  setimageId={setimageId}
-                  onDeleteComplete={refreshEventDetails}
-                />
-              );
-            })}
-        </div>
+        {viewMode === "grid" ? (
+          <div className="event-items">
+            {event_data.image_details.length > 0 &&
+              event_data.image_details.map((item) => {
+                return (
+                  <Item
+                    item={item}
+                    key={item._id}
+                    setimageId={setimageId}
+                    onDeleteComplete={refreshEventDetails}
+                    showInlineActions
+                  />
+                );
+              })}
+          </div>
+        ) : (
+          <div className="event-items-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Media</th>
+                  <th>Type</th>
+                  <th>Likes</th>
+                  <th>Created</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {event_data.image_details.map((item) => (
+                  <tr key={item._id}>
+                    <td>
+                      <div className="media-cell">
+                        {item.resource_type === "image" ? (
+                          <img
+                            src={item.imageUrl}
+                            alt=""
+                            className="media-thumb"
+                          />
+                        ) : (
+                          <video
+                            className="media-thumb"
+                            muted
+                            playsInline
+                            preload="metadata"
+                          >
+                            <source src={item.imageUrl} type="video/mp4" />
+                          </video>
+                        )}
+                        <span>{item.title || "Untitled"}</span>
+                      </div>
+                    </td>
+                    <td>{item.resource_type}</td>
+                    <td>{item.likes?.length || 0}</td>
+                    <td>{returnTimeDate(item.createdAt)}</td>
+                    <td>
+                      <div className="table-actions">
+                        <button onClick={() => setimageId(item._id)}>
+                          View
+                        </button>
+                        <button onClick={() => handleDownload(item)}>
+                          Download
+                        </button>
+                        <LoadingButton
+                          loading={loadingAction === `delete-${item._id}`}
+                          loadingText="Deleting"
+                          onClick={() => handleDeleteMedia(item._id)}
+                        >
+                          Delete
+                        </LoadingButton>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     )
   );

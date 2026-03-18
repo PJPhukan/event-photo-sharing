@@ -28,10 +28,13 @@ const Notification = () => {
     setallMessage(result);
   };
   useEffect(() => {
+    if (!showNotification) {
+      return;
+    }
     if (localStorage.getItem("token")) {
       get_all();
     }
-  });
+  }, [showNotification]);
 
   useEffect(() => {
     setshowNotification(false);

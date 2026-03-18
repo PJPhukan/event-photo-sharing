@@ -12,6 +12,10 @@ const Settings = () => {
     UpdateUserDetails,
     changepassword,
     changeemail,
+    getTwoFactorStatus,
+    setupTwoFactor,
+    verifyTwoFactor,
+    disableTwoFactor,
   } = useContext(context);
   const [profileForm, setProfileForm] = useState({
     eusername: "",
@@ -28,9 +32,25 @@ const Settings = () => {
     newPassword: "",
   });
   const [loadingAction, setLoadingAction] = useState("");
+  const [twoFactorStatus, setTwoFactorStatus] = useState({
+    enabled: false,
+    pending: false,
+  });
+  const [twoFactorSetup, setTwoFactorSetup] = useState(null);
+  const [twoFactorCode, setTwoFactorCode] = useState("");
+  const [backupCodes, setBackupCodes] = useState([]);
+  const [disableCode, setDisableCode] = useState("");
+  const [useBackupDisable, setUseBackupDisable] = useState(false);
+  const [showDisablePanel, setShowDisablePanel] = useState(false);
 
   useEffect(() => {
     getuser();
+    (async () => {
+      const status = await getTwoFactorStatus();
+      if (status?.data) {
+        setTwoFactorStatus(status.data);
+      }
+    })();
   }, []);
 
   useEffect(() => {
@@ -84,6 +104,51 @@ const Settings = () => {
       oldPassword: "",
       newPassword: "",
     });
+    setLoadingAction("");
+  };
+
+  const handleSetupTwoFactor = async () => {
+    setLoadingAction("2fa-setup");
+    const response = await setupTwoFactor();
+    if (response?.success) {
+      setTwoFactorSetup(response.data);
+      setBackupCodes([]);
+      setTwoFactorCode("");
+      setTwoFactorStatus({ enabled: false, pending: true });
+    }
+    setLoadingAction("");
+  };
+
+  const handleVerifyTwoFactor = async (e) => {
+    e.preventDefault();
+    if (!twoFactorCode.trim()) return;
+    setLoadingAction("2fa-verify");
+    const response = await verifyTwoFactor({ token: twoFactorCode.trim() });
+    if (response?.success) {
+      setBackupCodes(response.data.backupCodes || []);
+      setTwoFactorSetup(null);
+      setTwoFactorCode("");
+      setTwoFactorStatus({ enabled: true, pending: false });
+      await getuser();
+    }
+    setLoadingAction("");
+  };
+
+  const handleDisableTwoFactor = async (e) => {
+    e.preventDefault();
+    const payload = useBackupDisable
+      ? { backupCode: disableCode.trim() }
+      : { token: disableCode.trim() };
+    if (!payload.backupCode && !payload.token) return;
+    setLoadingAction("2fa-disable");
+    const response = await disableTwoFactor(payload);
+    if (response?.success) {
+      setTwoFactorStatus({ enabled: false, pending: false });
+      setDisableCode("");
+      setBackupCodes([]);
+      setShowDisablePanel(false);
+      await getuser();
+    }
     setLoadingAction("");
   };
 
@@ -170,6 +235,142 @@ const Settings = () => {
                 </LoadingButton>
               </div>
             </form>
+          </div>
+        </div>
+        <div className="security-settings">
+          <div className="settings-heading">Security Settings</div>
+          <div className="heading-sub-text">
+            Manage security features like two-factor authentication.
+          </div>
+          <div className="change-box">
+            <div className="box-heading">Two-Factor Authentication</div>
+            <div className="heading-sub-text">
+              Add an extra layer of security to your account.
+            </div>
+            <div className="twofactor-row">
+              <div className="twofactor-copy">
+                {twoFactorStatus.enabled ? "2FA is enabled" : "Two-factor authentication"}
+              </div>
+              <button
+                type="button"
+                className={`switch-button ${twoFactorStatus.enabled ? "is-on" : ""}`}
+                aria-pressed={twoFactorStatus.enabled}
+                aria-label={
+                  twoFactorStatus.enabled ? "Disable two-factor" : "Enable two-factor"
+                }
+                onClick={() => {
+                  if (twoFactorStatus.enabled) {
+                    setShowDisablePanel(true);
+                  } else {
+                    handleSetupTwoFactor();
+                  }
+                }}
+              >
+                <span className="switch-knob"></span>
+              </button>
+            </div>
+            {twoFactorSetup && (
+              <div className="row-box">
+                <div className="top">
+                  <i className="bx bx-qr"></i>
+                  <span>Scan this QR in your authenticator app</span>
+                </div>
+                {twoFactorSetup.qrCodeDataUrl && (
+                  <img
+                    src={twoFactorSetup.qrCodeDataUrl}
+                    alt="Two-factor QR"
+                    style={{ width: "180px", marginTop: "12px" }}
+                  />
+                )}
+                <div className="row-box">
+                  <div className="top">
+                    <i className="bx bx-key"></i>
+                    <span>Manual setup key</span>
+                  </div>
+                  <input type="text" value={twoFactorSetup.secret || ""} readOnly />
+                </div>
+                <form method="post" onSubmit={handleVerifyTwoFactor}>
+                  <div className="row-box">
+                    <div className="top">
+                      <i className="bx bx-shield-quarter"></i>
+                      <span>Verification code</span>
+                    </div>
+                    <input
+                      type="text"
+                      value={twoFactorCode}
+                      onChange={(e) => setTwoFactorCode(e.target.value)}
+                      placeholder="6-digit code"
+                    />
+                  </div>
+                  <div className="btn">
+                    <LoadingButton
+                      type="submit"
+                      loading={loadingAction === "2fa-verify"}
+                      loadingText="Verifying"
+                    >
+                      Verify & Enable
+                    </LoadingButton>
+                  </div>
+                </form>
+              </div>
+            )}
+            {twoFactorStatus.enabled && showDisablePanel && (
+              <div className="row-box">
+                <div className="top">
+                  <i className="bx bxs-shield"></i>
+                  <span>2FA is enabled</span>
+                </div>
+                <form method="post" onSubmit={handleDisableTwoFactor}>
+                  <div className="row-box">
+                    <div className="top">
+                      <i className="bx bx-key"></i>
+                      <span>Disable with code</span>
+                    </div>
+                    <input
+                      type="text"
+                      value={disableCode}
+                      onChange={(e) => setDisableCode(e.target.value)}
+                      placeholder={useBackupDisable ? "Backup code" : "Authenticator code"}
+                    />
+                  </div>
+                  <div className="auth-meta">
+                    <label className="remember-row">
+                      <input
+                        type="checkbox"
+                        checked={useBackupDisable}
+                        onChange={(e) => setUseBackupDisable(e.target.checked)}
+                      />
+                      <span className="remember-box"></span>
+                      <span>Use backup code</span>
+                    </label>
+                  </div>
+                  <div className="btn">
+                    <LoadingButton
+                      type="submit"
+                      loading={loadingAction === "2fa-disable"}
+                      loadingText="Disabling"
+                    >
+                      Disable 2FA
+                    </LoadingButton>
+                  </div>
+                </form>
+              </div>
+            )}
+            {backupCodes.length > 0 && (
+              <div className="row-box">
+                <div className="top">
+                  <i className="bx bx-lock-alt"></i>
+                  <span>Backup codes (store these safely)</span>
+                </div>
+                <div style={{ display: "grid", gap: "8px", marginTop: "12px" }}>
+                  {backupCodes.map((code) => (
+                    <span key={code} style={{ fontFamily: "monospace" }}>
+                      {code}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
         <div className="profile-settings-bottom">

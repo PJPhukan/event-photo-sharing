@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./itemdetails.scss";
-import { dashboad } from "../../../Context/context";
+import { context, dashboad } from "../../../Context/context";
 import { downloadMedia } from "../../lib/downloadMedia";
+import LoadingButton from "../LoadingButton/LoadingButton";
+import CollectionPicker from "../CollectionPicker/CollectionPicker";
 
 const ItemDetails = ({ imageId, setimageId, title }) => {
   const [loveStyle, setLoveStyle] = useState({
@@ -9,8 +11,14 @@ const ItemDetails = ({ imageId, setimageId, title }) => {
     transform: "translate(-50%, -50%) scale(0)",
   });
   const [image_data, setimage_data] = useState(null);
+  const [collections, setCollections] = useState([]);
+  const [showPicker, setShowPicker] = useState(false);
+  const [loadingAction, setLoadingAction] = useState("");
   const dashboardContext = useContext(dashboad);
-  const { get_image_details } = dashboardContext;
+  const userContext = useContext(context);
+  const { get_image_details, add_favorite, get_collections } =
+    dashboardContext;
+  const { showToast } = userContext;
 
   const get_data = async () => {
     const result = await get_image_details(imageId);
@@ -18,6 +26,15 @@ const ItemDetails = ({ imageId, setimageId, title }) => {
   };
   useEffect(() => {
     get_data();
+  }, []);
+
+  useEffect(() => {
+    const loadCollections = async () => {
+      const result = await get_collections();
+      const data = result?.data?.data || [];
+      setCollections(data);
+    };
+    loadCollections();
   }, []);
 
   const handleDoubleClick = async () => {
@@ -66,11 +83,26 @@ const ItemDetails = ({ imageId, setimageId, title }) => {
         .then(() => {
           alert("Link copied to clipboard");
         })
-        .catch((error) => {
-          console.error("Error copying to clipboard:", error);
-        });
+      .catch((error) => {
+        console.error("Error copying to clipboard:", error);
+      });
     }
   };
+
+  const SaveToFavorites = async () => {
+    if (!image_data?._id) return;
+    setLoadingAction("favorite");
+    const result = await add_favorite({
+      imageId: image_data._id,
+      eventId: image_data.event_id,
+    });
+    if (result?.data?.success) {
+      showToast(result.data.message || "Added to favorites", "success");
+    }
+    setLoadingAction("");
+  };
+
+  // Collection picker handles add.
   return (
     imageId && (
       <div className="item-details">
@@ -102,7 +134,31 @@ const ItemDetails = ({ imageId, setimageId, title }) => {
               <span>Share</span>
             </button>
           </div>
+          <div className="action-box">
+            <LoadingButton
+              className="btn secondary"
+              loading={loadingAction === "favorite"}
+              loadingText="Saving"
+              onClick={SaveToFavorites}
+            >
+              <i className="bx bx-bookmark"></i>
+              <span>Save</span>
+            </LoadingButton>
+            <button
+              className="btn outline"
+              onClick={() => setShowPicker(true)}
+            >
+              <i className="bx bx-collection"></i>
+              <span>Add to collection</span>
+            </button>
+          </div>
         </div>
+        <CollectionPicker
+          open={showPicker}
+          onClose={() => setShowPicker(false)}
+          imageId={image_data?._id}
+          anchor="left"
+        />
       </div>
     )
   );

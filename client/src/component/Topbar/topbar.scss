@@ -5,13 +5,14 @@
   background: $dashboard-bg-primary;
   height: 60px;
   width: 100%;
-  position: sticky;
+  position: fixed;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 0.3rem;
   top: 0;
-  z-index: 99;
+  left: 0;
+  z-index: 1001;
 
   @include md {
     padding: 0 1.5rem;
@@ -39,6 +40,7 @@
       background: $dashboard-bg-secondary;
       padding: 5px 2px;
       border-radius: 5px;
+      position: relative;
       i {
         gap: 1rem;
         font-size: calc($font-size-large);
@@ -53,6 +55,73 @@
         @include md {
           width: 20rem;
         }
+      }
+
+      .search-dropdown {
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        width: min(420px, 90vw);
+        background: $dashboard-bg-primary;
+        border: 1px solid #ffffff1f;
+        border-radius: 12px;
+        padding: 0.75rem;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        z-index: 1200;
+      }
+
+      .search-state {
+        color: $text-color-secondary;
+        font-size: $font-size-small;
+        padding: 0.5rem 0.3rem;
+      }
+
+      .search-section {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .search-section-title {
+        font-size: $font-size-small;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: $text-color-secondary;
+      }
+
+      .search-item {
+        border: none;
+        background: $dashboard-bg-third;
+        color: $text-color-primary;
+        border-radius: 10px;
+        padding: 0.5rem 0.6rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+        cursor: pointer;
+        text-align: left;
+        transition: transform 0.2s ease, background 0.2s ease;
+
+        &:hover {
+          transform: translateY(-1px);
+          background: rgba(255, 255, 255, 0.08);
+        }
+      }
+
+      .search-item-title {
+        font-size: $font-size-base;
+      }
+
+      .search-item-sub {
+        font-size: $font-size-small;
+        color: $text-color-secondary;
+      }
+
+      .search-empty {
+        font-size: $font-size-small;
+        color: $text-color-secondary;
+        padding: 0.4rem 0.2rem;
       }
     }
   }
@@ -74,6 +143,21 @@
       display: none;
       @include md {
         display: inline-block;
+      }
+    }
+
+    .upload-trigger {
+      background: transparent;
+      border: none;
+      color: $text-color-primary;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+     font-size: 25px;
+      @include md {
+        font-size: 30px;
       }
     }
     i {

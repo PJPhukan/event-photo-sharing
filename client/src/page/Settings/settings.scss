@@ -47,6 +47,50 @@
           margin: .5rem 0;
           color: $text-color-secondary;
         }
+        .twofactor-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1rem;
+          margin: 0.5rem 0 1rem;
+          flex-wrap: wrap;
+        }
+        .twofactor-copy {
+          font-size: $font-size-base;
+          color: $text-color-secondary;
+        }
+        .switch-button {
+          position: relative;
+          width: 52px;
+          height: 28px;
+          border-radius: 999px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: flex-start;
+          padding: 0;
+          appearance: none;
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          background: rgba(255, 255, 255, 0.15);
+          cursor: pointer;
+          transition: background 0.2s ease, border-color 0.2s ease;
+        }
+        .switch-button .switch-knob {
+          position: absolute;
+          top: 3px;
+          left: 3px;
+          width: 22px;
+          height: 22px;
+          border-radius: 50%;
+          background: $text-color-primary;
+          transition: transform 0.2s ease;
+        }
+        .switch-button.is-on {
+          background: linear-gradient(0deg, #003fff, #0b31ac);
+          border-color: transparent;
+        }
+        .switch-button.is-on .switch-knob {
+          transform: translateX(24px);
+        }
         form {
           display: flex;
           // border: 1px solid red;
@@ -101,6 +145,21 @@
             }
           }
         }
+      }
+    }
+    .security-settings {
+      background: linear-gradient(
+        180deg,
+        $dashboard-bg-primary,
+        $dashboard-bg-primary,
+        $dashboard-bg-third
+      );
+      border-radius: 5px;
+      margin-bottom: 1rem;
+      padding: 0.5rem 0.5rem;
+      @include md {
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
       }
     }
 

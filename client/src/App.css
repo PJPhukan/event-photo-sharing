@@ -9,6 +9,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 html.lenis,
@@ -44,6 +45,7 @@ body {
   object-fit: cover;
   color: var(--text-color-primary);
   font-family: "Montserrat", sans-serif;
+  overflow-x: hidden;
 }
 
 a {
@@ -63,11 +65,38 @@ li{
   display: flex;
   justify-content: start;
   align-items: start;
-
+  position: relative;
 }
 
 .sidebar-right{
   width: 100%;
   z-index: 1;
   position: relative;
+  padding-top: 60px;
+}
+
+@media (min-width: 768px) {
+  .sidebar-right {
+    padding-top: 80px;
+  }
+}
+
+@media (min-width: 768px) {
+  .sidebar.show ~ .sidebar-right {
+    padding-left: 15rem;
+  }
+
+  .sidebar.hide ~ .sidebar-right {
+    padding-left: 0;
+  }
+
+  .sidebar.show ~ .sidebar-right .top-bar {
+    left: 15rem;
+    width: calc(100% - 15rem);
+  }
+
+  .sidebar.hide ~ .sidebar-right .top-bar {
+    left: 0;
+    width: 100%;
+  }
 }

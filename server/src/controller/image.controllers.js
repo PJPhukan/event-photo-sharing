@@ -5,6 +5,7 @@ import { AsyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 import { cloudinaryUpload, cloudinaryDelete } from "../utils/cloudinary.js";
+import mongoose from "mongoose";
 
 const UploadImage = AsyncHandler(async (req, res) => {
   const { eventId } = req.params;
@@ -12,6 +13,9 @@ const UploadImage = AsyncHandler(async (req, res) => {
 
   if (!files || files.length === 0) {
     throw new ApiError(400, "No such file found");
+  }
+  if (!mongoose.Types.ObjectId.isValid(eventId)) {
+    throw new ApiError(400, "Invalid event id");
   }
 
   const event = await Event.findById(eventId);
@@ -63,6 +67,9 @@ const UploadImage = AsyncHandler(async (req, res) => {
 
 const DeleteImage = AsyncHandler(async (req, res) => {
   const { imageId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(imageId)) {
+    throw new ApiError(400, "Invalid image id");
+  }
   const image = await Image.findById(imageId);
   if (!image) throw new ApiError(404, "Image not found !");
   if (image.user_id.toString() !== req.user._id.toString()) {
@@ -87,6 +94,9 @@ const DeleteImage = AsyncHandler(async (req, res) => {
 
 const GetImage = AsyncHandler(async (req, res) => {
   const { imageId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(imageId)) {
+    throw new ApiError(400, "Invalid image id");
+  }
   const image = await Image.findById(imageId);
   if (!image) throw new ApiError(404, "Image not found");
   if (image.user_id.toString() !== req.user._id.toString()) {

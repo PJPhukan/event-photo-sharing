@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "./sidebar.scss";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { context } from "../../../Context/context";
@@ -9,6 +9,7 @@ const Sidebar = () => {
   const usercontext = useContext(context);
   const {
     showSidebar,
+    setshowSidebar,
     logout,
     setadminlogin,
     showNotification,
@@ -16,6 +17,7 @@ const Sidebar = () => {
   } = usercontext;
   const [Showmobile, setShowmobile] = useState(true);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const sidebarRef = useRef(null);
   let location = useLocation();
   useEffect(() => {
     const handleResize = () => {
@@ -32,6 +34,26 @@ const Sidebar = () => {
     };
   }, []);
   useEffect(() => {}, [location]);
+
+  useEffect(() => {
+    if (!showSidebar || !Showmobile) {
+      return;
+    }
+
+    const handleOutsideClick = (event) => {
+      if (!sidebarRef.current) {
+        return;
+      }
+      if (!sidebarRef.current.contains(event.target)) {
+        setshowSidebar(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("pointerdown", handleOutsideClick);
+    };
+  }, [showSidebar, Showmobile, setshowSidebar]);
 
   const HandleLogout = async () => {
     setIsLoggingOut(true);
@@ -52,9 +74,23 @@ const Sidebar = () => {
   const checkUrl = (str) => {
     return location.pathname.includes(`/${str}/`);
   };
+
+  const closeSidebarOnMobile = () => {
+    if (Showmobile) {
+      setshowSidebar(false);
+    }
+  };
   return (
     <>
+      {showSidebar && Showmobile && (
+        <div
+          className="sidebar-backdrop"
+          onClick={() => setshowSidebar(false)}
+          onTouchStart={() => setshowSidebar(false)}
+        ></div>
+      )}
       <div
+        ref={sidebarRef}
         className={`sidebar ${showSidebar ? "show" : "hide"} ${
           Showmobile ? "mobile-show" : ""
         }`}
@@ -66,11 +102,22 @@ const Sidebar = () => {
               mem<span>ois</span>
             </div>
           </div>
+          {Showmobile && (
+            <button
+              className="sidebar-close"
+              onClick={() => setshowSidebar(false)}
+              type="button"
+            >
+              <i className="bx bx-x"></i>
+            </button>
+          )}
         </div>
         <div className="nav-item">
+          <div className="nav-links">
           <Link
             to="/"
             className={`${location.pathname === "/" ? "active" : " "}`}
+            onClick={closeSidebarOnMobile}
           >
             <li>
               <i className="bx bxs-dashboard"></i>
@@ -85,6 +132,7 @@ const Sidebar = () => {
                 ? "active"
                 : " "
             }`}
+            onClick={closeSidebarOnMobile}
           >
             <li>
               <i className="bx bxs-user"></i>
@@ -99,6 +147,7 @@ const Sidebar = () => {
                 ? "active"
                 : " "
             }`}
+            onClick={closeSidebarOnMobile}
           >
             <li>
               <i className="bx bxs-calendar-event"></i>
@@ -114,6 +163,7 @@ const Sidebar = () => {
                 ? "active"
                 : " "
             }`}
+            onClick={closeSidebarOnMobile}
           >
             <li>
               <i className="bx bx-collection"></i>
@@ -129,6 +179,7 @@ const Sidebar = () => {
                 ? "active"
                 : " "
             }`}
+            onClick={closeSidebarOnMobile}
           >
             <li>
               <i className="bx bxs-star"></i>
@@ -136,7 +187,12 @@ const Sidebar = () => {
             </li>
           </Link>
 
-          <button onClick={ToggleNotification}>
+          <button
+            onClick={() => {
+              ToggleNotification();
+              closeSidebarOnMobile();
+            }}
+          >
             <li>
               <i className="bx bxs-bell"></i>
               <span>Notifications</span>
@@ -150,14 +206,22 @@ const Sidebar = () => {
                 ? "active"
                 : " "
             }`}
+            onClick={closeSidebarOnMobile}
           >
             <li>
               <i className="bx bxs-cog"></i>
               <span>Settings</span>
             </li>
           </Link>
+          </div>
+        </div>
+        <div className="logout-row">
           <LoadingButton
-            onClick={HandleLogout}
+            className="logout-button"
+            onClick={() => {
+              HandleLogout();
+              closeSidebarOnMobile();
+            }}
             loading={isLoggingOut}
             loadingText="Logging out"
           >

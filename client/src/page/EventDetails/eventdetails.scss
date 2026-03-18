@@ -86,6 +86,7 @@
           align-items: center;
           gap: 0.5rem;
           flex-direction: row;
+          flex-wrap: wrap;
           @include md {
             gap: 0.3rem;
           }
@@ -195,6 +196,26 @@
               }
             }
           }
+          .view-toggle {
+            display: flex;
+            background: $dashboard-bg-primary;
+            border-radius: 8px;
+            padding: 0.2rem;
+            border: 1px solid #ffffff1a;
+
+            button {
+              border: none;
+              background: transparent;
+              color: $text-color-primary;
+              padding: 0.4rem 0.6rem;
+              border-radius: 6px;
+              cursor: pointer;
+
+              &.active {
+                background: $dashboard-bg-secondary;
+              }
+            }
+          }
         }
       }
       .mobile-desc {
@@ -241,6 +262,72 @@
     margin-top: 0.5rem;
     @include md {
       gap: 0.5rem;
+    }
+  }
+
+  .event-items-table {
+    margin-top: 0.5rem;
+    background: $dashboard-bg-primary;
+    border-radius: 12px;
+    border: 1px solid #ffffff1a;
+    padding: 1rem;
+    overflow-x: auto;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: $font-size-small;
+
+      th,
+      td {
+        padding: 0.7rem 0.6rem;
+        text-align: left;
+        border-bottom: 1px solid #ffffff1a;
+        color: $text-color-primary;
+      }
+
+      th {
+        color: $text-color-secondary;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-size: 12px;
+      }
+    }
+
+    .media-cell {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+
+      .media-thumb {
+        width: 46px;
+        height: 46px;
+        border-radius: 8px;
+        object-fit: cover;
+        background: #0b0b0b;
+        display: block;
+      }
+
+      span {
+        color: $text-color-primary;
+      }
+    }
+
+    .table-actions {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+
+      button {
+        background: transparent;
+        border: 1px solid #ffffff1f;
+        color: $text-color-primary;
+        padding: 0.35rem 0.6rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px;
+      }
     }
   }
 }

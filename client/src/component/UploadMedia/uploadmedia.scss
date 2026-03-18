@@ -1,0 +1,183 @@
+@import "../../css-config/mixins.scss";
+@import "../../css-config/variables.scss";
+
+.upload-media-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1400;
+  padding: 1rem;
+}
+
+.upload-media-modal {
+  width: min(520px, 100%);
+  background: $dashboard-bg-primary;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+  border: 1px solid #ffffff1f;
+  color: $text-color-primary;
+
+  .modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+
+    h3 {
+      font-size: $font-size-medium;
+      margin-bottom: 0.35rem;
+    }
+
+    p {
+      color: $text-color-secondary;
+      font-size: $font-size-small;
+    }
+
+    .close-btn {
+      background: transparent;
+      border: none;
+      color: $text-color-primary;
+      font-size: $font-size-large;
+      cursor: pointer;
+    }
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+
+    label {
+      font-size: $font-size-small;
+      color: $text-color-secondary;
+    }
+
+    select,
+    input {
+      background: $dashboard-bg-third;
+      border: 1px solid #ffffff1f;
+      color: $text-color-primary;
+      padding: 0.6rem 0.8rem;
+      border-radius: 8px;
+      font-family: "Tilt Neon", sans-serif;
+      font-size: $font-size-small;
+    }
+
+    input[type="file"] {
+      padding: 0.45rem;
+      cursor: pointer;
+    }
+
+    .helper {
+      color: $text-color-secondary;
+      font-size: 12px;
+    }
+  }
+
+  .dropzone {
+    border: 1.5px dashed #ffffff3a;
+    border-radius: 14px;
+    padding: 1.4rem 1rem;
+    background: $dashboard-bg-third;
+    margin-bottom: 0.8rem;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    position: relative;
+
+    input {
+      display: none;
+    }
+
+    &.dragging {
+      border-color: #003fff;
+      background: rgba(0, 63, 255, 0.12);
+      transform: translateY(-1px);
+    }
+
+    &.disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  .dropzone-inner {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    align-items: center;
+  }
+
+  .drop-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.08);
+    color: $text-color-primary;
+    font-size: 22px;
+  }
+
+  .dropzone h4 {
+    font-size: $font-size-base;
+  }
+
+  .dropzone p {
+    font-size: $font-size-small;
+    color: $text-color-secondary;
+  }
+
+  .drop-hint {
+    font-size: 12px;
+    color: $text-color-secondary;
+  }
+
+  .file-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: $text-color-secondary;
+    margin-bottom: 1rem;
+
+    button {
+      background: transparent;
+      border: 1px solid #ffffff2a;
+      color: $text-color-primary;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+  }
+
+  .ghost-btn {
+    background: transparent;
+    border: 1px solid #ffffff1f;
+    color: $text-color-primary;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+  }
+
+  .primary-btn {
+    background: linear-gradient(90deg, #003fff, #0b31ac);
+    border: none;
+    color: $text-color-primary;
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+  }
+}

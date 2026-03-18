@@ -11,8 +11,6 @@ const Profile = () => {
   const [coverImg, setCoverImg] = useState(null);
   const [loadingAction, setLoadingAction] = useState("");
 
-  const [initialized, setInitialized] = useState(false);
-
   const [fullname, setFullname] = useState("");
   const [bio, setBio] = useState("");
   useEffect(() => {
@@ -28,7 +26,7 @@ const Profile = () => {
   });
 
   useEffect(() => {
-    if (user && !initialized) {
+    if (user) {
       seteuser({
         eusername: user.username || "",
         ename: user.fullname || "",
@@ -36,12 +34,10 @@ const Profile = () => {
         eemail: user.email || "",
         ebio: user.bio || "",
       });
-
-      setInitialized(true); // Mark form as initialized
+      setFullname(user.fullname || "");
+      setBio(user.bio || "");
     }
-    setFullname(user?.fullname);
-    setBio(user?.bio || "");
-  }, [user, initialized]);
+  }, [user]);
 
   const Onchange = (e) => {
     seteuser({ ...euser, [e.target.name]: e.target.value });

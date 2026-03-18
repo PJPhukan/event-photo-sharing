@@ -11,7 +11,16 @@ import GlobalBackground from "./component/GlobalBackground/GlobalBackground";
 import Toast from "./component/Toast/Toast";
 
 function App() {
-  const [showSplash, setShowSplash] = useState(true);
+  const shouldShowSplash = (() => {
+    if (typeof performance === "undefined") {
+      return true;
+    }
+    const [navEntry] = performance.getEntriesByType("navigation");
+    const navType = navEntry?.type;
+    return navType ? navType !== "back_forward" : true;
+  })();
+
+  const [showSplash, setShowSplash] = useState(shouldShowSplash);
 
   useEffect(() => {
     AOS.init({
@@ -21,6 +30,10 @@ function App() {
   }, []);
 
   useEffect(() => {
+    if (!showSplash) {
+      return undefined;
+    }
+
     const hideTimer = window.setTimeout(() => {
       setShowSplash(false);
     }, 1900);
@@ -28,7 +41,7 @@ function App() {
     return () => {
       window.clearTimeout(hideTimer);
     };
-  }, []);
+  }, [showSplash]);
 
   return (
     <>

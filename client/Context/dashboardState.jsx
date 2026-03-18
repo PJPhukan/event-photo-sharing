@@ -1,18 +1,24 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { dashboad } from "./context";
 import axios from "axios";
 import * as faceapi from "face-api.js";
 
 let faceModelsPromise;
 
+const getModelBaseUrl = () => {
+  const base = (import.meta.env.BASE_URL || "/").trim();
+  return base.endsWith("/") ? `${base}models` : `${base}/models`;
+};
+
 const loadFaceModels = () => {
   // Cache model loading so repeated selfie matches do not re-download weights.
   if (!faceModelsPromise) {
+    const MODEL_URL = getModelBaseUrl();
     faceModelsPromise = Promise.all([
-      faceapi.nets.ssdMobilenetv1.loadFromUri("/models"),
-      faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
-      faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
+      faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
+      faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
+      faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
     ]);
   }
 
@@ -59,17 +65,17 @@ const DashboardState = (props) => {
   };
 
   //get event
-  const get_event = async () => {
+  const get_event = useCallback(async () => {
     try {
       const res = await axios.get("/api/event/get-events");
       return res;
     } catch (err) {
       console.log(err.response?.data?.message || "Error occured while fetching all event");
     }
-  };
+  }, []);
 
   //get event
-  const get_event_details = async (eventId) => {
+  const get_event_details = useCallback(async (eventId) => {
     try {
       const res = await axios.get(`/api/event/get-event-details/${eventId}`);
       const result = res.data.data.event_details[0];
@@ -79,7 +85,7 @@ const DashboardState = (props) => {
     } catch (err) {
       console.log(err.response?.data?.message || "Error occured while fetching event details");
     }
-  };
+  }, []);
 
   //DASHBOARD ROUTES
 
@@ -124,7 +130,7 @@ const DashboardState = (props) => {
   };
 
   //get event data
-  const get_event_data = async () => {
+  const get_event_data = useCallback(async () => {
     try {
       const res = await axios.get("/api/dashboard/get-event-data");
       // console.log(response);
@@ -132,7 +138,7 @@ const DashboardState = (props) => {
     } catch (err) {
       console.log(err.response?.data?.message || "Error occured while fetching event data");
     }
-  };
+  }, []);
 
   //Images Routes
 
@@ -203,15 +209,19 @@ const DashboardState = (props) => {
   const faceRecognition = async (userImage, dbimage) => {
     try {
       await loadFaceModels();
+      const detectOptions = new faceapi.TinyFaceDetectorOptions({
+        inputSize: 416,
+        scoreThreshold: 0.4,
+      });
       const Reface = await faceapi.fetchImage(dbimage);
 
       const facesToCheck = await faceapi.fetchImage(userImage);
       let refAIData = await faceapi
-        .detectAllFaces(Reface)
+        .detectAllFaces(Reface, detectOptions)
         .withFaceLandmarks()
         .withFaceDescriptors();
       let facesToCheckAIData = await faceapi
-        .detectAllFaces(facesToCheck)
+        .detectAllFaces(facesToCheck, detectOptions)
         .withFaceLandmarks()
         .withFaceDescriptors();
 
@@ -301,6 +311,94 @@ const DashboardState = (props) => {
       console.log("Error occured while deleting notification");
     }
   };
+
+  //Favorites
+  const get_favorites = async () => {
+    try {
+      const response = await axios.get("/api/favorite");
+      return response;
+    } catch (error) {
+      console.log(error.response?.data?.message || "Error occured while fetching favorites");
+    }
+  };
+
+  const add_favorite = async (payload) => {
+    try {
+      const response = await axios.post("/api/favorite/add", payload);
+      return response;
+    } catch (error) {
+      console.log(error.response?.data?.message || "Error occured while adding favorite");
+    }
+  };
+
+  const remove_favorite = async (imageId) => {
+    try {
+      const response = await axios.delete(`/api/favorite/remove/${imageId}`);
+      return response;
+    } catch (error) {
+      console.log(error.response?.data?.message || "Error occured while removing favorite");
+    }
+  };
+
+  //Collections
+  const get_collections = async () => {
+    try {
+      const response = await axios.get("/api/collection");
+      return response;
+    } catch (error) {
+      console.log(error.response?.data?.message || "Error occured while fetching collections");
+    }
+  };
+
+  const create_collection = async (payload) => {
+    try {
+      const response = await axios.post("/api/collection/create", payload);
+      return response;
+    } catch (error) {
+      console.log(error.response?.data?.message || "Error occured while creating collection");
+    }
+  };
+
+  const get_collection = async (collectionId) => {
+    try {
+      const response = await axios.get(`/api/collection/${collectionId}`);
+      return response;
+    } catch (error) {
+      console.log(error.response?.data?.message || "Error occured while fetching collection");
+    }
+  };
+
+  const delete_collection = async (collectionId) => {
+    try {
+      const response = await axios.delete(`/api/collection/${collectionId}`);
+      return response;
+    } catch (error) {
+      console.log(error.response?.data?.message || "Error occured while deleting collection");
+    }
+  };
+
+  const add_image_to_collection = async (collectionId, imageId) => {
+    try {
+      const response = await axios.post(
+        `/api/collection/${collectionId}/add-image`,
+        { imageId }
+      );
+      return response;
+    } catch (error) {
+      console.log(error.response?.data?.message || "Error occured while adding to collection");
+    }
+  };
+
+  const remove_image_from_collection = async (collectionId, imageId) => {
+    try {
+      const response = await axios.delete(
+        `/api/collection/${collectionId}/remove-image/${imageId}`
+      );
+      return response;
+    } catch (error) {
+      console.log(error.response?.data?.message || "Error occured while removing from collection");
+    }
+  };
   return (
     <dashboad.Provider
       value={{
@@ -329,6 +427,15 @@ const DashboardState = (props) => {
         get_all_notification,
         mark_as_read,
         delete_notification,
+        get_favorites,
+        add_favorite,
+        remove_favorite,
+        get_collections,
+        create_collection,
+        get_collection,
+        delete_collection,
+        add_image_to_collection,
+        remove_image_from_collection,
       }}
     >
       {props.children}

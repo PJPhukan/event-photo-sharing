@@ -5,7 +5,7 @@
   position: relative;
   height: 100%;
   box-sizing: border-box;
-  background: $dashboard-bg-secondary;
+  background: transparent;
   padding: 0.5rem;
   font-family: "Tilt Neon", sans-serif;
   z-index: 1;
@@ -19,6 +19,7 @@
     // margin: 0 1rem;
     // border: 2px solid red;
     align-items: start;
+    gap: 1rem;
     .section-heading {
       margin-bottom: 0.5rem;
       @include md {
@@ -37,6 +38,41 @@
         font-weight: 200;
         @include md {
           font-size: $font-size-base;
+        }
+      }
+    }
+
+    .event-actions {
+      display: flex;
+      gap: 0.8rem;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .view-toggle {
+      display: flex;
+      gap: 0.4rem;
+      background: $dashboard-bg-primary;
+      padding: 0.3rem;
+      border-radius: 8px;
+      border: 1px solid #ffffff1a;
+
+      button {
+        border: none;
+        background: transparent;
+        color: $text-color-primary;
+        padding: 0.4rem 0.7rem;
+        border-radius: 6px;
+        font-family: "Tilt Neon", sans-serif;
+        font-size: $font-size-small;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+
+        &.active {
+          background: $dashboard-bg-secondary;
         }
       }
     }
@@ -64,5 +100,84 @@
     gap: 1rem;
     flex-wrap: wrap;
     width: 100%;
+  }
+
+  .event-table {
+    background: $dashboard-bg-primary;
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid #ffffff1a;
+    overflow-x: auto;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: $font-size-small;
+
+      th,
+      td {
+        padding: 0.7rem 0.6rem;
+        text-align: left;
+        border-bottom: 1px solid #ffffff1a;
+        color: $text-color-primary;
+      }
+
+      th {
+        color: $text-color-secondary;
+        font-weight: 400;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-size: 12px;
+      }
+
+      tbody tr:hover {
+        background: rgba(255, 255, 255, 0.04);
+      }
+    }
+
+    .event-cell {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+
+      img {
+        width: 42px;
+        height: 42px;
+        border-radius: 8px;
+        object-fit: cover;
+        background: #0b0b0b;
+      }
+    }
+
+    .event-cell-text {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .event-name {
+      font-size: $font-size-base;
+    }
+
+    .event-sub {
+      color: $text-color-secondary;
+      font-size: 12px;
+    }
+
+    .event-table-actions {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+
+      button {
+        background: transparent;
+        border: 1px solid #ffffff1f;
+        color: $text-color-primary;
+        padding: 0.35rem 0.6rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px;
+      }
+    }
   }
 }

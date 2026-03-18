@@ -7,6 +7,9 @@ import {
   encodeAuthToken,
   CompareHashedPassword,
 } from "../libs/auth.helpers.js";
+import jwt from "jsonwebtoken";
+import speakeasy from "speakeasy";
+import qrcode from "qrcode";
 import { cloudinaryUpload } from "../utils/cloudinary.js";
 import { transporter } from "../libs/transporter.js";
 import { Notification } from "../model/notification.model.js";
@@ -45,6 +48,39 @@ const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
 
 const normalizeEmail = (value = "") => value.trim().toLowerCase();
 const normalizeUsername = (value = "") => value.trim().toLowerCase();
+const generateBackupCodes = (count = 8) =>
+  Array.from({ length: count }, () =>
+    Math.random().toString().slice(2, 12).padEnd(10, "0")
+  );
+
+const buildBackupCodeEntries = async (codes) => {
+  const entries = [];
+  for (const code of codes) {
+    const codeHash = await GenerateHashedPassword(code);
+    entries.push({ codeHash, used: false });
+  }
+  return entries;
+};
+
+const verifyBackupCode = async (user, rawCode = "") => {
+  if (!rawCode) return { valid: false };
+  const code = rawCode.trim();
+  if (!code || !Array.isArray(user.twoFactorBackupCodes)) {
+    return { valid: false };
+  }
+  for (const entry of user.twoFactorBackupCodes) {
+    if (entry.used) continue;
+    const match = await CompareHashedPassword(code, entry.codeHash);
+    if (match) {
+      entry.used = true;
+      return { valid: true };
+    }
+  }
+  return { valid: false };
+};
+
+const createTwoFactorToken = (payload) =>
+  jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "10m" });
 
 const assertValidPassword = (password) => {
   if (!passwordPattern.test(password)) {
@@ -181,6 +217,25 @@ const Login = AsyncHandler(async (req, res) => {
 
   user.password = undefined;
 
+  if (user.twoFactorEnabled) {
+    const twoFactorToken = createTwoFactorToken({
+      _id: user._id,
+      type: "2fa",
+    });
+
+    return res.status(200).json(
+      new ApiResponse(
+        200,
+        {
+          requiresTwoFactor: true,
+          twoFactorToken,
+          userId: user._id,
+        },
+        "Two-factor authentication required"
+      )
+    );
+  }
+
   const payload = {
     _id: user._id,
     username: user.username,
@@ -205,6 +260,87 @@ const Login = AsyncHandler(async (req, res) => {
     .json(new ApiResponse(200, { user, token }, "User successfully logged in"));
 });
 
+const LoginWithTwoFactor = AsyncHandler(async (req, res) => {
+  const { twoFactorToken, token, backupCode } = req.body;
+
+  if (!twoFactorToken) {
+    throw new ApiError(400, "Two-factor token is required");
+  }
+
+  let decoded;
+  try {
+    decoded = jwt.verify(twoFactorToken, process.env.JWT_SECRET);
+  } catch (error) {
+    throw new ApiError(401, "Two-factor session expired. Please login again.");
+  }
+
+  if (!decoded || decoded.type !== "2fa") {
+    throw new ApiError(401, "Invalid two-factor session");
+  }
+
+  const user = await User.findById(decoded._id);
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  if (!user.twoFactorEnabled || !user.twoFactorSecret) {
+    throw new ApiError(409, "Two-factor authentication is not enabled");
+  }
+
+  let verified = false;
+  let usedBackupCode = false;
+
+  if (token) {
+    const verification = speakeasy.totp.verify({
+      secret: user.twoFactorSecret,
+      encoding: "base32",
+      token: String(token).trim(),
+      window: 1,
+    });
+    if (verification) {
+      const currentStep = speakeasy.totp.timeUsed();
+      if (user.twoFactorLastUsedStep === currentStep) {
+        throw new ApiError(409, "This code was already used");
+      }
+      user.twoFactorLastUsedStep = currentStep;
+      verified = true;
+    }
+  }
+
+  if (!verified && backupCode) {
+    const backupResult = await verifyBackupCode(user, backupCode);
+    if (backupResult.valid) {
+      verified = true;
+      usedBackupCode = true;
+    }
+  }
+
+  if (!verified) {
+    throw new ApiError(401, "Invalid verification code");
+  }
+
+  await user.save();
+
+  const payload = {
+    _id: user._id,
+    username: user.username,
+    email: user.email,
+  };
+
+  const authToken = encodeAuthToken(payload);
+
+  return res
+    .status(200)
+    .cookie("authToken", authToken, buildCookieOptions())
+    .json(
+      new ApiResponse(
+        200,
+        { user, token: authToken, usedBackupCode },
+        "Two-factor verification successful"
+      )
+    );
+});
+
 const Logout = AsyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   if (!user) {
@@ -216,15 +352,180 @@ const Logout = AsyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "User logged out successfully"));
 });
 
+const GetTwoFactorStatus = AsyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      {
+        enabled: Boolean(user.twoFactorEnabled),
+        pending: Boolean(user.twoFactorTempSecret && !user.twoFactorEnabled),
+      },
+      "Two-factor status fetched"
+    )
+  );
+});
+
+const SetupTwoFactor = AsyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  const secret = speakeasy.generateSecret({
+    name: `Memois (${user.email})`,
+    length: 20,
+  });
+
+  user.twoFactorTempSecret = secret.base32;
+  await user.save();
+
+  const qrCodeDataUrl = await qrcode.toDataURL(secret.otpauth_url);
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      {
+        otpauthUrl: secret.otpauth_url,
+        qrCodeDataUrl,
+        secret: secret.base32,
+      },
+      "Two-factor setup generated"
+    )
+  );
+});
+
+const VerifyTwoFactor = AsyncHandler(async (req, res) => {
+  const { token } = req.body;
+  if (!token) {
+    throw new ApiError(400, "Verification code is required");
+  }
+
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  if (!user.twoFactorTempSecret) {
+    throw new ApiError(409, "No pending two-factor setup");
+  }
+
+  const verified = speakeasy.totp.verify({
+    secret: user.twoFactorTempSecret,
+    encoding: "base32",
+    token: String(token).trim(),
+    window: 1,
+  });
+
+  if (!verified) {
+    throw new ApiError(401, "Invalid verification code");
+  }
+
+  user.twoFactorSecret = user.twoFactorTempSecret;
+  user.twoFactorTempSecret = null;
+  user.twoFactorEnabled = true;
+  user.twoFactorLastUsedStep = speakeasy.totp.timeUsed();
+
+  const backupCodes = generateBackupCodes(8);
+  user.twoFactorBackupCodes = await buildBackupCodeEntries(backupCodes);
+  await user.save();
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      { backupCodes },
+      "Two-factor authentication enabled"
+    )
+  );
+});
+
+const DisableTwoFactor = AsyncHandler(async (req, res) => {
+  const { token, backupCode } = req.body;
+  if (!token && !backupCode) {
+    throw new ApiError(400, "Verification code is required");
+  }
+
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  if (!user.twoFactorEnabled || !user.twoFactorSecret) {
+    throw new ApiError(409, "Two-factor authentication is not enabled");
+  }
+
+  let verified = false;
+  if (token) {
+    verified = speakeasy.totp.verify({
+      secret: user.twoFactorSecret,
+      encoding: "base32",
+      token: String(token).trim(),
+      window: 1,
+    });
+  }
+
+  if (!verified && backupCode) {
+    const backupResult = await verifyBackupCode(user, backupCode);
+    verified = backupResult.valid;
+  }
+
+  if (!verified) {
+    throw new ApiError(401, "Invalid verification code");
+  }
+
+  user.twoFactorEnabled = false;
+  user.twoFactorSecret = null;
+  user.twoFactorTempSecret = null;
+  user.twoFactorBackupCodes = [];
+  user.twoFactorLastUsedStep = null;
+  await user.save();
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Two-factor authentication disabled"));
+});
+
 const UpdateUserDetails = AsyncHandler(async (req, res) => {
   const { eusername, ename, ebio, emobile } = req.body;
 
   const UpdateUser = {};
 
-  if (eusername) UpdateUser.username = eusername;
-  if (ename) UpdateUser.fullname = ename;
+  if (eusername) {
+    const normalizedUsername = normalizeUsername(eusername);
+    if (!usernamePattern.test(normalizedUsername)) {
+      throw new ApiError(
+        400,
+        "Username must be 3-20 characters and use only letters, numbers, dots or underscores"
+      );
+    }
+    const existingUser = await User.findOne({
+      username: normalizedUsername,
+      _id: { $ne: req.user._id },
+    });
+    if (existingUser) {
+      throw new ApiError(409, "Username already in use");
+    }
+    UpdateUser.username = normalizedUsername;
+  }
+  if (ename) {
+    const normalizedFullname = ename.trim();
+    if (!normalizedFullname) {
+      throw new ApiError(400, "Full name is required");
+    }
+    UpdateUser.fullname = normalizedFullname;
+  }
   if (ebio) UpdateUser.bio = ebio;
-  if (emobile) UpdateUser.phoneNumber = emobile;
+  if (emobile) {
+    const normalizedPhoneNumber = `${emobile}`.trim();
+    if (!phonePattern.test(normalizedPhoneNumber)) {
+      throw new ApiError(400, "Please enter a valid phone number");
+    }
+    UpdateUser.phoneNumber = Number(normalizedPhoneNumber);
+  }
 
   let user = await User.findById(req.user._id);
 
@@ -265,6 +566,7 @@ const ChangePassword = AsyncHandler(async (req, res) => {
   if (!checkPassword) {
     throw new ApiError(401, "Old password is incorrect !");
   }
+  assertValidPassword(newPassword);
   const hashedPassword = await GenerateHashedPassword(newPassword);
 
   user = await User.findByIdAndUpdate(req.user._id, {
@@ -290,6 +592,10 @@ const ChangeEmail = AsyncHandler(async (req, res) => {
   if (!email || !password) {
     throw new ApiError(400, "Email and password are required");
   }
+  const normalizedEmail = normalizeEmail(email);
+  if (!emailPattern.test(normalizedEmail)) {
+    throw new ApiError(400, "Please enter a valid email address");
+  }
 
   let user = await User.findById(req.user._id);
   if (!user) {
@@ -300,11 +606,22 @@ const ChangeEmail = AsyncHandler(async (req, res) => {
   if (!checkPassword) {
     throw new ApiError(401, "Password is incorrect !");
   }
-  user = await User.findByIdAndUpdate(req.user._id, {
-    $set: {
-      email,
+  const existingUser = await User.findOne({
+    email: normalizedEmail,
+    _id: { $ne: req.user._id },
+  });
+  if (existingUser) {
+    throw new ApiError(409, "Email already in use");
+  }
+  user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $set: {
+        email: normalizedEmail,
+      },
     },
-  }).select("-password");
+    { new: true }
+  ).select("-password");
 
   return res
     .status(200)
@@ -316,12 +633,16 @@ const ChangeMobileNumber = AsyncHandler(async (req, res) => {
   if (!newNumber || !oldNumber) {
     throw new ApiError(400, "All fields are required !");
   }
+  const normalizedNewNumber = `${newNumber}`.trim();
+  if (!phonePattern.test(normalizedNewNumber)) {
+    throw new ApiError(400, "Please enter a valid phone number");
+  }
   let user = await User.findById(req.user._id)?.select("-password");
   if (!user) throw new ApiError(404, "User not found !");
   if (`${user.phoneNumber}` !== `${oldNumber}`) {
     throw new ApiError(400, "Old phone number does not match");
   }
-  user.phoneNumber = newNumber;
+  user.phoneNumber = Number(normalizedNewNumber);
 
   user = await user.save({ validateBeforeSave: false });
 
@@ -336,7 +657,7 @@ const ChangeAvater = AsyncHandler(async (req, res) => {
     throw new ApiError(400, "Please select an valid avatar");
   }
   const cloudinaryUrl = await cloudinaryUpload(localAvatarPath);
-  if (!cloudinaryUrl.url) {
+  if (!cloudinaryUrl?.url) {
     throw new ApiError(500, "Error occured while updating avatar image ");
   }
   const user = await User.findByIdAndUpdate(req.user._id, {
@@ -358,7 +679,7 @@ const ChangeCoverImage = AsyncHandler(async (req, res) => {
     throw new ApiError(400, "Please select a valid cover image");
 
   const cloudinaryCoverUrl = await cloudinaryUpload(localCoverPath);
-  if (!cloudinaryCoverUrl.url)
+  if (!cloudinaryCoverUrl?.url)
     throw new ApiError(
       500,
       "Error occured while uploading image to the cloudinary "
@@ -518,7 +839,12 @@ export {
   RegisterUser,
   GerUserDetails,
   Login,
+  LoginWithTwoFactor,
   Logout,
+  GetTwoFactorStatus,
+  SetupTwoFactor,
+  VerifyTwoFactor,
+  DisableTwoFactor,
   ChangePassword,
   ChangeMobileNumber,
   ChangeAvater,

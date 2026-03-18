@@ -128,6 +128,9 @@ const EventDetails = AsyncHandler(async (req, res) => {
   if (!eventId || !_id) {
     throw new ApiError(401, "Unauthorized");
   }
+  if (!mongoose.Types.ObjectId.isValid(eventId)) {
+    throw new ApiError(400, "Invalid event id");
+  }
 
   const combined_details = await Event.aggregate([
     {
@@ -175,7 +178,7 @@ const EventDetails = AsyncHandler(async (req, res) => {
   ]);
 
   // console.log("Print Combined details:", combined_details);
-  if (combined_details.length >= 0) {
+  if (combined_details.length > 0) {
     return res
       .status(200)
       .json(
@@ -186,6 +189,6 @@ const EventDetails = AsyncHandler(async (req, res) => {
         )
       );
   }
-  throw new ApiError(500, "Error occured while fetching events");
+  throw new ApiError(404, "Event not found");
 });
 export { CreateEvent, EditEvent, DeleteEvent, GetAllEvent, EventDetails };

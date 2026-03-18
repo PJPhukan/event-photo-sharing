@@ -5,6 +5,7 @@ import {
   Routes,
   Route,
   useLocation,
+  Navigate,
 } from "react-router-dom";
 import Lenis from "lenis";
 import Home from "./page/Home/Home";
@@ -32,7 +33,9 @@ import EditEvent from "./component/EditEvent/EditEvent";
 import QRCode from "./component/QRCode/QRCode";
 import Selfie from "./page/Selfie/Selfie";
 import BackToTop from "./component/BackToTop/BackToTop";
-import ComingSoon from "./component/ComingSoon/ComingSoon";
+import Favorite from "./page/Favorite/Favorite";
+import Collections from "./page/Collections/Collections";
+import CollectionDetails from "./page/CollectionDetails/CollectionDetails";
 
 const SmoothScrollController = ({ enabled }) => {
   useEffect(() => {
@@ -69,7 +72,7 @@ const SmoothScrollController = ({ enabled }) => {
 
 const AppRoutes = () => {
   const userContext = useContext(context);
-  const { adminlogin, CheckCookie, createEvent, editEvent, downloadQR } =
+  const { adminlogin, authChecked, CheckCookie, createEvent, editEvent, downloadQR } =
     userContext;
   const location = useLocation();
 
@@ -94,11 +97,27 @@ const AppRoutes = () => {
     !location.pathname.startsWith("/forgot-password") &&
     !location.pathname.startsWith("/event/");
 
+  const isAuthRoute =
+    location.pathname.startsWith("/login") ||
+    location.pathname.startsWith("/signup") ||
+    location.pathname.startsWith("/forgot-password");
+
+  const showDashboardLayout = adminlogin && !isAuthRoute;
+  const isDashboardRoute = location.pathname.startsWith("/dashboard");
+
+  if (!authChecked) {
+    return null;
+  }
+
+  if (!adminlogin && isDashboardRoute) {
+    return <Navigate to="/login" replace state={{ from: location.pathname }} />;
+  }
+
   return (
     <>
       <SmoothScrollController enabled={enableSmoothScroll} />
       <BackToTop visible={showBackToTop} />
-        {!adminlogin ? (
+        {!showDashboardLayout ? (
           <>
             <Navber />
             <Routes>
@@ -130,21 +149,15 @@ const AppRoutes = () => {
                 <Route path="/dashboard/event" element={<Event />} />
                 <Route
                   path="/dashboard/favorite"
-                  element={
-                    <ComingSoon
-                      title="Favorites is coming soon"
-                      description="A dedicated favorites space for saved media is on the way."
-                    />
-                  }
+                  element={<Favorite />}
                 />
                 <Route
                   path="/dashboard/collections"
-                  element={
-                    <ComingSoon
-                      title="Collections is coming soon"
-                      description="Curated media collections and smarter organization will be available here soon."
-                    />
-                  }
+                  element={<Collections />}
+                />
+                <Route
+                  path="/dashboard/collections/:collectionId"
+                  element={<CollectionDetails />}
                 />
                 <Route path="/dashboard/settings" element={<Settings />} />
                 <Route path="/dashboard/profile" element={<Profile />} />

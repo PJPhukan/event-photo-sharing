@@ -14,13 +14,14 @@
   @include md {
     min-height: calc(100vh - 80px);
   }
-  .main-box {
-    width: 95%;
-    // border: 2px solid red;
-    background: #fff;
-    border-radius: 10px;
-    padding: 1rem 2rem;
-    position: relative;
+    .main-box {
+      width: 95%;
+      // border: 2px solid red;
+      background: #fff;
+      border-radius: 10px;
+      padding: 1rem 2rem;
+      position: relative;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
     @include md {
       width: 50%;
     }
@@ -106,6 +107,11 @@
         padding: .8rem 1.6rem;
         border: none;
         border-radius: 5px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        &:hover {
+          transform: translateY(-1px);
+          box-shadow: rgba(0, 0, 0, 0.45) 0px 18px 45px 2px;
+        }
         
         @include md{
           padding: 1rem 2rem;
@@ -113,6 +119,35 @@
           gap: 0.7rem;
           font-size: $font-size-large;
         }
+      }
+    }
+
+    .action-box {
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      align-items: center;
+
+      .btn {
+        width: 60%;
+      }
+
+      .secondary {
+        background: $dashboard-bg-secondary;
+        color: $text-color-primary;
+      }
+
+      .outline {
+        background: transparent;
+        color: $dashboard-bg-secondary;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+      }
+
+      .collection-controls {
+        width: 60%;
+        display: flex;
+        justify-content: center;
       }
     }
   }

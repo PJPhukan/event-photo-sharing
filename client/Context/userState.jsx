@@ -24,6 +24,7 @@ const UseState = (props) => {
   const [userId, setuserId] = useState(null);
   const [token, setToken] = useState(() => localStorage.getItem("token") || "");
   const [toasts, setToasts] = useState([]);
+  const [authChecked, setAuthChecked] = useState(false);
 
   const removeToast = useCallback((toastId) => {
     setToasts((current) => current.filter((toast) => toast.id !== toastId));
@@ -50,6 +51,13 @@ const UseState = (props) => {
       setadminlogin(false);
     }
   }, []);
+  useEffect(() => {
+    if (adminlogin && typeof window !== "undefined") {
+      if (window.innerWidth <= 768) {
+        setshowSidebar(false);
+      }
+    }
+  }, [adminlogin]);
 
   //REGISTER USER
   const register = async (payload) => {
@@ -61,6 +69,7 @@ const UseState = (props) => {
       localStorage.setItem("userId", res.data.data.user._id);
       localStorage.setItem("token", res.data.data.token);
       setadminlogin(true);
+      setAuthChecked(true);
       showToast("Account created successfully", "success");
       return res.data;
     } catch (err) {
@@ -74,12 +83,39 @@ const UseState = (props) => {
     setError(null);
     try {
       const res = await axios.post("/api/auth/user/login", payload);
+      if (res.data?.data?.requiresTwoFactor) {
+        return res.data;
+      }
       if (res.data.success) {
         setUser(res.data.data.user);
         setToken(res.data.data.token);
         localStorage.setItem("token", res.data.data.token);
         localStorage.setItem("userId", res.data.data.user._id);
         setadminlogin(true);
+        setAuthChecked(true);
+        if (typeof window !== "undefined" && window.innerWidth <= 768) {
+          setshowSidebar(false);
+        }
+        showToast("Logged in successfully", "success");
+      }
+      return res.data;
+    } catch (err) {
+      clearErrorWithDelay(err.response?.data?.message || "Login failed");
+      return null;
+    }
+  };
+
+  const loginWithTwoFactor = async (payload) => {
+    setError(null);
+    try {
+      const res = await axios.post("/api/auth/user/login-2fa", payload);
+      if (res.data.success) {
+        setUser(res.data.data.user);
+        setToken(res.data.data.token);
+        localStorage.setItem("token", res.data.data.token);
+        localStorage.setItem("userId", res.data.data.user._id);
+        setadminlogin(true);
+        setAuthChecked(true);
         showToast("Logged in successfully", "success");
       }
       return res.data;
@@ -90,7 +126,7 @@ const UseState = (props) => {
   };
 
   //GET USER DETAILS
-  const getuser = async () => {
+  const getuser = useCallback(async () => {
     await axios
       .get("/api/auth/user/getdetails")
       .then((res) => {
@@ -99,7 +135,7 @@ const UseState = (props) => {
       .catch(() => {
         setUser(null);
       });
-  };
+  }, []);
 
   //LOGOUT
   const logout = async () => {
@@ -110,6 +146,7 @@ const UseState = (props) => {
       setToken("");
       setUser(null);
       setadminlogin(false);
+      setAuthChecked(true);
       showToast("Logged out successfully", "success");
       return res.data;
     } catch (err) {
@@ -168,6 +205,8 @@ const UseState = (props) => {
       }
     } catch (error) {
       setadminlogin(false);
+    } finally {
+      setAuthChecked(true);
     }
   }, []);
   //CHANGE PASSWORD
@@ -197,6 +236,60 @@ const UseState = (props) => {
       clearErrorWithDelay(
         error.response?.data?.message || "Cover image update failed"
       );
+    }
+  };
+
+  const getTwoFactorStatus = async () => {
+    try {
+      const res = await axios.get("/api/auth/user/2fa/status");
+      return res.data;
+    } catch (error) {
+      clearErrorWithDelay(
+        error.response?.data?.message || "Failed to fetch 2FA status"
+      );
+      return null;
+    }
+  };
+
+  const setupTwoFactor = async () => {
+    try {
+      const res = await axios.post("/api/auth/user/2fa/setup");
+      return res.data;
+    } catch (error) {
+      clearErrorWithDelay(
+        error.response?.data?.message || "Failed to setup 2FA"
+      );
+      return null;
+    }
+  };
+
+  const verifyTwoFactor = async (payload) => {
+    try {
+      const res = await axios.post("/api/auth/user/2fa/verify", payload);
+      if (res.data.success) {
+        showToast("Two-factor authentication enabled", "success");
+      }
+      return res.data;
+    } catch (error) {
+      clearErrorWithDelay(
+        error.response?.data?.message || "2FA verification failed"
+      );
+      return null;
+    }
+  };
+
+  const disableTwoFactor = async (payload) => {
+    try {
+      const res = await axios.post("/api/auth/user/2fa/disable", payload);
+      if (res.data.success) {
+        showToast("Two-factor authentication disabled", "success");
+      }
+      return res.data;
+    } catch (error) {
+      clearErrorWithDelay(
+        error.response?.data?.message || "Failed to disable 2FA"
+      );
+      return null;
     }
   };
   //FORGOT PASSWORD
@@ -244,6 +337,7 @@ const UseState = (props) => {
         localStorage.setItem("token", res.data.data.token);
         localStorage.setItem("userId", res.data.data.user._id);
         setadminlogin(true);
+        setAuthChecked(true);
         showToast("Password reset successfully", "success");
       }
       return res.data;
@@ -317,6 +411,12 @@ const UseState = (props) => {
         toasts,
         showToast,
         removeToast,
+        authChecked,
+        loginWithTwoFactor,
+        getTwoFactorStatus,
+        setupTwoFactor,
+        verifyTwoFactor,
+        disableTwoFactor,
       }}
     >
       {props.children}

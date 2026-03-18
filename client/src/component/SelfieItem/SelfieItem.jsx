@@ -13,6 +13,7 @@ const SelfieItem = ({ item }) => {
   // console.log(item);
   //ALL USE-STATE
   const [isLiked, setisLiked] = useState(false);
+  const [localLikes, setLocalLikes] = useState(item?.likes || []);
   const [showDropdown, setshowDropdown] = useState(false);
   const dropdownRef = useRef(null);
   const [loveStyle, setLoveStyle] = useState({
@@ -31,7 +32,7 @@ const SelfieItem = ({ item }) => {
           (obj) => obj.likedUser === localStorage.getItem("userId")
         );
       };
-      let islike = findUserById(item?.likes);
+      let islike = findUserById(localLikes);
       if (islike) {
         setisLiked(true);
       } else {
@@ -39,6 +40,10 @@ const SelfieItem = ({ item }) => {
       }
     }
   };
+
+  useEffect(() => {
+    setLocalLikes(item?.likes || []);
+  }, [item?.likes]);
 
   // //TODO:Share logic
   const ShareImage = async () => {
@@ -91,8 +96,14 @@ const SelfieItem = ({ item }) => {
         imageId: item?._id,
         eventId: item?.event_id,
       };
-      await new_likes(payload);
-      setisLiked(true);
+      const res = await new_likes(payload);
+      if (res?.data?.success) {
+        setLocalLikes((prev) => [
+          ...prev,
+          { likedUser: localStorage.getItem("userId") },
+        ]);
+        setisLiked(true);
+      }
       setTimeout(() => {
         setLoveStyle({
           opacity: 0,
@@ -112,19 +123,32 @@ const SelfieItem = ({ item }) => {
           imageId: item?._id,
           eventId: item?.event_id,
         };
-        await new_likes(payload);
-        setisLiked(true);
+        const res = await new_likes(payload);
+        if (res?.data?.success) {
+          setLocalLikes((prev) => [
+            ...prev,
+            { likedUser: localStorage.getItem("userId") },
+          ]);
+          setisLiked(true);
+        }
       } else {
         const imageId = item?._id;
-        await dislike(imageId);
-        setisLiked(false);
+        const res = await dislike(imageId);
+        if (res?.data?.success) {
+          setLocalLikes((prev) =>
+            prev.filter(
+              (like) => `${like?.likedUser}` !== `${localStorage.getItem("userId")}`
+            )
+          );
+          setisLiked(false);
+        }
       }
     } else {
       navigate("/login");
     }
   };
 
-  const len = item?.likes?.length;
+  const len = localLikes?.length;
 
   useEffect(() => {
     if (!showDropdown) {
@@ -161,7 +185,13 @@ const SelfieItem = ({ item }) => {
         </video>
       )}
       <i className="bx bxs-heart" id="love" style={loveStyle}></i>
-      <div className="like-deteails-icon" onClick={handleLike}>
+      <div
+        className="like-deteails-icon"
+        onClick={(event) => {
+          event.stopPropagation();
+          handleLike();
+        }}
+      >
         {!isLiked && <i className="bx bx-heart"></i>}
         {isLiked && <i className="bx bxs-heart active"></i>}
         {len} Likes
