@@ -1,5 +1,6 @@
-import React, { useState, useRef, useContext } from "react";
-import QRCode from "qrcode.react";
+import React, { useRef, useContext } from "react";
+import { QRCodeCanvas } from "qrcode.react";
+import logo from "../../assets/logo.png";
 import "./qrcode.scss";
 import { context, dashboad } from "../../../Context/context";
 
@@ -31,12 +32,19 @@ const QRcode = () => {
         </button>
         <h5 className="heading">Download QR Code</h5>
         <div className="qr-code-box" ref={qrRef}>
-          <QRCode
+          <QRCodeCanvas
             value={qrtext}
             size={256}
+            level="H"
             bgColor="#ffffff"
             fgColor="#000000"
             className="qr-code"
+            imageSettings={{
+              src: logo,
+              height: 256 * 0.25,
+              width: 256 * 0.25,
+              excavate: true,
+            }}
           />
         </div>
         <button onClick={downloadQRCode} className="download-button">

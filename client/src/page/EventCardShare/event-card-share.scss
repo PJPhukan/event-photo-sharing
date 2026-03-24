@@ -1,0 +1,31 @@
+@import "../../css-config/variables.scss";
+
+.event-card-share {
+  min-height: 100vh;
+  background: $dashboard-bg-primary;
+  color: $text-color-primary;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.share-message {
+  margin-bottom: 1.5rem;
+  color: $text-color-secondary;
+  font-size: 0.95rem;
+}
+
+.share-canvas {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 1rem;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+
+  canvas {
+    border-radius: 14px;
+    border: 2px solid rgba(0, 212, 255, 0.6);
+  }
+}

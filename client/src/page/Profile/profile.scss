@@ -23,16 +23,68 @@
       border-radius: 10px;
       overflow: hidden;
       position: relative;
+      background: radial-gradient(
+          120% 120% at 10% 0%,
+          rgba(255, 45, 139, 0.22) 0%,
+          rgba(255, 45, 139, 0) 55%
+        ),
+        radial-gradient(
+          120% 120% at 90% 100%,
+          rgba(0, 212, 255, 0.24) 0%,
+          rgba(0, 212, 255, 0) 60%
+        ),
+        linear-gradient(135deg, #0e101a 0%, #14182a 50%, #0f1220 100%);
+      border: none;
+      box-shadow: none;
+      isolation: isolate;
       @include md {
         width: 100%;
         height: 20rem;
         border-radius: 15px;
       }
+      &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        padding: 2px;
+        border-radius: inherit;
+        background: linear-gradient(
+          120deg,
+          #ff2d8b,
+          #00d4ff,
+          #7c3aed,
+          #ff2d8b
+        );
+        background-size: 300% 300%;
+        animation: cover-premium-glow 8s ease infinite;
+        -webkit-mask: linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+        z-index: 4;
+      }
+      &::after {
+        content: "";
+        position: absolute;
+        inset: 6px;
+        border-radius: inherit;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 45, 139, 0.18) 0%,
+          rgba(124, 58, 237, 0.08) 45%,
+          rgba(0, 212, 255, 0.18) 100%
+        );
+        opacity: 0.6;
+        pointer-events: none;
+        z-index: 2;
+      }
       img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        z-index: -8;
+        z-index: 3;
+        display: block;
       }
       label {
         position: absolute;
@@ -244,5 +296,17 @@
         }
       }
     }
+  }
+}
+
+@keyframes cover-premium-glow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }

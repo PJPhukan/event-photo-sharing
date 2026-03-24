@@ -154,6 +154,20 @@ const Sidebar = () => {
               <span>Events</span>
             </li>
           </Link>
+          <Link
+            to="/dashboard/card-builder"
+            className={`${
+              location.pathname === "/dashboard/card-builder"
+                ? "active"
+                : " "
+            }`}
+            onClick={closeSidebarOnMobile}
+          >
+            <li>
+              <i className="bx bx-paint-roll"></i>
+              <span>Card Builder</span>
+            </li>
+          </Link>
 
           <Link
             to="/dashboard/collections"

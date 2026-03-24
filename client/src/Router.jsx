@@ -36,6 +36,8 @@ import BackToTop from "./component/BackToTop/BackToTop";
 import Favorite from "./page/Favorite/Favorite";
 import Collections from "./page/Collections/Collections";
 import CollectionDetails from "./page/CollectionDetails/CollectionDetails";
+import EventCardBuilder from "./page/EventCardBuilder/EventCardBuilder";
+import EventCardShare from "./page/EventCardShare/EventCardShare";
 
 const SmoothScrollController = ({ enabled }) => {
   useEffect(() => {
@@ -132,6 +134,7 @@ const AppRoutes = () => {
               <Route path="/terms-conditions" element={<TermsConditions />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/forgot-password" element={<ForgotPassowrd />} />
+              <Route path="/card/:cardId" element={<EventCardShare />} />
               <Route path="/event/:userId/:eventId" element={<Selfie />} />
             </Routes>
             <Footer />
@@ -158,6 +161,10 @@ const AppRoutes = () => {
                 <Route
                   path="/dashboard/collections/:collectionId"
                   element={<CollectionDetails />}
+                />
+                <Route
+                  path="/dashboard/card-builder"
+                  element={<EventCardBuilder />}
                 />
                 <Route path="/dashboard/settings" element={<Settings />} />
                 <Route path="/dashboard/profile" element={<Profile />} />
