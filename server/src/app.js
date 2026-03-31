@@ -19,12 +19,16 @@ const allowedOrigins = (process.env.CLIENT_ORIGIN || "")
   .map((origin) => origin.trim())
   .filter(Boolean);
 
+const defaultOrigins = [
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+  "https://memois.vercel.app",
+];
+
 app.use(
   cors({
     origin:
-      allowedOrigins.length > 0
-        ? allowedOrigins
-        : ["http://localhost:5173", "http://127.0.0.1:5173"],
+      allowedOrigins.length > 0 ? allowedOrigins : defaultOrigins,
     credentials: true,
   })
 );
