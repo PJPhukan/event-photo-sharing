@@ -25,13 +25,14 @@ const defaultOrigins = [
   "https://memois.vercel.app",
 ];
 
-app.use(
-  cors({
-    origin:
-      allowedOrigins.length > 0 ? allowedOrigins : defaultOrigins,
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin: allowedOrigins.length > 0 ? allowedOrigins : defaultOrigins,
+  credentials: true,
+};
+
+// Handle preflight requests explicitly
+app.options("*", cors(corsOptions));
+app.use(cors(corsOptions));
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
