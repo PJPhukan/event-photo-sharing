@@ -23,12 +23,49 @@ const Topbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(() => {
+    if (typeof window === "undefined") {
+      return false;
+    }
+    return localStorage.getItem("memois_sidebar_collapsed") === "true";
+  });
   const searchRef = useRef(null);
 
   useEffect(() => {}, [user]);
   const ToggleNotification = () => {
     setshowNotification(!showNotification);
   };
+
+  const handleSidebarToggle = () => {
+    if (typeof window !== "undefined" && window.innerWidth > 768) {
+      const nextCollapsed =
+        localStorage.getItem("memois_sidebar_collapsed") !== "true";
+      localStorage.setItem("memois_sidebar_collapsed", String(nextCollapsed));
+      window.dispatchEvent(
+        new CustomEvent("memois-sidebar-toggle", { detail: nextCollapsed })
+      );
+      setIsCollapsed(nextCollapsed);
+      return;
+    }
+    setshowSidebar((prev) => !prev);
+  };
+
+  useEffect(() => {
+    const handleExternalToggle = (event) => {
+      if (typeof event?.detail === "boolean") {
+        setIsCollapsed(event.detail);
+      } else if (typeof window !== "undefined") {
+        setIsCollapsed(
+          localStorage.getItem("memois_sidebar_collapsed") === "true"
+        );
+      }
+    };
+
+    window.addEventListener("memois-sidebar-toggle", handleExternalToggle);
+    return () => {
+      window.removeEventListener("memois-sidebar-toggle", handleExternalToggle);
+    };
+  }, []);
 
   const loadSearchData = async () => {
     setIsLoading(true);
@@ -99,10 +136,18 @@ const Topbar = () => {
   return (
     <div className="top-bar">
       <div className="left">
-        <i
-          className="bx bx-menu"
-          onClick={() => setshowSidebar((prev) => !prev)}
-        ></i>
+        <button
+          type="button"
+          className="collapse-toggle"
+          onClick={handleSidebarToggle}
+          aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          <i
+            className={`bx ${
+              isCollapsed ? "bx-chevron-right" : "bx-chevron-left"
+            }`}
+          ></i>
+        </button>
         <div className="search" ref={searchRef}>
           <input
             type="text"

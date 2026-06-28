@@ -3,6 +3,9 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap");
 
+$sidebar-expanded-width: 260px;
+$sidebar-collapsed-width: 60px;
+
 .sidebar {
   font-family: "Tilt Neon", sans-serif;
   position: fixed;
@@ -10,25 +13,31 @@
   left: 0;
   bottom: 0;
   color: $text-color-primary;
-  // width: auto;
   min-height: 100vh;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: 0 0.2rem;
-  overflow: hidden;
+  padding: 0.3rem 0.4rem 0.6rem;
+  overflow-x: hidden;
+  /* FIX 2: Allow vertical scroll when content overflows */
   overflow-y: auto;
-  transition: all 0.2s linear;
   background: $dashboard-bg-primary;
-  transition: all 0.3s;
+  transition: width 0.3s ease, padding 0.3s ease;
   z-index: 1000;
+
   &.show {
-    width: 15rem;
+    width: $sidebar-expanded-width;
   }
+
+  &.show.collapsed {
+    width: $sidebar-collapsed-width;
+  }
+
   &.hide {
     width: 0rem;
     pointer-events: none;
   }
+
   &.mobile-show {
     top: 60px;
     z-index: 10000;
@@ -37,35 +46,65 @@
       top: 80px;
     }
   }
-  @include md {
-    display: inline-block;
-    padding: 0 0.5rem;
+
+  &.collapsed {
+    padding: 0.3rem 0.2rem 0.6rem;
   }
+
+  @include md {
+    display: inline-flex;
+    padding: 0.4rem 0.6rem 0.6rem;
+  }
+
+  /* ─── LOGO ─────────────────────────────────── */
   .logo {
     display: flex;
     align-items: center;
-    gap: 0.85rem;
-    padding: 1.2rem 0.9rem 1rem;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 1.1rem 0.6rem 0.9rem;
+    min-height: 68px;
     text-align: left;
+    flex-shrink: 0;
 
     @include md {
-      padding: 1.4rem 0.9rem 1.2rem;
+      padding: 1.3rem 0.6rem 1rem;
+    }
+
+    .logo-mark {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      min-width: 0;
     }
 
     img {
-      width: 2.3rem;
-      height: 2.3rem;
+      width: 2.1rem;
+      height: 2.1rem;
       object-fit: contain;
       filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.24));
+      flex-shrink: 0;
 
       @include md {
-        width: 2.6rem;
-        height: 2.6rem;
+        width: 2.3rem;
+        height: 2.3rem;
       }
     }
 
     .logo-copy {
       min-width: 0;
+    }
+
+    .logo-text {
+      font-family: "Dancing Script", cursive;
+      font-weight: 900;
+      letter-spacing: 1px;
+      font-size: calc($font-size-medium + 2px);
+      line-height: 1;
+
+      span {
+        color: $text-color-pink;
+      }
     }
 
     .sidebar-close {
@@ -81,86 +120,28 @@
       justify-content: center;
       cursor: pointer;
       font-size: $font-size-medium;
-    }
-
-    .logo-mark {
-      font-family: "Dancing Script", cursive;
-      font-weight: 900;
-      letter-spacing: 1px;
-      font-size: calc($font-size-medium + 2px);
-      line-height: 1;
-
-      span {
-        color: $text-color-pink;
-      }
-    }
-
-    .logo-subtitle {
-      margin-top: 0.18rem;
-      font-size: 10px;
-      letter-spacing: 1.8px;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.68);
-      white-space: nowrap;
+      flex-shrink: 0;
     }
   }
 
+  /* ─── NAV ITEM ──────────────────────────────── */
   .nav-item {
     display: flex;
     flex-direction: column;
     align-items: start;
     justify-content: flex-start;
-    padding: 0.2rem 0.3rem;
+    padding: 0.2rem 0.2rem;
     gap: 0;
     position: relative;
-    height: auto;
+    /* FIX 3: flex:1 so nav pushes bottom section down */
     flex: 1;
+    /* FIX 4: allow scrolling inside nav when many items */
+    overflow-y: auto;
+    overflow-x: hidden;
+
     @include md {
-      gap: 0.5rem;
-      padding: 0.5rem;
-    }
-
-    a,button {
-      width: 100%;
-      height: 100%;
-      padding: 1rem 1.5rem !important;
-      border-radius: 5px;
-      transition: all 0.3s;
-      background-color: transparent;
-      border: none;
-      color: $text-color-primary;
-      font-family: "Tilt Neon", sans-serif;
-      @include md {
-        padding: 1rem 2rem;
-        border-radius: 6px;
-      }
-      
-      &:hover {
-        background-color: $dashboard-bg-light;
-      }
-      &.active {
-        color: rgb(7, 80, 251);
-      }
-      li {
-        display: flex;
-        justify-content: start;
-        align-items: center;
-        gap: 1rem;
-        font-size: calc($font-size-base - 3px);
-
-        @include md {
-          font-size: $font-size-base;
-          gap: 1.4rem;
-        }
-      }
-
-      // &.logout {
-      //   position: absolute;
-      //   bottom: 0;
-      //   left: 0;
-      //   width: 100%;
-      //   /* margin-bottom: 1rem; */
-      // }
+      gap: 0.4rem;
+      padding: 0.3rem 0.2rem;
     }
   }
 
@@ -169,40 +150,334 @@
     flex-direction: column;
     gap: 0.2rem;
     width: 100%;
-    flex: 1;
   }
 
-  .logout-row {
-    width: 100%;
-    padding: 0.6rem 0.5rem 0.9rem;
-    margin-top: auto;
+  /* FIX 5: Consistent icon sizing */
+  .nav-link li i {
+    font-size: 1.25rem;
+    min-width: 20px;
+    text-align: center;
+    flex-shrink: 0;
   }
 
-  .logout-button {
+  .nav-link {
     width: 100%;
-    background: rgba(255, 62, 62, 0.12);
-    color: #ff5f5f;
-    border: 1px solid rgba(255, 62, 62, 0.35);
-    border-radius: 8px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 0.9rem 1.3rem;
+    padding: 0;
+    border-radius: 6px;
+    transition: background 0.2s ease, color 0.2s ease;
+    background-color: transparent;
+    border: none;
+    color: $text-color-primary;
     font-family: "Tilt Neon", sans-serif;
     cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    position: relative;
+    min-height: 44px;
+    text-decoration: none;
+
+    @include md {
+      padding: 0;
+      border-radius: 6px;
+    }
 
     &:hover {
-      background: rgba(255, 62, 62, 0.2);
-      transform: translateY(-1px);
+      background-color: $dashboard-bg-light;
+    }
+
+    /* FIX 6: Active state with background highlight */
+    &.active {
+      color: rgb(7, 80, 251);
+      background-color: rgba(7, 80, 251, 0.1);
+    }
+
+    &.active i {
+      color: rgb(7, 80, 251);
     }
 
     li {
+      display: flex;
+      justify-content: start;
+      align-items: center;
+      gap: 0.85rem;
+      width: 100%;
+      font-size: calc($font-size-base - 3px);
+      padding: 0 0.75rem;
+
+      @include md {
+        font-size: $font-size-base;
+        gap: 1rem;
+        padding: 0 0.85rem;
+      }
+    }
+
+    span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  /* ─── BOTTOM SECTION ────────────────────────── */
+  .sidebar-bottom {
+    width: 100%;
+    margin-top: auto;
+    padding: 0.9rem 0.6rem 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    background: $dashboard-bg-primary;
+    /* FIX 7: Prevent bottom section from shrinking */
+    flex-shrink: 0;
+  }
+
+  .bottom-divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  /* FIX 8: New collapse toggle button styles */
+  .sidebar-toggle-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    color: $text-color-primary;
+    cursor: pointer;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.85rem;
+    opacity: 0.65;
+    transition: opacity 0.2s ease, background 0.2s ease;
+    font-family: "Tilt Neon", sans-serif;
+
+    i {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    &:hover {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  /* FIX 9: plan-block no longer position:fixed — uses normal flow */
+  .plan-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    background: $dashboard-bg-primary;
+    padding-bottom: 0.4rem;
+    /* REMOVED: position:fixed, left, bottom, hardcoded width */
+    width: 100%;
+  }
+
+  .plan-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: transparent;
+    border: none;
+    color: $text-color-primary;
+    padding: 0.4rem 0.2rem;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .plan-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .plan-label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.68);
+  }
+
+  .plan-subtext {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .plan-upgrade-button {
+    width: 100%;
+    padding: 0.6rem 1rem;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #ffffff;
+    background: linear-gradient(135deg, #7b2ff7, #f916c2);
+    border: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .plan-upgrade-button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 2px;
+    border-radius: inherit;
+    background: linear-gradient(120deg, #ff2d8b, #00d4ff, #7c3aed, #ff2d8b);
+    background-size: 300% 300%;
+    animation: cover-premium-glow 8s ease infinite;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .plan-upgrade-button::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -20%;
+    width: 30%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.35);
+    transform: rotate(20deg);
+    animation: upgradeShimmer 2.4s ease-in-out infinite;
+  }
+
+  /* ─── COLLAPSED STATE ───────────────────────── */
+  &.collapsed {
+    .logo-copy {
+      display: none;
+    }
+
+    .logo {
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-mark {
+      justify-content: center;
       width: 100%;
     }
+
+    .nav-links {
+      align-items: center;
+    }
+
+    .nav-link {
+      padding: 0;
+      justify-content: center;
+    }
+
+    .nav-link li {
+      justify-content: center;
+      padding: 0;
+    }
+
+    .nav-link span {
+      display: none;
+    }
+
+    .plan-text,
+    .plan-subtext {
+      display: none;
+    }
+
+    .plan-block {
+      width: 100%;
+      padding-left: 0.2rem;
+      padding-right: 0.2rem;
+      align-items: center;
+    }
+
+    .plan-upgrade-button {
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      border-radius: 10px;
+      justify-content: center;
+    }
+
+    .upgrade-text {
+      display: none;
+    }
+
+    .sidebar-toggle-btn {
+      justify-content: center;
+      padding: 0.45rem;
+      width: 44px;
+      margin: 0 auto;
+
+      span {
+        display: none;
+      }
+    }
+
+    overflow-y: hidden;
+
+    .nav-item {
+      overflow-y: hidden;
+    }
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    scrollbar-width: none;
+  }
+
+  /* ─── TOOLTIP (collapsed only) ─────────────── */
+  &.collapsed [data-tooltip] {
+    position: relative;
+  }
+
+  &.collapsed [data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: calc(100% + 12px);
+    top: 50%;
+    transform: translate(6px, -50%);
+    background: #151515;
+    color: #ffffff;
+    padding: 0.35rem 0.55rem;
+    border-radius: 8px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 20;
+  }
+
+  &.collapsed [data-tooltip]:hover::after {
+    opacity: 1;
+    transform: translate(0, -50%);
+  }
+
+  /* ─── SCROLLBAR ─────────────────────────────── */
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
   }
 }
 
+/* ─── MOBILE ──────────────────────────────────── */
 @media (max-width: 768px) {
   .sidebar {
     height: calc(100vh - 60px);
@@ -212,21 +487,38 @@
     height: calc(100vh - 60px);
     bottom: 0;
   }
-
-  .nav-item {
-    min-height: 0;
-  }
-
-  .logout-row {
-    position: static;
-    width: 100%;
-    padding: 0.6rem 0.5rem 0.9rem;
-  }
 }
 
+/* ─── BACKDROP ────────────────────────────────── */
 .sidebar-backdrop {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.4);
   z-index: 999;
+}
+
+/* ─── ANIMATIONS ──────────────────────────────── */
+@keyframes upgradeShimmer {
+  0% {
+    transform: translateX(-120%) rotate(20deg);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.8;
+  }
+  60%,
+  100% {
+    transform: translateX(240%) rotate(20deg);
+    opacity: 0;
+  }
+}
+
+@keyframes cover-premium-glow {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }

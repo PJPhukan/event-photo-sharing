@@ -20,6 +20,7 @@ import TermsConditions from "./page/TermsConditions/TermsConditions";
 import PrivacyPolicy from "./page/PrivacyPolicy/PrivacyPolicy";
 import Testimonial from "./page/Testimonial/Testimonial";
 import ForgotPassowrd from "./page/ForgotPassword/ForgotPassowrd";
+import Pricing from "./page/Pricing/Pricing";
 import Dashboard from "./page/Dashboard/Dashboard";
 import Event from "./page/Event/Event";
 import Sidebar from "./component/Sidebar/Sidebar";
@@ -36,6 +37,7 @@ import BackToTop from "./component/BackToTop/BackToTop";
 import Favorite from "./page/Favorite/Favorite";
 import Collections from "./page/Collections/Collections";
 import CollectionDetails from "./page/CollectionDetails/CollectionDetails";
+import ComingSoon from "./component/ComingSoon/ComingSoon";
 
 const SmoothScrollController = ({ enabled }) => {
   useEffect(() => {
@@ -126,6 +128,7 @@ const AppRoutes = () => {
               <Route path="/use-for" element={<UseFor />} />
               <Route path="/use-for/:slug" element={<UseForDetail />} />
               <Route path="/faq" element={<Faq />} />
+              <Route path="/pricing" element={<Pricing />} />
               <Route path="/testimonial" element={<Testimonial />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
@@ -146,6 +149,8 @@ const AppRoutes = () => {
               {downloadQR && <QRCode />}
               <Routes>
                 <Route path="/" element={<Dashboard />} />
+                <Route path="/pricing" element={<Pricing />} />
+                <Route path="/dashboard/billing" element={<Pricing />} />
                 <Route path="/dashboard/event" element={<Event />} />
                 <Route
                   path="/dashboard/favorite"
@@ -161,6 +166,24 @@ const AppRoutes = () => {
                 />
                 <Route path="/dashboard/settings" element={<Settings />} />
                 <Route path="/dashboard/profile" element={<Profile />} />
+                <Route
+                  path="/dashboard/event-card-builder"
+                  element={
+                    <ComingSoon
+                      title="Event Card Builder"
+                      description="Design and publish event cards from one place."
+                    />
+                  }
+                />
+                <Route
+                  path="/dashboard/support"
+                  element={
+                    <ComingSoon
+                      title="Help & Support"
+                      description="Chat with the team or browse support resources."
+                    />
+                  }
+                />
                 <Route
                   path="/dashboard/event/:eventId"
                   element={<EventDetails />}
