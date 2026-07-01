@@ -174,36 +174,6 @@ const Sidebar = () => {
               </li>
             </Link>
 
-<<<<<<< HEAD
-          <Link
-            to="/dashboard/event"
-            className={`${
-              location.pathname === "/dashboard/event" || checkUrl("event")
-                ? "active"
-                : " "
-            }`}
-            onClick={closeSidebarOnMobile}
-          >
-            <li>
-              <i className="bx bxs-calendar-event"></i>
-              <span>Events</span>
-            </li>
-          </Link>
-          <Link
-            to="/dashboard/card-builder"
-            className={`${
-              location.pathname === "/dashboard/card-builder"
-                ? "active"
-                : " "
-            }`}
-            onClick={closeSidebarOnMobile}
-          >
-            <li>
-              <i className="bx bx-paint-roll"></i>
-              <span>Card Builder</span>
-            </li>
-          </Link>
-=======
             <Link
               to="/dashboard/event"
               className={`nav-link ${
@@ -217,7 +187,6 @@ const Sidebar = () => {
                 <span>Events</span>
               </li>
             </Link>
->>>>>>> 2f2a657ec19eb87430f80d3ea6cb07855f1723e5
 
             <Link
               to="/dashboard/event-card-builder"
@@ -252,43 +221,6 @@ const Sidebar = () => {
               </li>
             </Link>
 
-<<<<<<< HEAD
-          <button
-            onClick={() => {
-              ToggleNotification();
-              closeSidebarOnMobile();
-            }}
-          >
-            <li>
-              <i className="bx bxs-bell"></i>
-              <span>Notifications</span>
-            </li>
-          </button>
-          <Link
-            to="/dashboard/settings"
-            className={`${
-              location.pathname === "/dashboard/settings" ||
-              checkUrl("settings")
-                ? "active"
-                : " "
-            }`}
-            onClick={closeSidebarOnMobile}
-          >
-            <li>
-              <i className="bx bxs-cog"></i>
-              <span>Settings</span>
-            </li>
-          </Link>
-
-          {/* Subscription — not implemented yet
-          <button onClick={closeSidebarOnMobile}>
-            <li>
-              <i className="bx bxs-crown"></i>
-              <span>Subscription</span>
-            </li>
-          </button>
-          */}
-=======
             <Link
               to="/dashboard/favorite"
               className={`nav-link ${
@@ -347,7 +279,6 @@ const Sidebar = () => {
                 <span>Help & Support</span>
               </li>
             </Link>
->>>>>>> 2f2a657ec19eb87430f80d3ea6cb07855f1723e5
           </div>
         </div>
 

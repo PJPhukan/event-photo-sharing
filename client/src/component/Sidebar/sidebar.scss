@@ -21,12 +21,6 @@ $sidebar-collapsed-width: 60px;
   overflow-x: hidden;
   /* FIX 2: Allow vertical scroll when content overflows */
   overflow-y: auto;
-<<<<<<< HEAD
-  scrollbar-width: none;
-  &::-webkit-scrollbar { display: none; }
-  transition: all 0.2s linear;
-=======
->>>>>>> 2f2a657ec19eb87430f80d3ea6cb07855f1723e5
   background: $dashboard-bg-primary;
   transition: width 0.3s ease, padding 0.3s ease;
   z-index: 1000;

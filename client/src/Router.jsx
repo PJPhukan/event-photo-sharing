@@ -37,12 +37,9 @@ import BackToTop from "./component/BackToTop/BackToTop";
 import Favorite from "./page/Favorite/Favorite";
 import Collections from "./page/Collections/Collections";
 import CollectionDetails from "./page/CollectionDetails/CollectionDetails";
-<<<<<<< HEAD
 import EventCardBuilder from "./page/EventCardBuilder/EventCardBuilder";
 import EventCardShare from "./page/EventCardShare/EventCardShare";
-=======
 import ComingSoon from "./component/ComingSoon/ComingSoon";
->>>>>>> 2f2a657ec19eb87430f80d3ea6cb07855f1723e5
 
 const SmoothScrollController = ({ enabled }) => {
   useEffect(() => {
