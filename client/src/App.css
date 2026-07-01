@@ -92,6 +92,7 @@ li{
   z-index: 1;
   position: relative;
   padding-top: 60px;
+  transition: padding-left 0.3s ease;
 }
 
 @media (min-width: 768px) {
@@ -102,7 +103,11 @@ li{
 
 @media (min-width: 768px) {
   .sidebar.show ~ .sidebar-right {
-    padding-left: 15rem;
+    padding-left: 260px;
+  }
+
+  .sidebar.show.collapsed ~ .sidebar-right {
+    padding-left: 60px;
   }
 
   .sidebar.hide ~ .sidebar-right {
@@ -110,8 +115,13 @@ li{
   }
 
   .sidebar.show ~ .sidebar-right .top-bar {
-    left: 15rem;
-    width: calc(100% - 15rem);
+    left: 260px;
+    width: calc(100% - 260px);
+  }
+
+  .sidebar.show.collapsed ~ .sidebar-right .top-bar {
+    left: 60px;
+    width: calc(100% - 60px);
   }
 
   .sidebar.hide ~ .sidebar-right .top-bar {

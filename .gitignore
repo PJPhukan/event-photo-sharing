@@ -28,4 +28,6 @@ yarn-error.log*
 *.env
 *.local
 *.env
-*.txt.env
+.env
+server/.env
+*.txt
