@@ -1,4 +1,9 @@
 import { User } from "../model/user.model.js";
+import { Event } from "../model/event.model.js";
+import { Image } from "../model/image.model.js";
+import { Like } from "../model/likes.model.js";
+import { Favorite } from "../model/favorite.model.js";
+import { Collection } from "../model/collection.model.js";
 import { AsyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
@@ -10,7 +15,7 @@ import {
 import jwt from "jsonwebtoken";
 import speakeasy from "speakeasy";
 import qrcode from "qrcode";
-import { cloudinaryUpload } from "../utils/cloudinary.js";
+import { cloudinaryUpload, cloudinaryDelete } from "../utils/cloudinary.js";
 import { transporter } from "../libs/transporter.js";
 import { Notification } from "../model/notification.model.js";
 /**
@@ -39,7 +44,9 @@ const buildCookieOptions = () => {
   };
 };
 
+// Map<email, { otp, expiresAt, attempts }>
 const resetOtpStore = new Map();
+const OTP_MAX_ATTEMPTS = 5;
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const usernamePattern = /^[a-zA-Z0-9._]{3,20}$/;
@@ -125,13 +132,17 @@ const RegisterUser = AsyncHandler(async (req, res) => {
 
   assertValidPassword(password);
 
-  let user = await User.findOne({
-    $or: [{ email: normalizedEmail }, { username: normalizedUsername }],
-  });
-
-  if (user) {
-    throw new ApiError(409, "User Already exist");
+  const existingEmail = await User.findOne({ email: normalizedEmail });
+  if (existingEmail) {
+    throw new ApiError(409, "Email is already registered");
   }
+
+  const existingUsername = await User.findOne({ username: normalizedUsername });
+  if (existingUsername) {
+    throw new ApiError(409, "Username is already taken");
+  }
+
+  let user;
 
   const securePassword = await GenerateHashedPassword(password);
 
@@ -155,8 +166,7 @@ const RegisterUser = AsyncHandler(async (req, res) => {
     email: user.email,
   };
 
-  //Add congratulation message to user
-  const RegisterNotification = await Notification.create({
+  await Notification.create({
     message: "Welcome! Your account has been created successfully.",
     owner_id: user._id,
     imageId: null,
@@ -278,7 +288,7 @@ const LoginWithTwoFactor = AsyncHandler(async (req, res) => {
     throw new ApiError(401, "Invalid two-factor session");
   }
 
-  const user = await User.findById(decoded._id);
+  const user = await User.findById(decoded._id).select("-password");
   if (!user) {
     throw new ApiError(404, "User not found");
   }
@@ -702,9 +712,29 @@ const CheckCookie = AsyncHandler(async (req, res) => {
   const token =
     req.cookies?.authToken ||
     req.header("Authorization")?.replace("Bearer ", "");
-  return res
-    .status(200)
-    .json(new ApiResponse(200, { token }, "Token fetched successfully !"));
+
+  if (!token) {
+    return res
+      .status(200)
+      .json(new ApiResponse(200, { loggedIn: false }, "Not authenticated"));
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded?._id).select("_id");
+    if (!user) {
+      return res
+        .status(200)
+        .json(new ApiResponse(200, { loggedIn: false }, "Not authenticated"));
+    }
+    return res
+      .status(200)
+      .json(new ApiResponse(200, { loggedIn: true }, "Authenticated"));
+  } catch {
+    return res
+      .status(200)
+      .json(new ApiResponse(200, { loggedIn: false }, "Not authenticated"));
+  }
 });
 const ForgotPassword = AsyncHandler(async (req, res) => {
   const normalizedEmail = normalizeEmail(req.body.email);
@@ -724,6 +754,7 @@ const ForgotPassword = AsyncHandler(async (req, res) => {
   resetOtpStore.set(normalizedEmail, {
     otp: verificationOtp,
     expiresAt: Date.now() + 10 * 60 * 1000,
+    attempts: 0,
   });
 
   const mailOptions = {
@@ -752,12 +783,19 @@ const VerifyOTP = AsyncHandler(async (req, res) => {
     throw new ApiError(400, "Email and otp are required");
   }
 
-  if (!resetRequest || !otp || Date.now() > resetRequest.expiresAt) {
+  if (!resetRequest || Date.now() > resetRequest.expiresAt) {
+    resetOtpStore.delete(email);
     throw new ApiError(401, "Verification code expired or invalid");
   }
 
+  if (resetRequest.attempts >= OTP_MAX_ATTEMPTS) {
+    resetOtpStore.delete(email);
+    throw new ApiError(429, "Too many incorrect attempts. Please request a new OTP.");
+  }
+
   if (`${otp}` !== `${resetRequest.otp}`) {
-    throw new ApiError(401, "Invalid Varification code ");
+    resetRequest.attempts += 1;
+    throw new ApiError(401, "Invalid verification code");
   }
 
   return res
@@ -776,10 +814,17 @@ const ResetPassword = AsyncHandler(async (req, res) => {
   }
 
   if (!resetRequest || Date.now() > resetRequest.expiresAt) {
+    resetOtpStore.delete(email);
     throw new ApiError(401, "Verification code expired or invalid");
   }
 
+  if (resetRequest.attempts >= OTP_MAX_ATTEMPTS) {
+    resetOtpStore.delete(email);
+    throw new ApiError(429, "Too many incorrect attempts. Please request a new OTP.");
+  }
+
   if (`${otp}` !== `${resetRequest.otp}`) {
+    resetRequest.attempts += 1;
     throw new ApiError(401, "Invalid verification code");
   }
 
@@ -814,18 +859,38 @@ const ResetPassword = AsyncHandler(async (req, res) => {
 });
 
 const DeleteAccount = AsyncHandler(async (req, res) => {
-  let user = await User.findById(req.user._id);
+  const userId = req.user._id;
+
+  const user = await User.findById(userId);
   if (!user)
     throw new ApiError(404, "Please Authenticate with valid credentials !");
 
-  const checkDeleted = await user.deleteOne();
-  if (checkDeleted) {
-    return res
-      .status(200)
-      .json(new ApiResponse(200, "User Successfully deleted"));
-  } else {
-    throw new ApiError(500, "Error Occured while deleting Account");
+  // Delete all images from Cloudinary then from DB
+  const images = await Image.find({ user_id: userId });
+  if (images.length > 0) {
+    await Promise.all(
+      images.map((img) => cloudinaryDelete(img.image_public_id, img.resource_type))
+    );
+    await Image.deleteMany({ user_id: userId });
   }
+
+  // Delete all events, likes, favorites, collections, notifications
+  const events = await Event.find({ user_id: userId }).select("_id");
+  const eventIds = events.map((e) => e._id);
+
+  await Event.deleteMany({ user_id: userId });
+  await Like.deleteMany({ $or: [{ likedUser: userId }, { user: userId }] });
+  await Like.deleteMany({ event_id: { $in: eventIds } });
+  await Favorite.deleteMany({ user_id: userId });
+  await Collection.deleteMany({ user_id: userId });
+  await Notification.deleteMany({ owner_id: userId });
+
+  await user.deleteOne();
+
+  return res
+    .status(200)
+    .clearCookie("authToken", buildCookieOptions())
+    .json(new ApiResponse(200, {}, "Account deleted successfully"));
 });
 
 const GetUserId = AsyncHandler(async (req, res) => {

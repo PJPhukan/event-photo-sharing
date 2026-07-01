@@ -27,7 +27,7 @@ const cloudinaryUpload = async (localFilePath) => {
 };
 
 const normalizeResourceType = (resourceType = "image") => {
-  const allowedTypes = new Set(["image", "video", "raw", "javascript", "css"]);
+  const allowedTypes = new Set(["image", "video", "raw"]);
 
   if (allowedTypes.has(resourceType)) {
     return resourceType;

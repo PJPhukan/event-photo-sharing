@@ -20,7 +20,9 @@ function App() {
     return navType ? navType !== "back_forward" : true;
   })();
 
-  const [showSplash, setShowSplash] = useState(shouldShowSplash);
+  const [timerDone, setTimerDone] = useState(!shouldShowSplash);
+  const [authReady, setAuthReady] = useState(false);
+  const showSplash = !timerDone || !authReady;
 
   useEffect(() => {
     AOS.init({
@@ -30,31 +32,29 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (!showSplash) {
+    if (timerDone) {
       return undefined;
     }
 
     const hideTimer = window.setTimeout(() => {
-      setShowSplash(false);
+      setTimerDone(true);
     }, 1900);
 
     return () => {
       window.clearTimeout(hideTimer);
     };
-  }, [showSplash]);
+  }, [timerDone]);
 
   return (
     <>
       <GlobalBackground />
       <SplashScreen visible={showSplash} />
-      {!showSplash && (
-        <UseState>
-          <DashboardState>
-            <Toast />
-            <Router />
-          </DashboardState>
-        </UseState>
-      )}
+      <UseState onAuthReady={() => setAuthReady(true)}>
+        <DashboardState>
+          <Toast />
+          {!showSplash && <Router />}
+        </DashboardState>
+      </UseState>
     </>
   );
 }

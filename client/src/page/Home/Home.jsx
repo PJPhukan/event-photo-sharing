@@ -35,7 +35,7 @@ const Home = () => {
               >
                 <button>Privacy first</button>
                 <button>Face Recognition</button>
-                <button>Premium sharing</button>
+                {/* <button>Premium sharing</button> */}
               </div>
             </div>
 

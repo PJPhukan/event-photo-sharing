@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import userRouter from "./route/user.route.js";
 import eventRouter from "./route/event.route.js";
@@ -13,6 +14,8 @@ import collectionRouter from "./route/collection.route.js";
 import cardDesignRouter from "./route/cardDesign.route.js";
 import { ApiError } from "./utils/ApiError.js";
 const app = express();
+
+app.use(helmet());
 
 const allowedOrigins = (process.env.CLIENT_ORIGIN || "")
   .split(",")
@@ -33,8 +36,8 @@ app.use(
   })
 );
 app.use(express.static("public"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "1mb" }));
+app.use(express.urlencoded({ limit: "1mb", extended: true }));
 app.use(cookieParser());
 
 app.get("/api/health", (_req, res) => {
@@ -61,7 +64,7 @@ app.use((_req, _res, next) => {
   next(new ApiError(404, "Route not found"));
 });
 
-app.use((err, req, res, next) => {
+app.use((err, _req, res, _next) => {
   if (err instanceof ApiError) {
     return res.status(err.statusCode).json({
       success: false,

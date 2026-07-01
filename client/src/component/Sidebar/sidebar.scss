@@ -18,6 +18,8 @@
   padding: 0 0.2rem;
   overflow: hidden;
   overflow-y: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
   transition: all 0.2s linear;
   background: $dashboard-bg-primary;
   transition: all 0.3s;

@@ -74,13 +74,8 @@ const SmoothScrollController = ({ enabled }) => {
 
 const AppRoutes = () => {
   const userContext = useContext(context);
-  const { adminlogin, authChecked, CheckCookie, createEvent, editEvent, downloadQR } =
-    userContext;
+  const { adminlogin, createEvent, editEvent, downloadQR } = userContext;
   const location = useLocation();
-
-  useEffect(() => {
-    CheckCookie();
-  }, [CheckCookie, adminlogin]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
@@ -106,10 +101,6 @@ const AppRoutes = () => {
 
   const showDashboardLayout = adminlogin && !isAuthRoute;
   const isDashboardRoute = location.pathname.startsWith("/dashboard");
-
-  if (!authChecked) {
-    return null;
-  }
 
   if (!adminlogin && isDashboardRoute) {
     return <Navigate to="/login" replace state={{ from: location.pathname }} />;

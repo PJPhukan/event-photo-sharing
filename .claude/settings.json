@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e ' *)",
+      "Bash(node -e \"require\\('speakeasy'\\)\")",
+      "Bash(node -e \"require\\('nodemailer'\\)\")",
+      "Bash(node -e \"require\\('qrcode'\\)\")",
+      "Bash(node --trace-deprecation -e ' *)",
+      "Bash(node --trace-deprecation /Users/pjphukan/Documents/Own/projects/event-photo-sharing/server/node_modules/.bin/nodemon --version)",
+      "Bash(git -C /Users/pjphukan/Documents/Own/projects/event-photo-sharing diff client/src/component/Sidebar/sidebar.scss)",
+      "Bash(git -C /Users/pjphukan/Documents/Own/projects/event-photo-sharing diff client/)"
+    ]
+  }
+}

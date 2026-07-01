@@ -227,6 +227,15 @@ const Sidebar = () => {
               <span>Settings</span>
             </li>
           </Link>
+
+          {/* Subscription — not implemented yet
+          <button onClick={closeSidebarOnMobile}>
+            <li>
+              <i className="bx bxs-crown"></i>
+              <span>Subscription</span>
+            </li>
+          </button>
+          */}
           </div>
         </div>
         <div className="logout-row">

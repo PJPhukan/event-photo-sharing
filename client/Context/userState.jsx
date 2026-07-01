@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { context } from "./context";
 import axios from "axios";
 
-const UseState = (props) => {
+const UseState = ({ onAuthReady, ...props }) => {
   const clearErrorWithDelay = (message) => {
     setError(message);
     showToast(message, "error");
@@ -197,9 +197,8 @@ const UseState = (props) => {
   const CheckCookie = useCallback(async () => {
     try {
       const response = await axios.get("/api/auth/user/check-cookie");
-      if (response.data.data.token) {
+      if (response.data.data.loggedIn) {
         setadminlogin(true);
-        setToken(response.data.data.token);
       } else {
         setadminlogin(false);
       }
@@ -207,8 +206,13 @@ const UseState = (props) => {
       setadminlogin(false);
     } finally {
       setAuthChecked(true);
+      onAuthReady?.();
     }
-  }, []);
+  }, [onAuthReady]);
+
+  useEffect(() => {
+    CheckCookie();
+  }, [CheckCookie]);
   //CHANGE PASSWORD
 
   //CHANGE MOBILE NUMBER

@@ -42,10 +42,29 @@ html.lenis {
 }
 body {
   background: transparent;
-  object-fit: cover;
   color: var(--text-color-primary);
   font-family: "Montserrat", sans-serif;
   overflow-x: hidden;
+}
+
+/* ── Custom scrollbar – dark theme ─────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
 }
 
 a {
